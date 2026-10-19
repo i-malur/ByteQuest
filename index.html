@@ -1,0 +1,2930 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>ByteQuest: 3D Voxel Code World</title>
+  <meta name="description" content="Jogo educativo 3D estilo Roblox/Voxel em 3ª pessoa para aprender programação em Python, JavaScript e Java com terminais Beecrowd e Speed Quiz.">
+  <meta property="og:title" content="ByteQuest: 3D Voxel Code World">
+  <meta property="og:description" content="Explore um mundo 3D estilo voxel em terceira pessoa, resolva desafios estilo Beecrowd em terminais virtuais e enfrente o Speed Quiz!">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0b0e1e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ByteQuest 3D">
+
+  <!-- Manifest Data URI for Single-file PWA -->
+  <link rel="manifest" href="data:application/manifest+json,%7B%22id%22%3A%22%2F%22%2C%22name%22%3A%22ByteQuest%203D%20Voxel%20Code%20World%22%2C%22short_name%22%3A%22ByteQuest3D%22%2C%22description%22%3A%22Jogo%203D%20Voxel%20estilo%20Roblox%20para%20ensino%20de%20programacao%22%2C%22start_url%22%3A%22.%22%2C%22scope%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230b0e1e%22%2C%22theme_color%22%3A%22%230b0e1e%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20512%20512'%253E%253Crect%20width%3D'512'%20height%3D'512'%20fill%3D'%230b0e1e'%2F%253E%253Cpath%20d%3D'M256%2064L416%20160V352L256%20448L96%20352V160Z'%20fill%3D'none'%20stroke%3D'%2300ff88'%20stroke-width%3D'32'%2F%253E%253Cpath%20d%3D'M256%2064V448M416%20160L256%20256L96%20160'%20stroke%3D'%2300ff88'%20stroke-width%3D'24'%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%22%7D%2C%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20512%20512'%253E%253Crect%20width%3D'512'%20height%3D'512'%20fill%3D'%230b0e1e'%2F%253E%253Cpath%20d%3D'M256%2064L416%20160V352L256%20448L96%20352V160Z'%20fill%3D'none'%20stroke%3D'%2300ff88'%20stroke-width%3D'32'%2F%253E%253Cpath%20d%3D'M256%2064V448M416%20160L256%20256L96%20160'%20stroke%3D'%2300ff88'%20stroke-width%3D'24'%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%22%7D%5D%7D">
+
+  <!-- Icons -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230b0e1e'/%3E%3Cpolygon points='50,15 85,35 85,75 50,95 15,75 15,35' fill='none' stroke='%2300ff88' stroke-width='8'/%3E%3Cpolyline points='15,35 50,55 85,35' stroke='%2300ff88' stroke-width='6' fill='none'/%3E%3Cline x1='50' y1='55' x2='50' y2='95' stroke='%2300ff88' stroke-width='6'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%230b0e1e'/%3E%3Cpolygon points='90,25 155,60 155,130 90,165 25,130 25,60' fill='none' stroke='%2300ff88' stroke-width='14'/%3E%3Cpolyline points='25,60 90,95 155,60' stroke='%2300ff88' stroke-width='10' fill='none'/%3E%3Cline x1='90' y1='95' x2='90' y2='165' stroke='%2300ff88' stroke-width='10'/%3E%3C/svg%3E">
+
+  <!-- Three.js Library from Reliable CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    /* ========================================================
+       RETRO-VOXEL CYBER ARCADE DESIGN SYSTEM
+       ======================================================== */
+    :root {
+      --bg-dark: #080a18;
+      --bg-surface: #10142c;
+      --bg-card: #151a3b;
+      --neon-green: #00ff88;
+      --neon-cyan: #00f0ff;
+      --neon-purple: #a855f7;
+      --neon-magenta: #ff007f;
+      --neon-yellow: #facc15;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #262d5e;
+      --font-arcade: 'Courier New', Courier, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: fixed;
+    }
+
+    /* 3D WebGL Canvas Container */
+    #canvas-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      cursor: grab;
+    }
+    #canvas-container:active {
+      cursor: grabbing;
+    }
+
+    /* Scanlines effect (toggleable) */
+    .scanlines-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.03));
+      background-size: 100% 4px, 6px 100%;
+      pointer-events: none;
+      z-index: 90;
+      opacity: 0.6;
+    }
+    body.no-scanlines .scanlines-overlay {
+      display: none;
+    }
+
+    /* Damage Red Flash */
+    @keyframes damageFlash {
+      0% { box-shadow: inset 0 0 100px rgba(255, 0, 80, 0.9); }
+      100% { box-shadow: inset 0 0 0 rgba(255, 0, 80, 0); }
+    }
+    .damage-effect {
+      animation: damageFlash 0.45s ease-out;
+    }
+
+    /* Screen shake */
+    @keyframes screenShake {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-8px, 6px); }
+      40% { transform: translate(8px, -6px); }
+      60% { transform: translate(-5px, -3px); }
+      80% { transform: translate(5px, 3px); }
+    }
+    .shake {
+      animation: screenShake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    /* ========================================================
+       TOP HUD (MINIMAL & NON-INTRUSIVE)
+       ======================================================== */
+    .top-hud {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      pointer-events: none;
+    }
+    .hud-box {
+      pointer-events: auto;
+      background: rgba(13, 16, 38, 0.92);
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+    .hud-title {
+      font-family: var(--font-arcade);
+      font-weight: 900;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .level-tag {
+      background: rgba(250, 204, 21, 0.2);
+      border: 1px solid var(--neon-yellow);
+      color: var(--neon-yellow);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-family: var(--font-arcade);
+    }
+    .xp-bar-container {
+      width: 110px;
+      height: 8px;
+      background: #090b1c;
+      border: 1px solid #232a58;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .xp-bar-fill {
+      height: 100%;
+      width: 25%;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green));
+      box-shadow: 0 0 8px var(--neon-green);
+      transition: width 0.3s ease-out;
+    }
+    .hearts-box {
+      display: flex;
+      gap: 4px;
+      font-size: 1rem;
+    }
+    .heart-icon.lost {
+      opacity: 0.2;
+      filter: grayscale(1);
+    }
+
+    /* Language Switcher in Top Right */
+    .top-controls {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lang-pill-group {
+      background: rgba(13, 16, 38, 0.92);
+      border: 2px solid var(--border-color);
+      border-radius: 24px;
+      padding: 3px;
+      display: flex;
+      gap: 2px;
+    }
+    .lang-pill {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-pill.active {
+      background: var(--neon-purple);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+    }
+    .icon-btn {
+      background: rgba(13, 16, 38, 0.92);
+      border: 2px solid var(--border-color);
+      color: #fff;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .icon-btn:hover {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
+    .pwa-btn {
+      background: linear-gradient(135deg, #00ff88, #059669);
+      border: 1px solid var(--neon-green);
+      color: #03140a;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 7px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
+    }
+
+    /* ========================================================
+       3D FLOATING PROXIMITY INTERACTION PROMPT
+       ======================================================== */
+    .interaction-prompt {
+      display: none;
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      background: rgba(12, 16, 40, 0.95);
+      border: 2px solid var(--neon-green);
+      border-radius: 30px;
+      padding: 10px 22px;
+      color: #fff;
+      font-family: var(--font-arcade);
+      font-weight: 800;
+      font-size: 0.92rem;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+      cursor: pointer;
+      animation: bouncePrompt 1.2s infinite alternate ease-in-out;
+    }
+    .interaction-prompt.visible {
+      display: flex;
+    }
+    @keyframes bouncePrompt {
+      from { transform: translateX(-50%) translateY(0); }
+      to { transform: translateX(-50%) translateY(-6px); }
+    }
+    .key-badge {
+      background: var(--neon-green);
+      color: #000;
+      font-size: 0.8rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 900;
+    }
+
+    /* ========================================================
+       COLLAPSIBLE BOTTOM CONTROL DOCK (Three.js Skill Compliant)
+       ======================================================== */
+    .bottom-dock-container {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: min(850px, 94vw);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bottom-dock-container.collapsed {
+      transform: translateX(-50%) translateY(calc(100% - 24px));
+    }
+    .dock-toggle-btn {
+      background: rgba(16, 20, 48, 0.95);
+      border: 1px solid var(--border-color);
+      border-bottom: none;
+      color: var(--neon-cyan);
+      font-family: var(--font-arcade);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.4);
+    }
+    .dock-bar {
+      background: rgba(13, 16, 38, 0.94);
+      border: 2px solid var(--border-color);
+      border-radius: 14px;
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      overflow-x: auto;
+    }
+    .dock-item-btn {
+      background: #151a3d;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: var(--font-arcade);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .dock-item-btn:hover {
+      border-color: var(--neon-cyan);
+      background: #1c2354;
+      color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+    }
+    .dock-item-btn.active-mode {
+      border-color: var(--neon-purple);
+      background: rgba(168, 85, 247, 0.2);
+      color: #fff;
+    }
+
+    /* ========================================================
+       TOUCH CONTROLS FOR MOBILE (D-PAD & ACTION BUTTONS)
+       ======================================================== */
+    .mobile-touch-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 15;
+      pointer-events: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 24px;
+    }
+    .virtual-dpad {
+      pointer-events: auto;
+      display: grid;
+      grid-template-columns: 52px 52px 52px;
+      grid-template-rows: 52px 52px 52px;
+      gap: 6px;
+      opacity: 0.95;
+      margin-bottom: 50px;
+      touch-action: none;
+      user-select: none;
+    }
+    .dpad-key {
+      background: rgba(16, 20, 50, 0.92);
+      border: 2px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      border-radius: 12px;
+      font-size: 1.3rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      touch-action: none;
+      user-select: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      transition: background 0.1s, color 0.1s, transform 0.1s, box-shadow 0.1s;
+    }
+    .dpad-key:hover {
+      border-color: #fff;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+    }
+    .dpad-key:active, .dpad-key.active {
+      background: var(--neon-cyan) !important;
+      color: #050818 !important;
+      transform: scale(0.92);
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.9) !important;
+    }
+    .dpad-k-up { grid-column: 2; grid-row: 1; }
+    .dpad-k-left { grid-column: 1; grid-row: 2; }
+    .dpad-k-right { grid-column: 3; grid-row: 2; }
+    .dpad-k-down { grid-column: 2; grid-row: 3; }
+
+    .virtual-actions {
+      pointer-events: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 50px;
+    }
+    .action-btn-circle {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      cursor: pointer;
+      touch-action: manipulation;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+      border: 2px solid #fff;
+      user-select: none;
+    }
+    .btn-act-jump {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      border-color: #60a5fa;
+      color: #fff;
+    }
+    .btn-act-interact {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-color: var(--neon-green);
+      color: #fff;
+    }
+    .action-btn-circle:active {
+      transform: scale(0.9);
+    }
+
+    /* Screen controls remain crisp and responsive on all devices */
+    @media (hover: hover) and (pointer: fine) {
+      .mobile-touch-layer {
+        opacity: 0.95;
+      }
+    }
+
+    /* ========================================================
+       MODAL: BEECROWD CODE TERMINAL (OVERLAY ON 3D WORLD)
+       ======================================================== */
+    .terminal-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 6, 16, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+    .terminal-modal-backdrop.open {
+      display: flex;
+    }
+    .terminal-card {
+      background: #0d1028;
+      border: 2px solid var(--neon-green);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 1050px;
+      height: 90vh;
+      max-height: 820px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 0 35px rgba(0, 255, 136, 0.35);
+      animation: modalZoom 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalZoom {
+      from { transform: scale(0.94); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .terminal-top-header {
+      background: #080a1c;
+      padding: 10px 18px;
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .term-title {
+      font-family: var(--font-arcade);
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: var(--neon-green);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .close-term-btn {
+      background: #1e244d;
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: var(--font-arcade);
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close-term-btn:hover {
+      background: #dc2626;
+      border-color: #ef4444;
+    }
+
+    /* Terminal Split: Problem Statement & Code Editor */
+    .terminal-split {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      flex: 1;
+      overflow: hidden;
+    }
+    @media (max-width: 850px) {
+      .terminal-split {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1.4fr;
+      }
+    }
+
+    /* Left: Problem Statement */
+    .term-problem-side {
+      background: #0c0f24;
+      border-right: 2px solid var(--border-color);
+      padding: 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.88rem;
+    }
+    .term-prob-title {
+      font-family: var(--font-arcade);
+      font-size: 1.15rem;
+      color: #fff;
+    }
+    .term-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tag-chip {
+      font-family: var(--font-arcade);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .tag-easy { background: rgba(0, 255, 136, 0.15); color: var(--neon-green); border: 1px solid var(--neon-green); }
+    .tag-med { background: rgba(250, 204, 21, 0.15); color: var(--neon-yellow); border: 1px solid var(--neon-yellow); }
+    .tag-hard { background: rgba(255, 0, 127, 0.2); color: var(--neon-magenta); border: 1px solid var(--neon-magenta); }
+
+    .term-section-label {
+      font-family: var(--font-arcade);
+      font-size: 0.78rem;
+      color: var(--neon-cyan);
+      text-transform: uppercase;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 4px;
+      margin-top: 8px;
+    }
+    .term-io-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-arcade);
+      font-size: 0.8rem;
+    }
+    .term-io-table th, .term-io-table td {
+      border: 1px solid var(--border-color);
+      padding: 6px 10px;
+      text-align: left;
+    }
+    .term-io-table th {
+      background: #070918;
+      color: var(--neon-green);
+    }
+    .term-io-table td {
+      background: #050612;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+    }
+
+    /* Right: Code Editor & Console */
+    .term-editor-side {
+      display: flex;
+      flex-direction: column;
+      background: #070914;
+      overflow: hidden;
+    }
+    .term-editor-tools {
+      background: #0a0d1e;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .term-lang-tag {
+      font-family: var(--font-arcade);
+      font-size: 0.8rem;
+      color: var(--neon-cyan);
+      font-weight: 800;
+    }
+    .term-quick-symbols {
+      background: #060812;
+      padding: 4px 10px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      border-bottom: 1px solid #1a2044;
+    }
+    .q-sym-btn {
+      background: #131738;
+      border: 1px solid var(--border-color);
+      color: var(--neon-cyan);
+      font-family: var(--font-arcade);
+      font-size: 0.8rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .q-sym-btn:hover {
+      background: var(--neon-cyan);
+      color: #000;
+    }
+
+    .editor-wrapper {
+      position: relative;
+      flex: 1;
+      display: flex;
+      min-height: 200px;
+      overflow: hidden;
+    }
+    .editor-gutter {
+      width: 38px;
+      background: #090b1c;
+      border-right: 1px solid var(--border-color);
+      color: #4b5585;
+      font-family: var(--font-arcade);
+      font-size: 0.82rem;
+      line-height: 20px;
+      padding: 10px 4px;
+      text-align: right;
+      user-select: none;
+      overflow: hidden;
+    }
+    #codeEditor {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #e0e7ff;
+      font-family: var(--font-arcade);
+      font-size: 0.85rem;
+      line-height: 20px;
+      padding: 10px 12px;
+      resize: none;
+      white-space: pre;
+      overflow-x: auto;
+      tab-size: 4;
+    }
+
+    /* Terminal Console & Verdict */
+    .term-console {
+      background: #04050d;
+      border-top: 1px solid var(--border-color);
+      height: 120px;
+      overflow-y: auto;
+      padding: 8px 12px;
+      font-family: var(--font-arcade);
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+    .term-btn-bar {
+      background: #0a0d20;
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      border-top: 1px solid var(--border-color);
+    }
+    .btn-quick-run {
+      background: #171d42;
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-family: var(--font-arcade);
+      font-weight: 800;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .btn-submit-code {
+      background: linear-gradient(135deg, #00ff88, #059669);
+      border: 1px solid var(--neon-green);
+      color: #03140a;
+      padding: 9px 22px;
+      border-radius: 6px;
+      font-family: var(--font-arcade);
+      font-weight: 900;
+      font-size: 0.88rem;
+      cursor: pointer;
+      box-shadow: 0 0 16px rgba(0, 255, 136, 0.4);
+    }
+
+    /* ========================================================
+       MODAL: SPEED QUIZ (15S & 3 HEARTS)
+       ======================================================== */
+    .quiz-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 6, 16, 0.9);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .quiz-modal-backdrop.open {
+      display: flex;
+    }
+    .quiz-card {
+      background: #0e122c;
+      border: 2px solid var(--neon-magenta);
+      border-radius: 16px;
+      max-width: 680px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 0 35px rgba(255, 0, 127, 0.4);
+      display: flex;
+      flex-direction: column;
+      animation: modalZoom 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .quiz-header {
+      background: #080a1c;
+      padding: 12px 18px;
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .quiz-timer-bar-wrap {
+      width: 100%;
+      height: 8px;
+      background: #060714;
+    }
+    .quiz-timer-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--neon-green), var(--neon-yellow), var(--neon-magenta));
+      transition: width 0.1s linear;
+    }
+    .quiz-body {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .quiz-q-counter {
+      font-family: var(--font-arcade);
+      font-size: 0.75rem;
+      color: var(--neon-cyan);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .quiz-regenerate-btn {
+      background: #171d44;
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-family: var(--font-arcade);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .quiz-regenerate-btn:hover {
+      background: var(--neon-cyan);
+      color: #050818;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
+    .quiz-q-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.4;
+    }
+    .quiz-snippet {
+      background: #060814;
+      border: 1px solid var(--border-color);
+      border-left: 3px solid var(--neon-purple);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-family: var(--font-arcade);
+      font-size: 0.85rem;
+      color: #93c5fd;
+      white-space: pre-wrap;
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .quiz-opt-btn {
+      background: #141838;
+      border: 2px solid var(--border-color);
+      color: #e2e8f0;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: var(--font-arcade);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      transition: all 0.15s;
+    }
+    .quiz-opt-btn:hover:not(:disabled) {
+      border-color: var(--neon-cyan);
+      background: #1b214a;
+    }
+    .quiz-opt-btn.correct {
+      background: rgba(0, 255, 136, 0.25) !important;
+      border-color: var(--neon-green) !important;
+      color: #fff !important;
+    }
+    .quiz-opt-btn.wrong {
+      background: rgba(255, 0, 80, 0.25) !important;
+      border-color: var(--neon-magenta) !important;
+      color: #fff !important;
+    }
+    .quiz-opt-btn.eliminated {
+      opacity: 0.22 !important;
+      text-decoration: line-through !important;
+      pointer-events: none !important;
+      border-color: #475569 !important;
+      background: #090b1c !important;
+    }
+
+    /* Floating Reward / Coin Toast Notification */
+    .floating-reward-toast {
+      position: fixed;
+      top: 68px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-25px);
+      background: rgba(13, 16, 42, 0.96);
+      border: 2px solid var(--neon-yellow);
+      color: #fff;
+      font-family: var(--font-arcade);
+      font-weight: 900;
+      font-size: 0.92rem;
+      padding: 10px 22px;
+      border-radius: 30px;
+      box-shadow: 0 0 25px rgba(250, 204, 21, 0.45);
+      z-index: 99;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.5px;
+    }
+    .floating-reward-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Genie Hint Speech Bubble in Speed Quiz */
+    .genie-tip-bubble {
+      background: rgba(26, 16, 56, 0.92);
+      border: 1px solid var(--neon-purple);
+      border-left: 4px solid var(--neon-purple);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: var(--font-arcade);
+      font-size: 0.82rem;
+      color: #e9d5ff;
+      line-height: 1.45;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.25);
+      animation: modalZoom 0.2s ease-out;
+    }
+
+    /* Offline Toast */
+    .offline-badge {
+      display: none;
+      position: fixed;
+      top: 65px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f59e0b;
+      color: #000;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 6px 14px;
+      border-radius: 20px;
+      z-index: 99;
+    }
+    .offline-badge.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Retro Scanlines Effect -->
+  <div class="scanlines-overlay" id="scanlines"></div>
+
+  <!-- Offline Status Toast -->
+  <div class="offline-badge" id="offlineBadge">
+    ⚠️ MODO OFFLINE ATIVO • PWA 100% FUNCIONAL
+  </div>
+
+  <!-- Floating Reward / Toast Notification -->
+  <div class="floating-reward-toast" id="rewardToast">
+    <span id="rewardToastIcon">💎</span>
+    <span id="rewardToastText">+15 MOEDAS CIBERNÉTICAS!</span>
+  </div>
+
+  <!-- 3D Three.js WebGL Container -->
+  <div id="canvas-container"></div>
+
+  <!-- ========================================================
+       TOP MINIMAL HUD
+       ======================================================== -->
+  <div class="top-hud">
+    <div class="hud-box">
+      <div class="hud-title">
+        <span>👾</span>
+        <span>BYTEQUEST 3D</span>
+      </div>
+      <div class="level-tag" id="hudLevelTag">NVL 1</div>
+      <div class="xp-bar-container" title="Barra de XP">
+        <div class="xp-bar-fill" id="hudXpFill"></div>
+      </div>
+      <div class="hearts-box" id="hudHearts">
+        <span class="heart-icon">❤️</span>
+        <span class="heart-icon">❤️</span>
+        <span class="heart-icon">❤️</span>
+      </div>
+      <div class="coins-badge" id="hudCoinsBadge" title="Moedas Cibernéticas • Clique para abrir o Gênio" style="display: flex; align-items: center; gap: 4px; font-family: var(--font-arcade); font-size: 0.8rem; font-weight: 800; color: var(--neon-yellow); background: rgba(250, 204, 21, 0.15); border: 1px solid rgba(250, 204, 21, 0.4); padding: 2px 8px; border-radius: 12px; cursor: pointer;" onclick="openGenieModal()">
+        <span>🪙</span>
+        <span id="hudCoins">50</span>
+      </div>
+      <div class="diamonds-badge" id="hudDiamondsBadge" title="Diamantes Coletados pelo Mapa" style="display: flex; align-items: center; gap: 4px; font-family: var(--font-arcade); font-size: 0.8rem; font-weight: 800; color: var(--neon-cyan); background: rgba(0, 240, 255, 0.15); border: 1px solid rgba(0, 240, 255, 0.4); padding: 2px 8px; border-radius: 12px;">
+        <span>💎</span>
+        <span id="hudDiamonds">0</span>
+      </div>
+    </div>
+
+    <div class="top-controls">
+      <!-- Multi-Language Pill Group -->
+      <div class="lang-pill-group">
+        <button class="lang-pill active" id="pillPy" onclick="switchLanguage('python')">🐍 Python</button>
+        <button class="lang-pill" id="pillJs" onclick="switchLanguage('javascript')">⚡ JS</button>
+        <button class="lang-pill" id="pillJava" onclick="switchLanguage('java')">☕ Java</button>
+      </div>
+
+      <button class="icon-btn" id="btnGenie" onclick="openGenieModal()" title="Santuário do Gênio (Dicas & Vidas)" style="border-color: var(--neon-purple); color: #d8b4fe; font-size: 1.1rem;">🧞</button>
+      <button class="icon-btn" id="btnAudio" onclick="toggleAudio()" title="Ativar/Mudo">🔊</button>
+      <button class="icon-btn" id="btnCrt" onclick="toggleCRT()" title="Scanlines CRT">📺</button>
+      <button class="pwa-btn" id="btnInstall" onclick="triggerPWAInstall()" style="display: none;">📲 Instalar</button>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       FLOATING 3D PROXIMITY INTERACTION PROMPT
+       ======================================================== */ -->
+  <div class="interaction-prompt" id="proximityPrompt" onclick="triggerCurrentInteraction()">
+    <span class="key-badge">E</span>
+    <span id="proximityText">ABRIR TERMINAL DE CÓDIGO</span>
+    <span>↵</span>
+  </div>
+
+  <!-- ========================================================
+       COLLAPSIBLE BOTTOM DOCK (Three.js Skill Viewport Rule)
+       ======================================================== -->
+  <div class="bottom-dock-container" id="bottomDock">
+    <button class="dock-toggle-btn" onclick="toggleDock()">
+      <span id="dockArrow">▾</span> <span id="dockLabel">Controles & Atalhos</span>
+    </button>
+    <div class="dock-bar">
+      <button class="dock-item-btn" onclick="teleportToSpawn()">
+        <span>📍</span> Reset Posição
+      </button>
+      <button class="dock-item-btn" onclick="openTerminalDirect(1001)">
+        <span>💻</span> Terminal #1001
+      </button>
+      <button class="dock-item-btn" onclick="openTerminalDirect(1002)">
+        <span>💻</span> Terminal #1002
+      </button>
+      <button class="dock-item-btn" onclick="openTerminalDirect(1003)">
+        <span>💻</span> Terminal #1003
+      </button>
+      <button class="dock-item-btn" onclick="startSpeedQuiz()">
+        <span>⚡</span> Speed Quiz Arcade
+      </button>
+      <button class="dock-item-btn" onclick="openGenieModal()" style="border-color: var(--neon-purple); background: rgba(168, 85, 247, 0.15); color: #fff;">
+        <span>🧞</span> Gênio do Código
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       SCREEN CONTROLS: VIRTUAL D-PAD & ACTION BUTTONS
+       ======================================================== -->
+  <div class="mobile-touch-layer">
+    <div class="virtual-dpad" id="virtualDpad" title="Controles Direcionais na Tela (ou use as setas do teclado)">
+      <div class="dpad-key dpad-k-up" id="dpadKeyUp" title="Mover para Frente (▲ ou W)">▲</div>
+      <div class="dpad-key dpad-k-left" id="dpadKeyLeft" title="Mover para Esquerda (◀ ou A)">◀</div>
+      <div class="dpad-key dpad-k-right" id="dpadKeyRight" title="Mover para Direita (▶ ou D)">▶</div>
+      <div class="dpad-key dpad-k-down" id="dpadKeyDown" title="Mover para Trás (▼ ou S)">▼</div>
+    </div>
+
+    <div class="virtual-actions">
+      <div class="action-btn-circle btn-act-interact" id="btnActInteract" onclick="triggerCurrentInteraction()" title="Interagir / Conversar (E ou Enter)">
+        ⚡
+      </div>
+      <div class="action-btn-circle btn-act-jump" id="btnActJump" title="Pular (Espaço)">
+        ▲
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 1: BEECROWD CODE TERMINAL
+       ======================================================== -->
+  <div class="terminal-modal-backdrop" id="terminalModal">
+    <div class="terminal-card">
+      <div class="terminal-top-header">
+        <div class="term-title">
+          <span>💻</span>
+          <span id="termHeaderTitle">TERMINAL DE CÓDIGO BEECROWD #1001</span>
+        </div>
+        <button class="close-term-btn" onclick="closeTerminal()">✕ FECHAR</button>
+      </div>
+
+      <div class="terminal-split">
+        <!-- Problem Statement -->
+        <div class="term-problem-side">
+          <div class="term-prob-title" id="termProblemTitle">Média Ponderada & Classificação</div>
+          <div class="term-tags">
+            <span class="tag-chip tag-easy" id="termDiffTag">Iniciante</span>
+            <span class="tag-chip" style="background: rgba(168,85,247,0.2); color: var(--neon-purple); border:1px solid var(--neon-purple)">Arrays & Lógica</span>
+            <span class="tag-chip" style="background: rgba(0,240,255,0.2); color: var(--neon-cyan); border:1px solid var(--neon-cyan)">+100 XP</span>
+          </div>
+
+          <div class="term-section-label">Enunciado</div>
+          <div id="termDescText" style="line-height: 1.5; color: #cbd5e1;"></div>
+
+          <div class="term-section-label">Entrada</div>
+          <div id="termInputText" style="color: #94a3b8;"></div>
+
+          <div class="term-section-label">Saída Esperada</div>
+          <div id="termOutputText" style="color: #94a3b8;"></div>
+
+          <div class="term-section-label">Exemplos de Teste</div>
+          <table class="term-io-table">
+            <thead>
+              <tr>
+                <th>Entrada</th>
+                <th>Saída</th>
+              </tr>
+            </thead>
+            <tbody id="termIoBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Interactive Code Editor -->
+        <div class="term-editor-side">
+          <div class="term-editor-tools">
+            <div class="term-lang-tag" id="termLangIndicator">PYTHON 3.12</div>
+            <div style="display: flex; gap: 6px;">
+              <button class="close-term-btn" style="background:#151a3d;" onclick="resetCodeTemplate()">↺ Reset</button>
+            </div>
+          </div>
+
+          <!-- Quick Code Symbols for Mobile -->
+          <div class="term-quick-symbols">
+            <button class="q-sym-btn" onclick="insertSymbol('()')">( )</button>
+            <button class="q-sym-btn" onclick="insertSymbol('{}')">{ }</button>
+            <button class="q-sym-btn" onclick="insertSymbol('[]')">[ ]</button>
+            <button class="q-sym-btn" onclick="insertSymbol(' == ')">==</button>
+            <button class="q-sym-btn" onclick="insertSymbol(' != ')">!=</button>
+            <button class="q-sym-btn" onclick="insertSymbol('def ')">def</button>
+            <button class="q-sym-btn" onclick="insertSymbol('return ')">return</button>
+            <button class="q-sym-btn" onclick="insertSymbol(':')">:</button>
+            <button class="q-sym-btn" onclick="insertSymbol(';')">;</button>
+          </div>
+
+          <div class="editor-wrapper">
+            <div class="editor-gutter" id="editorGutter">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
+            <textarea id="codeEditor" spellcheck="false"></textarea>
+          </div>
+
+          <div class="term-console" id="termConsole">
+            <div id="termGenieBox" style="display: none; background: #151133; border: 1px solid var(--neon-purple); border-left: 4px solid var(--neon-purple); padding: 10px 14px; border-radius: 6px; font-size: 0.82rem; color: #e9d5ff; margin-bottom: 8px; line-height: 1.5;"></div>
+            <div id="termConsoleText" style="color: #64748b;">Pronto. Execute um teste rápido ou submeta para avaliação do juiz Beecrowd.</div>
+          </div>
+
+          <div class="term-btn-bar">
+            <button class="btn-quick-run" onclick="askGenieChallengeHint()" style="border-color: var(--neon-purple); color: #d8b4fe;" title="Pedir dica explicativa estruturada ao Gênio por 20 moedas">
+              🧞 Dica do Gênio (20 🪙)
+            </button>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-quick-run" onclick="runQuickTest()">▶ Teste Rápido</button>
+              <button class="btn-submit-code" onclick="submitBeecrowdCode()">🚀 SUBMETER CÓDIGO</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 2: SPEED QUIZ ARCADE
+       ======================================================== -->
+  <div class="quiz-modal-backdrop" id="quizModal">
+    <div class="quiz-card">
+      <div class="quiz-header">
+        <div style="font-family: var(--font-arcade); font-weight: 900; color: var(--neon-magenta); font-size: 0.95rem;">
+          ⚡ SPEED QUIZ ARCADE
+        </div>
+        <div style="display: flex; gap: 14px; align-items: center;">
+          <div id="quizComboTag" style="font-family: var(--font-arcade); font-size: 0.8rem; color: var(--neon-cyan);">COMBO x1</div>
+          <button class="close-term-btn" onclick="closeQuiz()">✕ SAIR</button>
+        </div>
+      </div>
+
+      <div class="quiz-timer-bar-wrap">
+        <div class="quiz-timer-bar-fill" id="quizTimerBar"></div>
+      </div>
+
+      <div class="quiz-body" id="quizBody">
+        <div class="quiz-q-counter" id="quizQCounter">
+          <span id="quizQCounterText">PERGUNTA 1 • 15 SEGUNDOS</span>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <button class="quiz-regenerate-btn" onclick="askGenieQuizHint()" style="border-color: var(--neon-purple); color: #d8b4fe;" title="Eliminar 2 opções incorretas e ver dica do Gênio (15 moedas)">
+              🧞 Dica do Gênio (15 🪙)
+            </button>
+            <button class="quiz-regenerate-btn" onclick="regenerateQuiz()" title="Embaralhar e sortear novas perguntas">
+              🔄 Sortear Novas Perguntas
+            </button>
+          </div>
+        </div>
+        <div class="quiz-q-text" id="quizQText">Carregando pergunta...</div>
+        <div class="quiz-snippet" id="quizSnippet" style="display: none;"></div>
+        <div id="quizGenieTip" style="display: none;"></div>
+        <div class="quiz-options" id="quizOptions"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 3: SANTUÁRIO DO GÊNIO DO CÓDIGO
+       ======================================================== -->
+  <div class="terminal-modal-backdrop" id="genieModal">
+    <div class="terminal-card" style="max-width: 620px; height: auto; border-color: var(--neon-purple); box-shadow: 0 0 40px rgba(168, 85, 247, 0.45); max-height: 90vh; overflow-y: auto;">
+      <div class="terminal-top-header" style="border-color: rgba(168, 85, 247, 0.4);">
+        <div class="term-title" style="color: var(--neon-purple);">
+          <span>🧞</span>
+          <span>SANTUÁRIO DO GÊNIO DO CÓDIGO</span>
+        </div>
+        <button class="close-term-btn" onclick="closeGenieModal()">✕ FECHAR</button>
+      </div>
+
+      <div style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; gap: 14px; align-items: center; background: #0c0f26; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
+          <div style="font-size: 2.8rem; animation: bouncePrompt 1.4s infinite alternate;">🧞</div>
+          <div style="font-size: 0.85rem; line-height: 1.5; color: #e2e8f0;">
+            "Saudações, nobre explorador! Eu sou o <strong>Gênio do Código</strong>. Use suas <strong>moedas cibernéticas 🪙</strong> para pedir dicas durante os desafios, eliminar dúvidas no Speed Quiz ou adquirir bênçãos arcanas!"
+          </div>
+        </div>
+
+        <!-- Coins Balance & How to earn guide -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #070918; padding: 10px 16px; border-radius: 8px; border: 1px solid rgba(250, 204, 21, 0.4); font-family: var(--font-arcade); font-size: 0.85rem;">
+          <span style="color: var(--text-muted);">SEU SALDO ATUAL:</span>
+          <span style="color: var(--neon-yellow); font-weight: 900; font-size: 1.1rem;">🪙 <span id="genieModalCoins">50</span> Moedas</span>
+        </div>
+
+        <div style="background: rgba(14, 18, 48, 0.7); border: 1px solid #252d62; border-radius: 8px; padding: 10px 14px; font-size: 0.78rem; color: #94a3b8; line-height: 1.5;">
+          <strong style="color: var(--neon-cyan);">💎 COMO OBTER MOEDAS:</strong><br>
+          • <strong>Diamantes no mapa 3D:</strong> Caminhe até os cristais brilhantes (+15 🪙 cada). Eles reaparecem após coletados!<br>
+          • <strong>Speed Quiz:</strong> Acerte perguntas rápidas (+5 a +20 🪙 por acerto com combo).<br>
+          • <strong>Terminais Beecrowd:</strong> Submeta soluções corretas nos terminais (+35 🪙 cada).
+        </div>
+
+        <!-- Genie Actions -->
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <button class="dock-item-btn" style="justify-content: space-between; padding: 10px 14px;" onclick="buyGenieLife()">
+            <span>❤️ <strong>Restaurar Vidas</strong> (Recupera 3 vidas do Speed Quiz)</span>
+            <span style="color: var(--neon-yellow); font-weight: 800;">25 🪙</span>
+          </button>
+
+          <button class="dock-item-btn" style="justify-content: space-between; padding: 10px 14px;" onclick="buyGenieSpeedBuff()">
+            <span>⚡ <strong>Benção da Agilidade</strong> (+60% velocidade por 45s)</span>
+            <span style="color: var(--neon-yellow); font-weight: 800;">20 🪙</span>
+          </button>
+
+          <button class="dock-item-btn" style="justify-content: space-between; padding: 10px 14px;" onclick="buyGenieRandomTip()">
+            <span>💡 <strong>Conselho Místico</strong> (Dica de ouro em Python, JS ou Java)</span>
+            <span style="color: var(--neon-yellow); font-weight: 800;">10 🪙</span>
+          </button>
+
+          <button class="dock-item-btn" style="justify-content: space-between; padding: 10px 14px;" onclick="buyGenieDiamondCompass()">
+            <span>📍 <strong>Bússola de Diamantes</strong> (Localizar e ir ao cristal mais próximo)</span>
+            <span style="color: var(--neon-yellow); font-weight: 800;">15 🪙</span>
+          </button>
+        </div>
+
+        <div id="genieWisdomBox" style="display: none; background: #131738; border-left: 3px solid var(--neon-purple); padding: 12px 14px; border-radius: 6px; font-size: 0.83rem; color: #d8b4fe; font-family: var(--font-arcade); line-height: 1.45;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       SCRIPT: THREE.JS ENGINE + GAMEPLAY LOGIC
+       ======================================================== -->
+  <script>
+    /* ========================================================
+       1. RETRO 8-BIT SOUND ENGINE (WEB AUDIO API)
+       ======================================================== */
+    const SoundEngine = {
+      ctx: null,
+      enabled: true,
+
+      init() {
+        if (!this.ctx && (window.AudioContext || window.webkitAudioContext)) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContextClass();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      },
+
+      playBeep(freq = 440, duration = 0.08, type = 'square', vol = 0.09) {
+        if (!this.enabled) return;
+        try {
+          this.init();
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch (e) {}
+      },
+
+      playJump() {
+        if (!this.enabled) return;
+        this.playBeep(260, 0.06, 'sine', 0.1);
+        setTimeout(() => this.playBeep(480, 0.1, 'sine', 0.12), 40);
+      },
+
+      playCoin() {
+        if (!this.enabled) return;
+        this.playBeep(987.77, 0.08, 'sine', 0.14);
+        setTimeout(() => this.playBeep(1318.51, 0.15, 'sine', 0.14), 60);
+      },
+
+      playCorrect() {
+        if (!this.enabled) return;
+        this.playBeep(523.25, 0.08, 'sine', 0.12);
+        setTimeout(() => this.playBeep(659.25, 0.08, 'sine', 0.12), 70);
+        setTimeout(() => this.playBeep(783.99, 0.15, 'square', 0.14), 140);
+      },
+
+      playWrong() {
+        if (!this.enabled) return;
+        this.playBeep(240, 0.12, 'sawtooth', 0.14);
+        setTimeout(() => this.playBeep(160, 0.2, 'sawtooth', 0.14), 90);
+      },
+
+      playLevelUp() {
+        if (!this.enabled) return;
+        [440, 554.37, 659.25, 880].forEach((f, idx) => {
+          setTimeout(() => this.playBeep(f, 0.14, 'square', 0.12), idx * 80);
+        });
+      }
+    };
+
+    /* ========================================================
+       2. BEECROWD PROBLEMS REPOSITORY
+       ======================================================== */
+    const CHALLENGES = [
+      {
+        id: 1001,
+        title: "Média Ponderada & Classificação",
+        difficulty: "Iniciante",
+        diffTag: "tag-easy",
+        xp: 100,
+        desc: "O terminal de satélite precisa calcular a média ponderada de três leituras de sensores com pesos 2, 3 e 5. Fórmula: (N1*2 + N2*3 + N3*5) / 10. Se a média for maior ou igual a 7.0, imprima 'APROVADO'; caso contrário, imprima 'REPROVADO'.",
+        inputDesc: "Três valores numéricos decimais separados por espaço.",
+        outputDesc: "A média com 1 casa decimal seguida de ' - ' e a situação ('APROVADO' ou 'REPROVADO'). Ex: '7.8 - APROVADO'",
+        starter: {
+          python: `def resolver(entrada):\n    # entrada: três números decimais separados por espaço\n    # TODO: Desenvolva sua solução aqui\n    \n    return ""\n`,
+          javascript: `function resolver(entrada) {\n    // entrada: três números decimais separados por espaço\n    // TODO: Desenvolva sua solução aqui\n    \n    return "";\n}\n`,
+          java: `public class Solution {\n    public static String resolver(String entrada) {\n        // entrada: três números decimais separados por espaço\n        // TODO: Desenvolva sua solução aqui\n        \n        return "";\n    }\n}\n`
+        },
+        tests: [
+          { input: "5.0 6.0 10.0", expected: "7.8 - APROVADO" },
+          { input: "4.0 5.0 6.0", expected: "5.3 - REPROVADO" },
+          { input: "7.0 7.0 7.0", expected: "7.0 - APROVADO" }
+        ]
+      },
+      {
+        id: 1002,
+        title: "Detector de Palíndromo Cibernético",
+        difficulty: "Básico+",
+        diffTag: "tag-easy",
+        xp: 120,
+        desc: "Um firewall está filtrando pacotes corrompidos. Um pacote válido é aquele cuja sequência de caracteres é idêntica lida de frente para trás ou de trás para frente (desconsiderando espaços e diferenças entre maiúsculas e minúsculas).",
+        inputDesc: "Uma string com uma frase ou código de transmissão.",
+        outputDesc: "'VALIDO' caso seja um palíndromo, ou 'CORROMPIDO' caso contrário.",
+        starter: {
+          python: `def resolver(entrada):\n    # entrada: frase ou transmissão recebida\n    # TODO: Desenvolva sua solução aqui\n    \n    return ""\n`,
+          javascript: `function resolver(entrada) {\n    // entrada: frase ou transmissão recebida\n    // TODO: Desenvolva sua solução aqui\n    \n    return "";\n}\n`,
+          java: `public class Solution {\n    public static String resolver(String entrada) {\n        // entrada: frase ou transmissão recebida\n        // TODO: Desenvolva sua solução aqui\n        \n        return "";\n    }\n}\n`
+        },
+        tests: [
+          { input: "Ame o poema", expected: "VALIDO" },
+          { input: "Cyber security", expected: "CORROMPIDO" },
+          { input: "Radar", expected: "VALIDO" }
+        ]
+      },
+      {
+        id: 1003,
+        title: "Filtro de Números Primos no Vetor",
+        difficulty: "Intermediário",
+        diffTag: "tag-med",
+        xp: 150,
+        desc: "Identifique e retorne apenas os números primos contidos em uma lista de inteiros, ordenados em ordem crescente e separados por espaço.",
+        inputDesc: "Números inteiros separados por espaço.",
+        outputDesc: "Os primos encontrados separados por espaço, ou 'NENHUM'.",
+        starter: {
+          python: `def resolver(entrada):\n    # entrada: números inteiros separados por espaço\n    # TODO: Desenvolva sua solução aqui\n    \n    return ""\n`,
+          javascript: `function resolver(entrada) {\n    // entrada: números inteiros separados por espaço\n    // TODO: Desenvolva sua solução aqui\n    \n    return "";\n}\n`,
+          java: `public class Solution {\n    public static String resolver(String entrada) {\n        // entrada: números inteiros separados por espaço\n        // TODO: Desenvolva sua solução aqui\n        \n        return "";\n    }\n}\n`
+        },
+        tests: [
+          { input: "10 3 15 7 2 9 11", expected: "2 3 7 11" },
+          { input: "4 6 8 9", expected: "NENHUM" }
+        ]
+      }
+    ];
+
+    /* ========================================================
+       3. SPEED QUIZ QUESTIONS
+       ======================================================== */
+    const QUIZ_BANK = {
+      python: [
+        { q: "Qual é o valor retornado pela expressão bool([0]) em Python?", code: "val = bool([0])", opts: ["True", "False", "None", "IndexError"], ans: 0 },
+        { q: "Qual método insere um elemento no fim de uma lista?", code: "lista = [1, 2]", opts: ["lista.append(3)", "lista.push(3)", "lista.add(3)", "lista.insert(3)"], ans: 0 },
+        { q: "Qual a diferença fundamental entre Tupla e Lista em Python?", opts: ["Tuplas são imutáveis e listas são mutáveis", "Listas não aceitam números", "Tuplas não possuem índices", "Não há diferença"], ans: 0 },
+        { q: "Qual o resultado de [x * 2 for x in [1, 2, 3]]?", code: "res = [x * 2 for x in [1, 2, 3]]", opts: ["[2, 4, 6]", "[1, 2, 3, 1, 2, 3]", "[2, 3, 4]", "TypeError"], ans: 0 },
+        { q: "Qual é o tipo retornado pela chamada type({})?", code: "print(type({}))", opts: ["<class 'dict'>", "<class 'set'>", "<class 'list'>", "<class 'tuple'>"], ans: 0 },
+        { q: "O que a sintaxe s[::-1] produz em uma string ou lista?", code: "texto = 'radar'\ninvertido = texto[::-1]", opts: ["Inverte a ordem dos elementos", "Filtra apenas índices pares", "Retorna o primeiro caractere", "Lança um erro de sintaxe"], ans: 0 },
+        { q: "Como se declara uma função anônima de uma linha em Python?", opts: ["lambda x: x * 2", "arrow x => x * 2", "def (x): return x * 2", "func(x) -> x * 2"], ans: 0 },
+        { q: "Qual a diferença entre o operador 'is' e o operador '=='?", opts: ["'is' compara identidade na memória; '==' compara igualdade de valor", "São operadores exatamente idênticos", "'==' só funciona para números", "'is' converte tipos automaticamente"], ans: 0 },
+        { q: "Qual será o valor de len(set([1, 2, 2, 3, 3, 3]))?", code: "s = set([1, 2, 2, 3, 3, 3])\nprint(len(s))", opts: ["3", "6", "1", "TypeError"], ans: 0 },
+        { q: "Como obter um valor de um dicionário sem lançar KeyError caso a chave não exista?", code: "dados = {'a': 10}", opts: ["dados.get('b', 0)", "dados['b']", "dados.find('b')", "dados.search('b')"], ans: 0 },
+        { q: "Qual será o valor de 'b' após o desempacotamento a, *b = [10, 20, 30]?", code: "a, *b = [10, 20, 30]", opts: ["[20, 30]", "20", "[10, 20]", "TypeError"], ans: 0 },
+        { q: "Quais números serão gerados por list(range(1, 6, 2))?", code: "r = list(range(1, 6, 2))", opts: ["[1, 3, 5]", "[1, 2, 3, 4, 5]", "[2, 4, 6]", "[1, 3]"], ans: 0 }
+      ],
+      javascript: [
+        { q: "Qual o resultado de typeof NaN em JavaScript?", code: "console.log(typeof NaN);", opts: ["'number'", "'NaN'", "'undefined'", "'object'"], ans: 0 },
+        { q: "Qual a diferença entre '==' e '===' em JavaScript?", opts: ["'===' não faz coerção de tipo", "'==' é mais estrito", "São idênticos", "'===' converte tudo para string"], ans: 0 },
+        { q: "Qual declaração cria variável de escopo de bloco reatribuível?", opts: ["let", "const", "var", "function"], ans: 0 },
+        { q: "O que o método Array.prototype.map() retorna?", opts: ["Um novo array com o resultado da função aplicada a cada item", "Modifica o array original sem retornar nada", "Apenas valores booleanos", "O tamanho do array"], ans: 0 },
+        { q: "Qual é o resultado da expressão typeof null em JavaScript?", code: "console.log(typeof null);", opts: ["'object'", "'null'", "'undefined'", "'boolean'"], ans: 0 },
+        { q: "Qual o resultado de [1, 2] + [3, 4] no JavaScript?", code: "console.log([1, 2] + [3, 4]);", opts: ["'1,23,4'", "[1, 2, 3, 4]", "NaN", "TypeError"], ans: 0 },
+        { q: "Como desestruturar a propriedade 'x' do objeto { x: 5, y: 10 }?", opts: ["const { x } = obj;", "const [ x ] = obj;", "const ( x ) = obj;", "const obj.x;"], ans: 0 },
+        { q: "O que o método Array.prototype.filter() devolve?", opts: ["Um novo array apenas com os elementos que passaram no teste", "O primeiro elemento que passar no teste", "Um número com a contagem de elementos", "Modifica os elementos originais"], ans: 0 },
+        { q: "Qual a finalidade do operador de coalescência nula (??)?", code: "const res = a ?? b;", opts: ["Retorna 'b' apenas se 'a' for null ou undefined", "Retorna 'b' se 'a' for qualquer valor falsy (como 0 ou '')", "Compara se 'a' é igual a 'b'", "Lança erro se 'a' for nulo"], ans: 0 },
+        { q: "Qual o resultado de [1, 2, 3].reduce((acc, c) => acc + c, 0)?", code: "const total = [1, 2, 3].reduce((acc, c) => acc + c, 0);", opts: ["6", "[1, 2, 3]", "3", "0"], ans: 0 },
+        { q: "Como o 'this' se comporta em uma Arrow Function em JS?", opts: ["Possui vínculo léxico, herdado do escopo envolvente", "Sempre aponta para o elemento DOM atual", "Cria um novo contexto 'this' dinâmico", "É sempre undefined"], ans: 0 },
+        { q: "Qual é o valor retornado pela chamada Boolean('') em JavaScript?", code: "console.log(Boolean(''));", opts: ["false", "true", "undefined", "NaN"], ans: 0 }
+      ],
+      java: [
+        { q: "Como comparar o conteúdo de duas Strings em Java?", code: "s1.equals(s2)", opts: ["s1.equals(s2)", "s1 == s2", "s1 === s2", "s1 = s2"], ans: 0 },
+        { q: "Qual palavra-chave impede que uma classe seja herdada em Java?", opts: ["final", "static", "sealed", "const"], ans: 0 },
+        { q: "Qual tipo primitivo ocupa 64 bits para números inteiros em Java?", opts: ["long", "int", "double", "short"], ans: 0 },
+        { q: "Qual é a assinatura do método principal de uma aplicação Java?", opts: ["public static void main(String[] args)", "public void main(String args)", "static void run(String[] args)", "public start(String[] args)"], ans: 0 },
+        { q: "Qual coleção armazena pares chave-valor sem chaves duplicadas?", opts: ["HashMap", "ArrayList", "HashSet", "LinkedList"], ans: 0 },
+        { q: "Qual a diferença entre ArrayList e um array primitivo T[]?", opts: ["ArrayList possui tamanho dinâmico redimensionável", "Arrays primitivos aceitam apenas objetos", "ArrayList não aceita ordenação", "Não há nenhuma diferença"], ans: 0 },
+        { q: "O que a palavra-chave 'static' define em um método ou atributo?", opts: ["Pertence à própria classe, e não a instâncias específicas", "Impede que o valor seja alterado", "Garante que o método é assíncrono", "Exige herança obrigatória"], ans: 0 },
+        { q: "Qual a função do bloco 'finally' em uma estrutura try-catch-finally?", opts: ["É executado obrigatoriamente, com ou sem exceção", "Executa somente se uma exceção ocorrer", "Executa somente se NENHUMA exceção ocorrer", "Cancela a execução do programa"], ans: 0 },
+        { q: "Qual modificador de acesso restringe visibilidade apenas à própria classe?", opts: ["private", "public", "protected", "default"], ans: 0 },
+        { q: "Quantas interfaces uma classe pode implementar em Java?", opts: ["Múltiplas interfaces (sem limite)", "Apenas 1 interface", "No máximo 2 interfaces", "Nenhuma interface"], ans: 0 },
+        { q: "O que é 'Autoboxing' em Java?", opts: ["Conversão automática entre tipo primitivo e sua classe wrapper", "Alocação automática de memória no Garbage Collector", "Criação de classes anônimas", "Serialização automática para JSON"], ans: 0 },
+        { q: "Como obter a quantidade de caracteres de uma String em Java?", code: "String s = \"Java\";", opts: ["s.length()", "s.length", "s.size()", "s.count()"], ans: 0 }
+      ]
+    };
+
+    /* ========================================================
+       4. GAME STATE (PERSISTENT VIA LOCALSTORAGE)
+       ======================================================== */
+    const STATE_KEY = "bytequest_3d_save_v1";
+    let state = {
+      level: 1,
+      xp: 0,
+      xpNeeded: 250,
+      lives: 3,
+      coins: 50,
+      currentLanguage: "python",
+      completedPortals: [],
+      quizHighScore: 0,
+      crtEnabled: true
+    };
+
+    try {
+      const saved = localStorage.getItem(STATE_KEY);
+      if (saved) {
+        state = { ...state, ...JSON.parse(saved) };
+        if (state.coins === undefined) state.coins = 50;
+      }
+    } catch (e) {}
+
+    function saveState() {
+      try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {}
+      updateHUD();
+    }
+
+    function addXP(amount) {
+      state.xp += amount;
+      while (state.xp >= state.xpNeeded) {
+        state.xp -= state.xpNeeded;
+        state.level++;
+        state.xpNeeded = Math.round(state.xpNeeded * 1.4);
+        SoundEngine.playLevelUp();
+      }
+      saveState();
+    }
+
+    function updateHUD() {
+      document.getElementById('hudLevelTag').innerText = `NVL ${state.level}`;
+      const pct = Math.min(100, Math.round((state.xp / state.xpNeeded) * 100));
+      document.getElementById('hudXpFill').style.width = `${pct}%`;
+
+      const heartsContainer = document.getElementById('hudHearts');
+      heartsContainer.innerHTML = '';
+      for (let i = 0; i < 3; i++) {
+        const h = document.createElement('span');
+        h.className = `heart-icon ${i >= state.lives ? 'lost' : ''}`;
+        h.innerText = '❤️';
+        heartsContainer.appendChild(h);
+      }
+
+      const coinsEl = document.getElementById('hudCoins');
+      if (coinsEl) coinsEl.innerText = state.coins || 0;
+      const gCoinsEl = document.getElementById('genieModalCoins');
+      if (gCoinsEl) gCoinsEl.innerText = state.coins || 0;
+      const diaEl = document.getElementById('hudDiamonds');
+      if (diaEl) diaEl.innerText = state.diamondsCollected || 0;
+    }
+
+    let toastTimer = null;
+    function showFloatingReward(text, color = 'var(--neon-yellow)', icon = '🪙') {
+      const toast = document.getElementById('rewardToast');
+      const textEl = document.getElementById('rewardToastText');
+      const iconEl = document.getElementById('rewardToastIcon');
+      if (!toast) return;
+      if (textEl) textEl.innerText = text;
+      if (iconEl) iconEl.innerText = icon;
+      toast.style.borderColor = color;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    function collectDiamond(d) {
+      if (!d.active) return;
+      d.active = false;
+      d.group.visible = false;
+      d.respawnTimer = 25; // Reaparece após 25 segundos
+
+      const coinsGained = 15;
+      const xpGained = 20;
+      state.coins = (state.coins || 0) + coinsGained;
+      state.diamondsCollected = (state.diamondsCollected || 0) + 1;
+      addXP(xpGained);
+      SoundEngine.playCoin();
+      showFloatingReward(`+${coinsGained} MOEDAS 🪙 (+${xpGained} XP) • ACHADO COLETADO!`, '#00f0ff', '💎');
+      saveState();
+    }
+
+    function switchLanguage(lang) {
+      state.currentLanguage = lang;
+      SoundEngine.playBeep(480, 0.05);
+      ['pillPy', 'pillJs', 'pillJava'].forEach(id => document.getElementById(id).classList.remove('active'));
+      if (lang === 'python') document.getElementById('pillPy').classList.add('active');
+      if (lang === 'javascript') document.getElementById('pillJs').classList.add('active');
+      if (lang === 'java') document.getElementById('pillJava').classList.add('active');
+      saveState();
+      if (activeChallengeId) loadChallengeInTerminal(activeChallengeId);
+    }
+
+    function toggleAudio() {
+      SoundEngine.enabled = !SoundEngine.enabled;
+      document.getElementById('btnAudio').innerText = SoundEngine.enabled ? '🔊' : '🔇';
+      if (SoundEngine.enabled) SoundEngine.playBeep(520, 0.08);
+    }
+
+    function toggleCRT() {
+      state.crtEnabled = !state.crtEnabled;
+      document.body.classList.toggle('no-scanlines', !state.crtEnabled);
+      SoundEngine.playBeep(400, 0.05);
+      saveState();
+    }
+
+    /* ========================================================
+       5. THREE.JS ENGINE SETUP: VOXEL WORLD & 3RD-PERSON AVATAR
+       ======================================================== */
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a0d1e);
+    scene.fog = new THREE.FogExp2(0x0a0d1e, 0.018);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(renderer.domElement);
+
+    // Balanced Lighting (Key light, Hemisphere cool fill, ambient)
+    const hemiLight = new THREE.HemisphereLight(0x7dd3fc, 0x1e1b4b, 0.6);
+    scene.add(hemiLight);
+
+    const dirLight = new THREE.DirectionalLight(0xfffbeb, 1.2);
+    dirLight.position.set(25, 45, 20);
+    dirLight.castShadow = true;
+    dirLight.shadow.mapSize.width = 2048;
+    dirLight.shadow.mapSize.height = 2048;
+    dirLight.shadow.camera.near = 0.5;
+    dirLight.shadow.camera.far = 150;
+    const d = 35;
+    dirLight.shadow.camera.left = -d;
+    dirLight.shadow.camera.right = d;
+    dirLight.shadow.camera.top = d;
+    dirLight.shadow.camera.bottom = -d;
+    dirLight.shadow.bias = -0.0005;
+    scene.add(dirLight);
+
+    // Procedural Grid Texture for Voxel Ground
+    function createVoxelGridTexture() {
+      const c = document.createElement('canvas');
+      c.width = 128;
+      c.height = 128;
+      const ctx2 = c.getContext('2d');
+      ctx2.fillStyle = '#111536';
+      ctx2.fillRect(0, 0, 128, 128);
+      ctx2.fillStyle = '#171c45';
+      ctx2.fillRect(4, 4, 120, 120);
+      ctx2.strokeStyle = '#283170';
+      ctx2.lineWidth = 2;
+      ctx2.strokeRect(4, 4, 120, 120);
+      const texture = new THREE.CanvasTexture(c);
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(40, 40);
+      return texture;
+    }
+
+    // Ground Plane
+    const groundGeo = new THREE.PlaneGeometry(160, 160);
+    const groundMat = new THREE.MeshStandardMaterial({
+      map: createVoxelGridTexture(),
+      roughness: 0.8,
+      metalness: 0.1
+    });
+    const ground = new THREE.Mesh(groundGeo, groundMat);
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    /* --- PROCEDURAL VOXEL DECORATIONS (TREES, CODE CRYSTALS, RUINS) --- */
+    function createVoxelTree(x, z) {
+      const tree = new THREE.Group();
+      // Trunk (Stacked brown blocks)
+      const trunkMat = new THREE.MeshStandardMaterial({ color: 0x5c3a21, roughness: 0.9 });
+      const trunk = new THREE.Mesh(new THREE.BoxGeometry(1.2, 4, 1.2), trunkMat);
+      trunk.position.y = 2;
+      trunk.castShadow = true;
+      trunk.receiveShadow = true;
+      tree.add(trunk);
+
+      // Leaves (Chunky green voxel cube layers)
+      const leavesMat = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.7 });
+      const leaves1 = new THREE.Mesh(new THREE.BoxGeometry(4, 2.5, 4), leavesMat);
+      leaves1.position.y = 4.8;
+      leaves1.castShadow = true;
+      tree.add(leaves1);
+
+      const leaves2 = new THREE.Mesh(new THREE.BoxGeometry(2.6, 2, 2.6), leavesMat);
+      leaves2.position.y = 6.6;
+      leaves2.castShadow = true;
+      tree.add(leaves2);
+
+      tree.position.set(x, 0, z);
+      scene.add(tree);
+    }
+
+    // Place trees around the arena
+    const treePositions = [
+      [-25, -25], [-20, -32], [22, -28], [30, -18],
+      [-30, 20], [-22, 28], [25, 25], [32, 15],
+      [-15, 35], [18, 32]
+    ];
+    treePositions.forEach(p => createVoxelTree(p[0], p[1]));
+
+    // Collectable Cyber Diamonds ("Achados" / Moedas)
+    const collectableDiamonds = [];
+    function createCollectableDiamond(x, z, color = 0x00f0ff) {
+      const group = new THREE.Group();
+      const cryGeo = new THREE.OctahedronGeometry(1.15, 0);
+      const cryMat = new THREE.MeshStandardMaterial({
+        color: color,
+        emissive: color,
+        emissiveIntensity: 0.65,
+        roughness: 0.15,
+        metalness: 0.85
+      });
+      const crystal = new THREE.Mesh(cryGeo, cryMat);
+      crystal.castShadow = true;
+      group.add(crystal);
+
+      // Glowing pulsing ring beneath diamond
+      const ringGeo = new THREE.RingGeometry(0.7, 1.1, 16);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: color,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.4
+      });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = -Math.PI / 2;
+      ring.position.y = -1.1;
+      group.add(ring);
+
+      group.position.set(x, 1.8, z);
+      scene.add(group);
+
+      collectableDiamonds.push({
+        group: group,
+        crystal: crystal,
+        color: color,
+        active: true,
+        respawnTimer: 0,
+        baseY: 1.8,
+        x: x,
+        z: z
+      });
+    }
+
+    // Spawn 14 collectible diamonds around the world ("Achados" / Moedas)
+    const diamondPositions = [
+      [-14, -12, 0x00f0ff],
+      [15, -10, 0xa855f7],
+      [-12, 16, 0x00ff88],
+      [16, 14, 0xfacc15],
+      [-22, -4, 0x38bdf8],
+      [20, 2, 0xf43f5e],
+      [-6, -22, 0xa855f7],
+      [6, 22, 0x10b981],
+      [-26, 12, 0xfacc15],
+      [26, -20, 0x00f0ff],
+      [-18, 26, 0xff007f],
+      [24, 20, 0x38bdf8],
+      [-8, -32, 0x00ff88],
+      [12, -26, 0xfacc15]
+    ];
+    diamondPositions.forEach(p => createCollectableDiamond(p[0], p[1], p[2]));
+
+    /* --- VOXEL ROBLOX-STYLE AVATAR (COMPOSITE GROUP) --- */
+    const avatar = new THREE.Group();
+
+    // 1. Torso (Cyber hoodie block)
+    const torsoMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, roughness: 0.5 });
+    const torso = new THREE.Mesh(new THREE.BoxGeometry(1.4, 1.6, 0.8), torsoMat);
+    torso.position.y = 1.8;
+    torso.castShadow = true;
+    avatar.add(torso);
+
+    // 2. Head (Classic blocky Roblox head with cyber visor)
+    const headMat = new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.4 });
+    const head = new THREE.Mesh(new THREE.BoxGeometry(1.0, 1.0, 1.0), headMat);
+    head.position.y = 3.1;
+    head.castShadow = true;
+    avatar.add(head);
+
+    // Visor on face
+    const visorMat = new THREE.MeshStandardMaterial({ color: 0x00f0ff, emissive: 0x00f0ff, emissiveIntensity: 0.6 });
+    const visor = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.28, 0.2), visorMat);
+    visor.position.set(0, 3.1, 0.52);
+    avatar.add(visor);
+
+    // Headphones
+    const phoneMat = new THREE.MeshStandardMaterial({ color: 0x111827 });
+    const phoneLeft = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.4, 0.4), phoneMat);
+    phoneLeft.position.set(-0.55, 3.1, 0);
+    const phoneRight = phoneLeft.clone();
+    phoneRight.position.x = 0.55;
+    avatar.add(phoneLeft, phoneRight);
+
+    // 3. Arms (Pivoted for swing animation)
+    const armGeo = new THREE.BoxGeometry(0.5, 1.4, 0.5);
+    armGeo.translate(0, -0.6, 0); // pivot at shoulder
+
+    const armLeftGroup = new THREE.Group();
+    armLeftGroup.position.set(-0.95, 2.5, 0);
+    const armLeftMesh = new THREE.Mesh(armGeo, torsoMat);
+    armLeftMesh.castShadow = true;
+    armLeftGroup.add(armLeftMesh);
+    avatar.add(armLeftGroup);
+
+    const armRightGroup = new THREE.Group();
+    armRightGroup.position.set(0.95, 2.5, 0);
+    const armRightMesh = new THREE.Mesh(armGeo, torsoMat);
+    armRightMesh.castShadow = true;
+    armRightGroup.add(armRightMesh);
+    avatar.add(armRightGroup);
+
+    // 4. Legs (Pivoted for walking animation)
+    const legMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.8 });
+    const legGeo = new THREE.BoxGeometry(0.55, 1.4, 0.55);
+    legGeo.translate(0, -0.6, 0); // pivot at hip
+
+    const legLeftGroup = new THREE.Group();
+    legLeftGroup.position.set(-0.35, 1.1, 0);
+    const legLeftMesh = new THREE.Mesh(legGeo, legMat);
+    legLeftMesh.castShadow = true;
+    legLeftGroup.add(legLeftMesh);
+    avatar.add(legLeftGroup);
+
+    const legRightGroup = new THREE.Group();
+    legRightGroup.position.set(0.35, 1.1, 0);
+    const legRightMesh = new THREE.Mesh(legGeo, legMat);
+    legRightMesh.castShadow = true;
+    legRightGroup.add(legRightMesh);
+    avatar.add(legRightGroup);
+
+    // Contact shadow disc under avatar
+    const shadowGeo = new THREE.CircleGeometry(0.9, 24);
+    const shadowMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.35 });
+    const contactShadow = new THREE.Mesh(shadowGeo, shadowMat);
+    contactShadow.rotation.x = -Math.PI / 2;
+    contactShadow.position.y = 0.02;
+    avatar.add(contactShadow);
+
+    avatar.position.set(0, 0, 0);
+    scene.add(avatar);
+
+    /* --- INTERACTIVE CHECKPOINTS / TERMINAL PORTALS IN 3D --- */
+    const PORTALS = [
+      { id: 1001, name: "Terminal #1001: Média Ponderada", type: "beecrowd", x: -10, z: -10, color: 0x00ff88, challengeId: 1001 },
+      { id: 1002, name: "Terminal #1002: Detector Palíndromo", type: "beecrowd", x: 12, z: -14, color: 0x00f0ff, challengeId: 1002 },
+      { id: 1003, name: "Terminal #1003: Filtro de Primos", type: "beecrowd", x: -14, z: 12, color: 0xa855f7, challengeId: 1003 },
+      { id: 9999, name: "Arena 3D: Speed Quiz Arcade", type: "quiz", x: 0, z: 16, color: 0xff007f },
+      { id: 7777, name: "Santuário: Gênio do Código", type: "genie", x: 0, z: -15, color: 0xa855f7 }
+    ];
+
+    const portalMeshes = [];
+    PORTALS.forEach(p => {
+      const pGroup = new THREE.Group();
+
+      // Pedestal Base
+      const baseMat = new THREE.MeshStandardMaterial({ color: 0x111636, roughness: 0.4, metalness: 0.5 });
+      const base = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.5, 0.6, 8), baseMat);
+      base.position.y = 0.3;
+      base.receiveShadow = true;
+      pGroup.add(base);
+
+      // Glowing Cyber Ring / Column
+      const ringMat = new THREE.MeshStandardMaterial({
+        color: p.color,
+        emissive: p.color,
+        emissiveIntensity: 0.65,
+        roughness: 0.2
+      });
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.15, 8, 24), ringMat);
+      ring.rotation.x = Math.PI / 2;
+      ring.position.y = 0.7;
+      pGroup.add(ring);
+
+      let holoMesh;
+      if (p.type === 'genie') {
+        // Mystical Genie Hologram (Floating stylized cyber lamp/entity)
+        const genieGroup = new THREE.Group();
+        const lampMat = new THREE.MeshStandardMaterial({
+          color: 0xa855f7,
+          emissive: 0x7c3aed,
+          emissiveIntensity: 0.8,
+          roughness: 0.2,
+          metalness: 0.7
+        });
+        // Genie mystical head/halo
+        const head = new THREE.Mesh(new THREE.DodecahedronGeometry(0.7, 0), lampMat);
+        head.position.y = 2.7;
+        genieGroup.add(head);
+
+        const halo = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.08, 6, 16), ringMat);
+        halo.rotation.x = Math.PI / 3;
+        halo.position.y = 2.7;
+        genieGroup.add(halo);
+
+        // Mystical point light on genie
+        const genieLight = new THREE.PointLight(0xa855f7, 1.8, 8);
+        genieLight.position.y = 2.7;
+        genieGroup.add(genieLight);
+
+        pGroup.add(genieGroup);
+        holoMesh = genieGroup;
+      } else {
+        // Floating Hologram Diamond / Star
+        const holoGeo = new THREE.OctahedronGeometry(0.9, 0);
+        holoMesh = new THREE.Mesh(holoGeo, ringMat);
+        holoMesh.position.y = 2.4;
+        pGroup.add(holoMesh);
+      }
+
+      pGroup.position.set(p.x, 0, p.z);
+      scene.add(pGroup);
+
+      portalMeshes.push({
+        data: p,
+        group: pGroup,
+        hologram: holoMesh,
+        ring: ring
+      });
+    });
+
+    /* ========================================================
+       6. 3RD PERSON CONTROLS & CAMERA DAMPING
+       ======================================================== */
+    const keys = { w: false, a: false, s: false, d: false };
+    const playerPhysics = {
+      speed: 12,
+      velY: 0,
+      isGrounded: true,
+      walkCycle: 0
+    };
+
+    // Visual sync: Highlights on-screen arrow buttons when keyboard or touch is active
+    function updateDpadVisuals() {
+      const upEl = document.getElementById('dpadKeyUp');
+      const leftEl = document.getElementById('dpadKeyLeft');
+      const rightEl = document.getElementById('dpadKeyRight');
+      const downEl = document.getElementById('dpadKeyDown');
+
+      if (upEl) upEl.classList.toggle('active', !!keys.w);
+      if (leftEl) leftEl.classList.toggle('active', !!keys.a);
+      if (rightEl) rightEl.classList.toggle('active', !!keys.d);
+      if (downEl) downEl.classList.toggle('active', !!keys.s);
+    }
+
+    function setVirtualKey(k, val) {
+      keys[k] = val;
+      updateDpadVisuals();
+    }
+
+    // Initialize On-Screen Arrow / D-Pad Buttons
+    function initDpadControls() {
+      const mappings = [
+        { id: 'dpadKeyUp', key: 'w' },
+        { id: 'dpadKeyLeft', key: 'a' },
+        { id: 'dpadKeyRight', key: 'd' },
+        { id: 'dpadKeyDown', key: 's' }
+      ];
+
+      mappings.forEach(({ id, key }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        const press = (e) => {
+          e.preventDefault();
+          try { el.setPointerCapture(e.pointerId); } catch(err) {}
+          setVirtualKey(key, true);
+        };
+
+        const release = (e) => {
+          e.preventDefault();
+          try { el.releasePointerCapture(e.pointerId); } catch(err) {}
+          setVirtualKey(key, false);
+        };
+
+        el.addEventListener('pointerdown', press);
+        el.addEventListener('pointerup', release);
+        el.addEventListener('pointercancel', release);
+        el.addEventListener('lostpointercapture', release);
+        el.addEventListener('contextmenu', (e) => e.preventDefault());
+      });
+
+      const jumpBtn = document.getElementById('btnActJump');
+      if (jumpBtn) {
+        jumpBtn.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          doPlayerJump();
+        });
+      }
+    }
+
+    // Keyboard Input: Arrow Keys (ArrowUp, ArrowDown, ArrowLeft, ArrowRight) and WASD
+    window.addEventListener('keydown', (e) => {
+      // Don't intercept when user is typing in code editor or an input
+      if (document.activeElement && (document.activeElement.id === 'codeEditor' || document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT')) {
+        return;
+      }
+      const k = e.key ? e.key.toLowerCase() : '';
+      const code = e.code || '';
+
+      let handled = false;
+      if (k === 'w' || k === 'arrowup' || k === 'up' || code === 'ArrowUp' || code === 'KeyW') {
+        keys.w = true;
+        handled = true;
+      }
+      if (k === 'a' || k === 'arrowleft' || k === 'left' || code === 'ArrowLeft' || code === 'KeyA') {
+        keys.a = true;
+        handled = true;
+      }
+      if (k === 's' || k === 'arrowdown' || k === 'down' || code === 'ArrowDown' || code === 'KeyS') {
+        keys.s = true;
+        handled = true;
+      }
+      if (k === 'd' || k === 'arrowright' || k === 'right' || code === 'ArrowRight' || code === 'KeyD') {
+        keys.d = true;
+        handled = true;
+      }
+
+      if (handled) {
+        e.preventDefault(); // Prevent browser window scrolling with arrow keys
+        updateDpadVisuals();
+      }
+
+      if (code === 'Space') {
+        e.preventDefault();
+        doPlayerJump();
+      }
+      if (k === 'e' || code === 'Enter') {
+        triggerCurrentInteraction();
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if (document.activeElement && (document.activeElement.id === 'codeEditor' || document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT')) {
+        return;
+      }
+      const k = e.key ? e.key.toLowerCase() : '';
+      const code = e.code || '';
+
+      if (k === 'w' || k === 'arrowup' || k === 'up' || code === 'ArrowUp' || code === 'KeyW') {
+        keys.w = false;
+      }
+      if (k === 'a' || k === 'arrowleft' || k === 'left' || code === 'ArrowLeft' || code === 'KeyA') {
+        keys.a = false;
+      }
+      if (k === 's' || k === 'arrowdown' || k === 'down' || code === 'ArrowDown' || code === 'KeyS') {
+        keys.s = false;
+      }
+      if (k === 'd' || k === 'arrowright' || k === 'right' || code === 'ArrowRight' || code === 'KeyD') {
+        keys.d = false;
+      }
+      updateDpadVisuals();
+    });
+
+    function doPlayerJump() {
+      if (playerPhysics.isGrounded) {
+        playerPhysics.velY = 10;
+        playerPhysics.isGrounded = false;
+        SoundEngine.playJump();
+      }
+    }
+
+    // Camera follow parameters (Smooth Exponential Damping)
+    let cameraAngle = 0;
+    const cameraDistance = 9.5;
+    const cameraHeight = 5.2;
+
+    // Mouse / Touch Drag to Orbit Camera
+    let isDragging = false;
+    let prevMouseX = 0;
+
+    container.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      prevMouseX = e.clientX;
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (isDragging) {
+        const deltaX = e.clientX - prevMouseX;
+        cameraAngle -= deltaX * 0.006;
+        prevMouseX = e.clientX;
+      }
+    });
+    window.addEventListener('pointerup', () => isDragging = false);
+
+    /* ========================================================
+       7. PROXIMITY DETECTION & INTERACTION ENGINE
+       ======================================================== */
+    let currentNearPortal = null;
+
+    function checkProximity() {
+      let nearest = null;
+      let minDist = 3.6;
+
+      portalMeshes.forEach(pm => {
+        const dist = avatar.position.distanceTo(pm.group.position);
+        if (dist < minDist) {
+          minDist = dist;
+          nearest = pm.data;
+        }
+      });
+
+      const promptEl = document.getElementById('proximityPrompt');
+      const promptText = document.getElementById('proximityText');
+
+      if (nearest) {
+        currentNearPortal = nearest;
+        promptEl.classList.add('visible');
+        if (nearest.type === 'quiz') {
+          promptText.innerText = 'INICIAR SPEED QUIZ';
+        } else if (nearest.type === 'genie') {
+          promptText.innerText = 'CONVERSAR COM O GÊNIO DO CÓDIGO';
+        } else {
+          promptText.innerText = `INTERAGIR COM ${nearest.name.toUpperCase()}`;
+        }
+      } else {
+        currentNearPortal = null;
+        promptEl.classList.remove('visible');
+      }
+    }
+
+    function triggerCurrentInteraction() {
+      if (currentNearPortal) {
+        SoundEngine.playBeep(520, 0.06);
+        if (currentNearPortal.type === 'quiz') {
+          startSpeedQuiz();
+        } else if (currentNearPortal.type === 'genie') {
+          openGenieModal();
+        } else {
+          openTerminalDirect(currentNearPortal.challengeId);
+        }
+      }
+    }
+
+    function teleportToSpawn() {
+      avatar.position.set(0, 0, 0);
+      playerPhysics.velY = 0;
+      SoundEngine.playBeep(320, 0.08);
+    }
+
+    /* ========================================================
+       8. MAIN GAME ANIMATION LOOP (THREE.JS)
+       ======================================================== */
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const delta = Math.min(clock.getDelta(), 0.1);
+
+      // Rotate and animate portals
+      portalMeshes.forEach(pm => {
+        pm.hologram.rotation.y += delta * 2;
+        pm.hologram.rotation.x += delta * 0.8;
+        pm.ring.rotation.z += delta * 0.6;
+      });
+
+      // Update collectable diamonds (rotation, bobbing, collision detection)
+      collectableDiamonds.forEach(d => {
+        if (d.active) {
+          d.crystal.rotation.y += delta * 2.8;
+          d.crystal.rotation.z = Math.sin(clock.getElapsedTime() * 2 + d.x) * 0.3;
+          d.group.position.y = d.baseY + Math.sin(clock.getElapsedTime() * 3.5 + d.z) * 0.35;
+
+          // Collision detection with player avatar
+          const dist = Math.hypot(avatar.position.x - d.x, avatar.position.z - d.z);
+          if (dist < 2.0 && avatar.position.y < 3.5) {
+            collectDiamond(d);
+          }
+        } else {
+          // Respawn timer countdown
+          d.respawnTimer -= delta;
+          if (d.respawnTimer <= 0) {
+            d.active = true;
+            d.group.visible = true;
+          }
+        }
+      });
+
+      // Calculate Player Movement Direction relative to camera angle
+      let forwardInput = 0;
+      let rightInput = 0;
+      if (keys.w) forwardInput += 1;
+      if (keys.s) forwardInput -= 1;
+      if (keys.d) rightInput += 1;
+      if (keys.a) rightInput -= 1;
+
+      const isMoving = forwardInput !== 0 || rightInput !== 0;
+
+      if (isMoving) {
+        const len = Math.hypot(forwardInput, rightInput);
+        const normForward = forwardInput / len;
+        const normRight = rightInput / len;
+
+        // Camera Forward vector on XZ plane: (sin(cameraAngle), cos(cameraAngle))
+        // Camera Right vector on XZ plane:   (-cos(cameraAngle), sin(cameraAngle))
+        const worldMoveX = normForward * Math.sin(cameraAngle) - normRight * Math.cos(cameraAngle);
+        const worldMoveZ = normForward * Math.cos(cameraAngle) + normRight * Math.sin(cameraAngle);
+
+        avatar.position.x += worldMoveX * playerPhysics.speed * delta;
+        avatar.position.z += worldMoveZ * playerPhysics.speed * delta;
+
+        // Smoothly rotate avatar towards movement vector
+        const targetRotY = Math.atan2(worldMoveX, worldMoveZ);
+        avatar.rotation.y = THREE.MathUtils.damp(avatar.rotation.y, targetRotY, 15, delta);
+
+        // Limb swinging walk cycle
+        playerPhysics.walkCycle += delta * 12;
+        armLeftGroup.rotation.x = Math.sin(playerPhysics.walkCycle) * 0.7;
+        armRightGroup.rotation.x = -Math.sin(playerPhysics.walkCycle) * 0.7;
+        legLeftGroup.rotation.x = -Math.sin(playerPhysics.walkCycle) * 0.7;
+        legRightGroup.rotation.x = Math.sin(playerPhysics.walkCycle) * 0.7;
+      } else {
+        // Idle limb damping
+        armLeftGroup.rotation.x = THREE.MathUtils.damp(armLeftGroup.rotation.x, 0, 10, delta);
+        armRightGroup.rotation.x = THREE.MathUtils.damp(armRightGroup.rotation.x, 0, 10, delta);
+        legLeftGroup.rotation.x = THREE.MathUtils.damp(legLeftGroup.rotation.x, 0, 10, delta);
+        legRightGroup.rotation.x = THREE.MathUtils.damp(legRightGroup.rotation.x, 0, 10, delta);
+      }
+
+      // Gravity & Jump Physics
+      playerPhysics.velY -= 25 * delta;
+      avatar.position.y += playerPhysics.velY * delta;
+      if (avatar.position.y <= 0) {
+        avatar.position.y = 0;
+        playerPhysics.velY = 0;
+        playerPhysics.isGrounded = true;
+      }
+
+      // Constrain within arena boundaries (-65 to 65)
+      avatar.position.x = Math.max(-65, Math.min(65, avatar.position.x));
+      avatar.position.z = Math.max(-65, Math.min(65, avatar.position.z));
+
+      // Camera Smooth 3rd-Person Follow
+      const targetCamX = avatar.position.x - Math.sin(cameraAngle) * cameraDistance;
+      const targetCamZ = avatar.position.z - Math.cos(cameraAngle) * cameraDistance;
+      const targetCamY = avatar.position.y + cameraHeight;
+
+      camera.position.x = THREE.MathUtils.damp(camera.position.x, targetCamX, 10, delta);
+      camera.position.y = THREE.MathUtils.damp(camera.position.y, targetCamY, 10, delta);
+      camera.position.z = THREE.MathUtils.damp(camera.position.z, targetCamZ, 10, delta);
+
+      camera.lookAt(avatar.position.x, avatar.position.y + 2.0, avatar.position.z);
+
+      checkProximity();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    /* ========================================================
+       9. BEECROWD CODE TERMINAL (MODAL)
+       ======================================================== */
+    let activeChallengeId = 1001;
+    const codeEditor = document.getElementById('codeEditor');
+    const editorGutter = document.getElementById('editorGutter');
+
+    function openTerminalDirect(probId) {
+      activeChallengeId = probId;
+      loadChallengeInTerminal(probId);
+      document.getElementById('terminalModal').classList.add('open');
+      SoundEngine.playBeep(450, 0.08);
+    }
+
+    function closeTerminal() {
+      document.getElementById('terminalModal').classList.remove('open');
+      SoundEngine.playBeep(320, 0.05);
+    }
+
+    function loadChallengeInTerminal(probId) {
+      const prob = CHALLENGES.find(c => c.id === probId) || CHALLENGES[0];
+      document.getElementById('termHeaderTitle').innerText = `TERMINAL DE CÓDIGO BEECROWD #${prob.id}`;
+      document.getElementById('termProblemTitle').innerText = prob.title;
+      document.getElementById('termDescText').innerText = prob.desc;
+      document.getElementById('termInputText').innerText = prob.inputDesc;
+      document.getElementById('termOutputText').innerText = prob.outputDesc;
+
+      const diffEl = document.getElementById('termDiffTag');
+      diffEl.className = `tag-chip ${prob.diffTag}`;
+      diffEl.innerText = prob.difficulty;
+
+      const tbody = document.getElementById('termIoBody');
+      tbody.innerHTML = '';
+      prob.tests.forEach(t => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${t.input}</td><td>${t.expected}</td>`;
+        tbody.appendChild(tr);
+      });
+
+      const langNames = { python: 'PYTHON 3.12', javascript: 'JAVASCRIPT (ES2024)', java: 'JAVA 21 (JDK)' };
+      document.getElementById('termLangIndicator').innerText = langNames[state.currentLanguage];
+
+      codeEditor.value = prob.starter[state.currentLanguage] || prob.starter.python;
+      updateGutter();
+      document.getElementById('termConsole').innerHTML = `<div style="color: #64748b;">Problema #${prob.id} pronto. Digite sua solução e submeta.</div>`;
+    }
+
+    function updateGutter() {
+      const count = codeEditor.value.split('\n').length;
+      let txt = '';
+      for (let i = 1; i <= Math.max(count, 10); i++) txt += i + '<br>';
+      editorGutter.innerHTML = txt;
+    }
+    codeEditor.addEventListener('input', updateGutter);
+    codeEditor.addEventListener('scroll', () => { editorGutter.scrollTop = codeEditor.scrollTop; });
+
+    codeEditor.addEventListener('keydown', function(e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
+        this.selectionStart = this.selectionEnd = start + 4;
+        updateGutter();
+      }
+    });
+
+    function insertSymbol(sym) {
+      const start = codeEditor.selectionStart;
+      const end = codeEditor.selectionEnd;
+      codeEditor.value = codeEditor.value.substring(0, start) + sym + codeEditor.value.substring(end);
+      codeEditor.focus();
+      codeEditor.selectionStart = codeEditor.selectionEnd = start + sym.length;
+      updateGutter();
+    }
+
+    function resetCodeTemplate() {
+      const prob = CHALLENGES.find(c => c.id === activeChallengeId);
+      if (prob) {
+        codeEditor.value = prob.starter[state.currentLanguage] || '';
+        updateGutter();
+        SoundEngine.playBeep(360, 0.05);
+      }
+    }
+
+    function transpilePythonToJs(pyCode) {
+      const lines = pyCode.split('\n');
+      const jsLines = [];
+      const indentStack = [0];
+
+      for (let rawLine of lines) {
+        const trimmed = rawLine.trim();
+        if (!trimmed || trimmed.startsWith('#')) continue;
+
+        const indent = rawLine.search(/\S|$/);
+        while (indentStack.length > 1 && indent < indentStack[indentStack.length - 1]) {
+          indentStack.pop();
+          jsLines.push('}');
+        }
+
+        let line = trimmed;
+        if (line.startsWith('def ') && line.endsWith(':')) {
+          const sig = line.slice(4, -1);
+          line = 'function ' + sig + ' {';
+          indentStack.push(indent + 4);
+        } else if (line.startsWith('if ') && line.endsWith(':')) {
+          const cond = line.slice(3, -1);
+          line = 'if (' + convertPyExpr(cond) + ') {';
+          indentStack.push(indent + 4);
+        } else if (line.startsWith('elif ') && line.endsWith(':')) {
+          const cond = line.slice(5, -1);
+          line = '} else if (' + convertPyExpr(cond) + ') {';
+        } else if (line === 'else:') {
+          line = '} else {';
+        } else if (line.startsWith('for ') && line.endsWith(':')) {
+          const forBody = line.slice(4, -1);
+          if (forBody.includes(' in range(')) {
+            const [varName, rest] = forBody.split(' in range(');
+            const rangeArgs = rest.slice(0, -1).split(',').map(s => s.trim());
+            const start = rangeArgs.length > 1 ? rangeArgs[0] : '0';
+            const end = rangeArgs.length > 1 ? rangeArgs[1] : rangeArgs[0];
+            line = `for (let ${varName} = ${start}; ${varName} < ${end}; ${varName}++) {`;
+          } else if (forBody.includes(' in ')) {
+            const [varName, iter] = forBody.split(' in ');
+            line = `for (let ${varName} of ${convertPyExpr(iter)}) {`;
+          }
+          indentStack.push(indent + 4);
+        } else if (line.startsWith('while ') && line.endsWith(':')) {
+          const cond = line.slice(6, -1);
+          line = 'while (' + convertPyExpr(cond) + ') {';
+          indentStack.push(indent + 4);
+        } else {
+          line = convertPyStatement(line) + ';';
+        }
+        jsLines.push(line);
+      }
+      while (indentStack.length > 1) {
+        indentStack.pop();
+        jsLines.push('}');
+      }
+      return jsLines.join('\n');
+    }
+
+    function convertPyExpr(expr) {
+      return expr
+        .replace(/\band\b/g, '&&')
+        .replace(/\bor\b/g, '||')
+        .replace(/\bnot\b/g, '!')
+        .replace(/\bTrue\b/g, 'true')
+        .replace(/\bFalse\b/g, 'false')
+        .replace(/\bNone\b/g, 'null')
+        .replace(/len\((.*?)\)/g, '($1).length')
+        .replace(/(\w+)\.split\(\)/g, '$1.trim().split(/\\s+/)')
+        .replace(/int\((.*?)\)/g, 'parseInt($1, 10)')
+        .replace(/float\((.*?)\)/g, 'parseFloat($1)')
+        .replace(/str\((.*?)\)/g, 'String($1)')
+        .replace(/(\w+)\.lower\(\)/g, '$1.toLowerCase()')
+        .replace(/(\w+)\[::-1\]/g, '$1.split("").reverse().join("")');
+    }
+
+    function convertPyStatement(st) {
+      if (st.startsWith('return ')) {
+        const val = st.slice(7).trim();
+        if (val.startsWith('f"') || val.startsWith("f'")) {
+          let inner = val.slice(2, -1);
+          inner = inner.replace(/\{(\w+):\.1f\}/g, '${Number($1).toFixed(1)}');
+          inner = inner.replace(/\{(\w+)\}/g, '${$1}');
+          return 'return `' + inner + '`';
+        }
+        const ternMatch = val.match(/(.*?)\s+if\s+(.*?)\s+else\s+(.*)/);
+        if (ternMatch) {
+          return `return (${convertPyExpr(ternMatch[2])}) ? (${convertPyExpr(ternMatch[1])}) : (${convertPyExpr(ternMatch[3])})`;
+        }
+        return 'return ' + convertPyExpr(val);
+      }
+      if (st.includes(' = ')) {
+        const [lhs, rhs] = st.split(' = ');
+        if (lhs.includes(',')) {
+          const vars = lhs.split(',').map(s => s.trim());
+          const vals = rhs.split(',').map(s => s.trim());
+          return vars.map((v, i) => `let ${v} = ${convertPyExpr(vals[i] || '0')}`).join('; ');
+        }
+        const compMatch = rhs.match(/\[(.*)\s+for\s+(\w+)\s+in\s+(.*?)\]/);
+        if (compMatch) {
+          const [_, mapExpr, varName, iterExpr] = compMatch;
+          return `let ${lhs} = (${convertPyExpr(iterExpr)}).map(${varName} => ${convertPyExpr(mapExpr)})`;
+        }
+        return `let ${lhs} = ${convertPyExpr(rhs)}`;
+      }
+      return convertPyExpr(st);
+    }
+
+    function transpileJavaToJs(javaCode) {
+      const match = javaCode.match(/public\s+static\s+\w+\s+resolver\s*\((.*?)\)\s*\{([\s\S]*)\}/);
+      const body = match ? match[2] : javaCode;
+      const js = body
+        .replace(/double\s+/g, 'let ')
+        .replace(/int\s+/g, 'let ')
+        .replace(/String\[\]\s+/g, 'let ')
+        .replace(/String\s+/g, 'let ')
+        .replace(/boolean\s+/g, 'let ')
+        .replace(/Double\.parseDouble\((.*?)\)/g, 'parseFloat($1)')
+        .replace(/Integer\.parseInt\((.*?)\)/g, 'parseInt($1, 10)')
+        .replace(/\.split\("\\\\s\+"\)/g, '.trim().split(/\\s+/)')
+        .replace(/\.equals\((.*?)\)/g, ' === $1')
+        .replace(/String\.format\(.*?"%.1f - %s",\s*(\w+),\s*(\w+)\)/g, '`${Number($1).toFixed(1)} - ${$2}`');
+
+      return `function resolver(entrada) {\n${js}\n}`;
+    }
+
+    function executeCode(code, inputStr, lang) {
+      if (!code || !code.trim()) {
+        return { success: false, error: "Nenhum código submetido!" };
+      }
+
+      try {
+        let fn = null;
+        if (lang === 'javascript') {
+          fn = new Function(`${code}\nif (typeof resolver === 'function') return resolver; else throw new Error("Função resolver(entrada) não encontrada!");`)();
+        } else if (lang === 'python') {
+          const transpiled = transpilePythonToJs(code);
+          fn = new Function(`${transpiled}\nif (typeof resolver === 'function') return resolver; else throw new Error("Função def resolver(entrada) não encontrada!");`)();
+        } else if (lang === 'java') {
+          const transpiled = transpileJavaToJs(code);
+          fn = new Function(`${transpiled}\nif (typeof resolver === 'function') return resolver; else throw new Error("Método public static String resolver não encontrado!");`)();
+        }
+
+        if (!fn) throw new Error("Não foi possível compilar o código.");
+        const result = fn(inputStr);
+        return { success: true, output: (result !== undefined && result !== null) ? String(result).trim() : "" };
+      } catch (err) {
+        return { success: false, error: err.message };
+      }
+    }
+
+    function runQuickTest() {
+      const prob = CHALLENGES.find(c => c.id === activeChallengeId);
+      if (!prob) return;
+      const t = prob.tests[0];
+      const res = executeCode(codeEditor.value, t.input, state.currentLanguage);
+      const consoleEl = document.getElementById('termConsole');
+
+      if (!res.success) {
+        SoundEngine.playWrong();
+        consoleEl.innerHTML = `<div style="color: var(--neon-magenta)">✗ RUNTIME ERROR: ${res.error}</div>`;
+      } else if (res.output === t.expected) {
+        SoundEngine.playCorrect();
+        consoleEl.innerHTML = `<div style="color: var(--neon-green)">✓ TESTE 1 PASSOU! Saída: "${res.output}"</div>`;
+      } else {
+        SoundEngine.playWrong();
+        consoleEl.innerHTML = `<div style="color: var(--neon-magenta)">✗ WRONG ANSWER: Esperado "${t.expected}", obteve "${res.output}"</div>`;
+      }
+    }
+
+    function submitBeecrowdCode() {
+      const prob = CHALLENGES.find(c => c.id === activeChallengeId);
+      if (!prob) return;
+      const consoleEl = document.getElementById('termConsole');
+      let allGood = true;
+
+      for (let t of prob.tests) {
+        const res = executeCode(codeEditor.value, t.input, state.currentLanguage);
+        if (!res.success || res.output !== t.expected) {
+          allGood = false;
+          break;
+        }
+      }
+
+      if (allGood) {
+        SoundEngine.playCorrect();
+        const coinReward = 35;
+        state.coins = (state.coins || 0) + coinReward;
+        showFloatingReward(`+${coinReward} MOEDAS 🪙 BÔNUS BEECROWD!`, '#00f0ff', '💻');
+        consoleEl.innerHTML = `
+          <div style="color: var(--neon-green); font-size: 1rem; font-weight: bold;">
+            ✓ ACCEPTED (100% CORRETO)
+          </div>
+          <div style="color: #cbd5e1;">Todos os casos de teste passaram! Recompensa: +${prob.xp} XP e +${coinReward} Moedas 🪙!</div>
+        `;
+        if (!state.completedPortals.includes(prob.id)) {
+          state.completedPortals.push(prob.id);
+          addXP(prob.xp);
+
+          // Mark portal in 3D scene (make it gold)
+          const pm = portalMeshes.find(p => p.data.challengeId === prob.id);
+          if (pm) {
+            pm.hologram.material.color.setHex(0xfacc15);
+            pm.hologram.material.emissive.setHex(0xfacc15);
+          }
+        }
+        saveState();
+      } else {
+        SoundEngine.playWrong();
+        consoleEl.innerHTML = `<div style="color: var(--neon-magenta); font-weight: bold;">✗ RESPOSTA INCORRETA (WRONG ANSWER)</div>`;
+      }
+    }
+
+    /* ========================================================
+       10. SPEED QUIZ ARCADE MINIGAME (15S & 3 VIDAS)
+       ======================================================== */
+    let quizInterval = null;
+    let quizTimeLeft = 15;
+    let quizIndex = 0;
+    let quizQuestions = [];
+    let quizCombo = 1;
+
+    function startSpeedQuiz() {
+      state.lives = 3;
+      updateHUD();
+      quizCombo = 1;
+      document.getElementById('quizComboTag').innerText = 'COMBO x1';
+
+      const bank = QUIZ_BANK[state.currentLanguage] || QUIZ_BANK.python;
+      // Shuffle and pick 10 questions per run
+      const shuffled = [...bank].sort(() => 0.5 - Math.random());
+      quizQuestions = shuffled.slice(0, Math.min(shuffled.length, 10));
+      quizIndex = 0;
+
+      document.getElementById('quizModal').classList.add('open');
+      loadQuizQuestion();
+    }
+
+    function regenerateQuiz() {
+      SoundEngine.playBeep(480, 0.08);
+      clearInterval(quizInterval);
+      startSpeedQuiz();
+    }
+
+    function closeQuiz() {
+      clearInterval(quizInterval);
+      document.getElementById('quizModal').classList.remove('open');
+    }
+
+    function loadQuizQuestion() {
+      if (state.lives <= 0 || quizIndex >= quizQuestions.length) {
+        endQuiz();
+        return;
+      }
+
+      // Hide previous genie tip
+      const tipEl = document.getElementById('quizGenieTip');
+      if (tipEl) tipEl.style.display = 'none';
+
+      const q = quizQuestions[quizIndex];
+      const counterTextEl = document.getElementById('quizQCounterText');
+      if (counterTextEl) {
+        counterTextEl.innerText = `PERGUNTA ${quizIndex + 1} DE ${quizQuestions.length} • ${state.currentLanguage.toUpperCase()}`;
+      } else {
+        document.getElementById('quizQCounter').innerText = `PERGUNTA ${quizIndex + 1} DE ${quizQuestions.length} • ${state.currentLanguage.toUpperCase()}`;
+      }
+      document.getElementById('quizQText').innerText = q.q;
+
+      const snippetEl = document.getElementById('quizSnippet');
+      if (q.code) {
+        snippetEl.innerText = q.code;
+        snippetEl.style.display = 'block';
+      } else {
+        snippetEl.style.display = 'none';
+      }
+
+      const optsContainer = document.getElementById('quizOptions');
+      optsContainer.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      q.opts.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt-btn';
+        btn.innerHTML = `<strong>${letters[idx]}</strong> <span>${opt}</span>`;
+        btn.onclick = () => handleQuizChoice(idx, btn);
+        optsContainer.appendChild(btn);
+      });
+
+      clearInterval(quizInterval);
+      quizTimeLeft = 15;
+      updateQuizBar();
+
+      quizInterval = setInterval(() => {
+        quizTimeLeft -= 0.1;
+        updateQuizBar();
+        if (quizTimeLeft <= 0) {
+          clearInterval(quizInterval);
+          handleQuizDamage();
+          setTimeout(() => { quizIndex++; loadQuizQuestion(); }, 1200);
+        }
+      }, 100);
+    }
+
+    function updateQuizBar() {
+      const pct = Math.max(0, (quizTimeLeft / 15) * 100);
+      document.getElementById('quizTimerBar').style.width = `${pct}%`;
+    }
+
+    function handleQuizChoice(choiceIdx, btn) {
+      clearInterval(quizInterval);
+      const q = quizQuestions[quizIndex];
+      const allBtns = document.querySelectorAll('.quiz-opt-btn');
+      allBtns.forEach(b => b.disabled = true);
+
+      if (choiceIdx === q.ans) {
+        btn.classList.add('correct');
+        SoundEngine.playCorrect();
+        const coinGain = 5 * quizCombo;
+        state.coins = (state.coins || 0) + coinGain;
+        showFloatingReward(`+${coinGain} MOEDAS 🪙 (Combo x${quizCombo})`, '#00ff88', '⚡');
+        quizCombo++;
+        document.getElementById('quizComboTag').innerText = `COMBO x${quizCombo} 🔥`;
+        addXP(30 * quizCombo);
+        saveState();
+      } else {
+        btn.classList.add('wrong');
+        allBtns[q.ans].classList.add('correct');
+        handleQuizDamage();
+        quizCombo = 1;
+        document.getElementById('quizComboTag').innerText = 'COMBO x1';
+      }
+
+      setTimeout(() => {
+        quizIndex++;
+        loadQuizQuestion();
+      }, 1200);
+    }
+
+    function handleQuizDamage() {
+      SoundEngine.playWrong();
+      state.lives = Math.max(0, state.lives - 1);
+      updateHUD();
+      document.body.classList.add('shake', 'damage-effect');
+      setTimeout(() => document.body.classList.remove('shake', 'damage-effect'), 400);
+    }
+
+    function endQuiz() {
+      clearInterval(quizInterval);
+      if (state.lives > 0) {
+        SoundEngine.playLevelUp();
+        const bonusCoins = 25;
+        state.coins = (state.coins || 0) + bonusCoins;
+        saveState();
+        showFloatingReward(`+${bonusCoins} MOEDAS BÔNUS DE SOBREVIVÊNCIA!`, '#00ff88', '🎉');
+        alert("🎉 PARABÉNS! Você sobreviveu à Arena Speed Quiz e ganhou +25 Moedas!");
+      } else {
+        SoundEngine.playWrong();
+        alert("💀 GAME OVER! Suas vidas acabaram na rede.");
+      }
+      closeQuiz();
+    }
+
+    /* ========================================================
+       11. GÊNIO DO CÓDIGO (AI MENTOR / HINTS & COIN REWARDS)
+       ======================================================== */
+    function openGenieModal() {
+      document.getElementById('genieModal').classList.add('open');
+      const box = document.getElementById('genieWisdomBox');
+      if (box) box.style.display = 'none';
+      updateHUD();
+      SoundEngine.playBeep(480, 0.08);
+    }
+
+    function closeGenieModal() {
+      document.getElementById('genieModal').classList.remove('open');
+      SoundEngine.playBeep(320, 0.05);
+    }
+
+    function buyGenieLife() {
+      const cost = 25;
+      if ((state.coins || 0) < cost) {
+        showGenieWisdom(`🪙 Moedas insuficientes! Você tem ${state.coins || 0} moedas, mas precisa de ${cost}. Colete os diamantes brilhantes 💎 espalhados pelo mapa 3D para acumular moedas!`);
+        SoundEngine.playWrong();
+        return;
+      }
+      state.coins -= cost;
+      state.lives = 3;
+      updateHUD();
+      saveState();
+      SoundEngine.playCorrect();
+      showGenieWisdom(`❤️ O Gênio canalizou os fluxos quânticos! Suas 3 vidas foram totalmente recuperadas para o Speed Quiz. Saldo restante: ${state.coins} 🪙`);
+    }
+
+    function buyGenieSpeedBuff() {
+      const cost = 20;
+      if ((state.coins || 0) < cost) {
+        showGenieWisdom(`🪙 Moedas insuficientes! O passe de agilidade custa ${cost} moedas. Explore o cenário e colete diamantes 💎 para ganhar moedas.`);
+        SoundEngine.playWrong();
+        return;
+      }
+      state.coins -= cost;
+      updateHUD();
+      saveState();
+      playerPhysics.speed = 19;
+      SoundEngine.playLevelUp();
+      showFloatingReward('⚡ BENÇÃO DA AGILIDADE ATIVA! (+60% VELOCIDADE)', '#a855f7', '⚡');
+      showGenieWisdom(`⚡ O Gênio concedeu a Benção da Agilidade! Você correrá +60% mais rápido pelos próximos 45 segundos para coletar diamantes! Saldo restante: ${state.coins} 🪙`);
+      setTimeout(() => {
+        playerPhysics.speed = 12;
+        showFloatingReward('Velocidade normal restabelecida.', '#94a3b8', '🏃');
+      }, 45000);
+    }
+
+    const GENIE_TIPS_DATABASE = [
+      "💡 <strong>Clean Code:</strong> Nomes de variáveis devem revelar a intenção. Prefira <code>tempoEmSegundos</code> a <code>t</code> ou <code>s</code>.",
+      "🐍 <strong>Python Pro-Tip:</strong> Use <code>enumerate(lista)</code> para iterar com índice e valor simultaneamente, sem contadores manuais.",
+      "⚡ <strong>JavaScript Pro-Tip:</strong> O operador de coalescência nula (<code>??</code>) é mais seguro que <code>||</code> para valores padrão, pois aceita <code>0</code> e <code>''</code> como valores válidos.",
+      "☕ <strong>Java Pro-Tip:</strong> Sempre use <code>StringBuilder</code> quando fizer muitas concatenações de Strings em loops para evitar alocações desnecessárias na Heap.",
+      "💡 <strong>Algoritmos:</strong> Para verificar palíndromos rapidamente, a técnica de dois ponteiros (início e fim caminhando para o centro) tem complexidade O(n) e espaço O(1)!",
+      "🐍 <strong>Python Dictionaries:</strong> O método <code>dict.get(chave, valor_padrao)</code> previne erros <code>KeyError</code> e torna seu código resiliente.",
+      "⚡ <strong>JS Destructuring:</strong> Você pode atribuir valores padrão durante a desestruturação: <code>const { tema = 'dark' } = config;</code>",
+      "☕ <strong>Java Collections:</strong> Use <code>HashSet</code> quando precisar verificar existência em tempo constante O(1) sem duplicatas."
+    ];
+
+    function buyGenieRandomTip() {
+      const cost = 10;
+      if ((state.coins || 0) < cost) {
+        showGenieWisdom(`🪙 Você precisa de ${cost} moedas para receber uma sabedoria do Gênio. Colete diamantes 💎 no mapa!`);
+        SoundEngine.playWrong();
+        return;
+      }
+      state.coins -= cost;
+      updateHUD();
+      saveState();
+      SoundEngine.playCoin();
+      const tip = GENIE_TIPS_DATABASE[Math.floor(Math.random() * GENIE_TIPS_DATABASE.length)];
+      showGenieWisdom(tip);
+    }
+
+    function buyGenieDiamondCompass() {
+      const cost = 15;
+      if ((state.coins || 0) < cost) {
+        showGenieWisdom(`🪙 Você precisa de ${cost} moedas para a Bússola. Colete cristais ou dispute o quiz!`);
+        SoundEngine.playWrong();
+        return;
+      }
+
+      // Find closest active diamond
+      let closest = null;
+      let minD = 9999;
+      collectableDiamonds.forEach(d => {
+        if (d.active) {
+          const dist = Math.hypot(avatar.position.x - d.x, avatar.position.z - d.z);
+          if (dist < minD) {
+            minD = dist;
+            closest = d;
+          }
+        }
+      });
+
+      if (!closest) {
+        showGenieWisdom("💎 Todos os diamantes foram coletados recentemente! Espere alguns segundos que eles reaparecerão no mapa.");
+        return;
+      }
+
+      state.coins -= cost;
+      updateHUD();
+      saveState();
+      SoundEngine.playLevelUp();
+
+      // Teleport player near the diamond
+      avatar.position.x = closest.x + 1.2;
+      avatar.position.z = closest.z + 1.2;
+      closeGenieModal();
+      showFloatingReward("📍 BÚSSOLA CONDUZIU VOCÊ AO CRISTAL!", '#00f0ff', '💎');
+    }
+
+    function showGenieWisdom(msg) {
+      const box = document.getElementById('genieWisdomBox');
+      if (box) {
+        box.innerHTML = msg;
+        box.style.display = 'block';
+      }
+    }
+
+    /* --- Dica do Gênio no Speed Quiz --- */
+    function askGenieQuizHint() {
+      const cost = 15;
+      if ((state.coins || 0) < cost) {
+        alert(`🪙 Moedas insuficientes!\n\nVocê tem ${state.coins || 0} moedas, mas a Dica do Gênio custa ${cost} moedas.\n\n💡 Como conseguir moedas:\n• Colete os diamantes brilhantes pelo mapa 3D (+15 cada)\n• Acerte perguntas no Speed Quiz (+5 a +20 por acerto)\n• Submeta códigos no Beecrowd (+35 cada)`);
+        SoundEngine.playWrong();
+        return;
+      }
+
+      const q = quizQuestions[quizIndex];
+      if (!q) return;
+
+      state.coins -= cost;
+      updateHUD();
+      saveState();
+      SoundEngine.playCoin();
+
+      // 1. Eliminate 2 wrong options (50/50)
+      const allBtns = document.querySelectorAll('.quiz-opt-btn');
+      const wrongIndices = [];
+      q.opts.forEach((_, idx) => {
+        if (idx !== q.ans) wrongIndices.push(idx);
+      });
+      // Shuffle wrong indices and take first 2
+      wrongIndices.sort(() => 0.5 - Math.random());
+      const toEliminate = wrongIndices.slice(0, 2);
+
+      toEliminate.forEach(idx => {
+        const btn = allBtns[idx];
+        if (btn) {
+          btn.classList.add('eliminated');
+          btn.innerHTML += ' <span style="color:#f43f5e; font-size:0.75rem; font-weight:bold;">[ELIMINADA]</span>';
+        }
+      });
+
+      // 2. Render concept hint in the quiz dialog
+      const tipEl = document.getElementById('quizGenieTip');
+      if (tipEl) {
+        tipEl.className = 'genie-tip-bubble';
+        tipEl.innerHTML = `
+          <div style="font-size: 1.6rem;">🧞</div>
+          <div>
+            <strong>Gênio Ada sussurra:</strong> "Eliminei duas alternativas falsas para você! Fique atento às regras de tipagem e sintaxe fundamentais de <em>${state.currentLanguage.toUpperCase()}</em>."
+          </div>
+        `;
+        tipEl.style.display = 'flex';
+      }
+
+      showFloatingReward(`-15 🪙 DICA DO GÊNIO ATIVADA!`, '#a855f7', '🧞');
+    }
+
+    /* --- Dica do Gênio no Terminal Beecrowd --- */
+    function askGenieChallengeHint() {
+      const cost = 20;
+      if ((state.coins || 0) < cost) {
+        alert(`🪙 Moedas insuficientes!\n\nVocê possui ${state.coins || 0} moedas, mas a Dica do Gênio custa ${cost} moedas.\n\n💡 Dica: Explore o mapa 3D para coletar cristais/diamantes (+15 moedas cada) ou pratique no Speed Quiz!`);
+        SoundEngine.playWrong();
+        return;
+      }
+
+      const prob = CHALLENGES.find(c => c.id === activeChallengeId);
+      if (!prob) return;
+
+      state.coins -= cost;
+      updateHUD();
+      saveState();
+      SoundEngine.playCoin();
+
+      const box = document.getElementById('termGenieBox');
+      if (!box) return;
+
+      let guidance = "";
+      if (prob.id === 1001) {
+        guidance = `
+          <strong>🧞 DICA DO GÊNIO • PROBLEMA #1001 (Média Ponderada):</strong><br>
+          • <strong>Passo 1:</strong> Separe a string de entrada em 3 valores usando <code>.split()</code> e converta para números decimais.<br>
+          • <strong>Passo 2:</strong> Aplique a fórmula: <code>(N1*2 + N2*3 + N3*5) / 10</code>.<br>
+          • <strong>Passo 3:</strong> Se média >= 7.0, status é "APROVADO", senão "REPROVADO".<br>
+          • <strong>Exemplo de formatação:</strong> Formate a média com 1 casa decimal (ex: em JS use <code>media.toFixed(1)</code>, em Python use <code>f"{media:.1f}"</code>).
+        `;
+      } else if (prob.id === 1002) {
+        guidance = `
+          <strong>🧞 DICA DO GÊNIO • PROBLEMA #1002 (Palíndromo):</strong><br>
+          • <strong>Passo 1:</strong> Remova todos os espaços da string e converta tudo para minúsculas.<br>
+          • <strong>Passo 2:</strong> Compare a string limpa com ela mesma lida de trás para frente.<br>
+          • <strong>Sintaxe rápida:</strong> Em Python use <code>texto[::-1]</code>; em JS use <code>texto.split('').reverse().join('')</code>; em Java use <code>new StringBuilder(texto).reverse().toString()</code>.<br>
+          • <strong>Retorno:</strong> Retorne "VALIDO" se for igual, ou "CORROMPIDO" caso contrário.
+        `;
+      } else if (prob.id === 1003) {
+        guidance = `
+          <strong>🧞 DICA DO GÊNIO • PROBLEMA #1003 (Filtro de Primos):</strong><br>
+          • <strong>Passo 1:</strong> Crie uma função auxiliar para testar se um número <code>n</code> é primo: deve ser <code>> 1</code> e não ser divisível por nenhum inteiro de 2 até a raiz quadrada de <code>n</code>.<br>
+          • <strong>Passo 2:</strong> Filtre os inteiros da lista que são primos e ordene-os em ordem crescente.<br>
+          • <strong>Passo 3:</strong> Junte com espaços (<code>" ".join(...)</code>). Se a lista de primos estiver vazia, retorne exatamente "NENHUM".
+        `;
+      }
+
+      box.innerHTML = guidance;
+      box.style.display = 'block';
+      showFloatingReward(`-20 🪙 DICA ESTRUTURADA REVELADA!`, '#a855f7', '🧞');
+    }
+
+    /* ========================================================
+       11. DOCK & PWA SUPPORT
+       ======================================================== */
+    let dockCollapsed = false;
+    function toggleDock() {
+      dockCollapsed = !dockCollapsed;
+      document.getElementById('bottomDock').classList.toggle('collapsed', dockCollapsed);
+      document.getElementById('dockArrow').innerText = dockCollapsed ? '▴' : '▾';
+    }
+
+    // PWA Install prompt handling
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('btnInstall').style.display = 'flex';
+    });
+
+    function triggerPWAInstall() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt = null;
+      } else {
+        alert("Para instalar, use a opção 'Adicionar à Tela de Início' no menu do seu navegador.");
+      }
+    }
+
+    // Inline Service Worker for Offline PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        const sw = `
+          self.addEventListener('install', e => self.skipWaiting());
+          self.addEventListener('activate', e => clients.claim());
+          self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+        `;
+        const blob = new Blob([sw], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+      });
+    }
+
+    window.addEventListener('online', () => document.getElementById('offlineBadge').classList.remove('show'));
+    window.addEventListener('offline', () => document.getElementById('offlineBadge').classList.add('show'));
+
+    // Initialize HUD and on-screen D-pad controls on load
+    updateHUD();
+    initDpadControls();
+  </script>
+</body>
+</html>
