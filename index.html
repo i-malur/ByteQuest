@@ -1272,46 +1272,7 @@
     <span>↵</span>
   </div>
 
-  <!-- ========================================================
-       COLLAPSIBLE BOTTOM DOCK (Three.js Skill Viewport Rule)
-       ======================================================== -->
-  <div class="bottom-dock-container" id="bottomDock">
-    <button class="dock-toggle-btn" onclick="toggleDock()">
-      <span id="dockArrow">▾</span> <span id="dockLabel">Controles & Atalhos do Mapa</span>
-    </button>
-    <div class="dock-bar">
-      <button class="dock-item-btn" onclick="teleportToSpawn()">
-        <span>📍</span> Spawn
-      </button>
-      <button class="dock-item-btn" onclick="openTerminalDirect(1001)">
-        <span>💻</span> #1001 Média
-      </button>
-      <button class="dock-item-btn" onclick="openTerminalDirect(1002)">
-        <span>💻</span> #1002 Palíndromo
-      </button>
-      <button class="dock-item-btn" onclick="openTerminalDirect(1003)">
-        <span>💻</span> #1003 Primos
-      </button>
-      <button class="dock-item-btn" onclick="openTerminalDirect(1004)">
-        <span>🗄️</span> #1004 SQL Query
-      </button>
-      <button class="dock-item-btn" onclick="openTerminalDirect(1005)">
-        <span>⚙️</span> #1005 C++ Vetores
-      </button>
-      <button class="dock-item-btn" onclick="openTerminalDirect(1006)">
-        <span>🌐</span> #1006 Web HTML/CSS
-      </button>
-      <button class="dock-item-btn" onclick="startSpeedQuiz()" style="border-color: var(--neon-magenta); color: #f472b6;">
-        <span>⚡</span> Speed Quiz
-      </button>
-      <button class="dock-item-btn" onclick="openObstacleDirect(1)" style="border-color: #f43f5e; color: #fda4af;">
-        <span>⛔</span> Firewall Alpha
-      </button>
-      <button class="dock-item-btn" onclick="openGenieModal()" style="border-color: var(--neon-purple); background: rgba(168, 85, 247, 0.15); color: #fff;">
-        <span>🧞</span> Gênio
-      </button>
-    </div>
-  </div>
+
 
   <!-- ========================================================
        SCREEN CONTROLS: VIRTUAL D-PAD & ACTION BUTTONS
@@ -4298,9 +4259,12 @@
        ======================================================== */
     let dockCollapsed = false;
     function toggleDock() {
+      const dock = document.getElementById('bottomDock');
+      if (!dock) return;
       dockCollapsed = !dockCollapsed;
-      document.getElementById('bottomDock').classList.toggle('collapsed', dockCollapsed);
-      document.getElementById('dockArrow').innerText = dockCollapsed ? '▴' : '▾';
+      dock.classList.toggle('collapsed', dockCollapsed);
+      const arrow = document.getElementById('dockArrow');
+      if (arrow) arrow.innerText = dockCollapsed ? '▴' : '▾';
     }
 
     // PWA Install prompt handling
