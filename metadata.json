@@ -1,6 +1,6 @@
 {
   "name": "ByteQuest: 3D Voxel Code World",
-  "description": "Jogo educativo 3D estilo Roblox/Voxel em 3ª pessoa para aprender programação em Python, JavaScript e Java com terminais Beecrowd e Speed Quiz.",
+  "description": "Jogo educativo 3D estilo Roblox/Voxel em 3ª pessoa para aprender programação e marcação em Python, JavaScript, Java, SQL, C++, HTML e CSS com terminais Beecrowd, Speed Quiz, obstáculos e zoom de câmera.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

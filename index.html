@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>ByteQuest: 3D Voxel Code World</title>
-  <meta name="description" content="Jogo educativo 3D estilo Roblox/Voxel em 3ª pessoa para aprender programação em Python, JavaScript e Java com terminais Beecrowd e Speed Quiz.">
+  <meta name="description" content="Jogo educativo 3D estilo Roblox/Voxel em 3ª pessoa para aprender programação e marcação em Python, JavaScript, Java, SQL, C++, HTML e CSS com terminais Beecrowd, Speed Quiz, obstáculos e zoom de câmera.">
   <meta property="og:title" content="ByteQuest: 3D Voxel Code World">
-  <meta property="og:description" content="Explore um mundo 3D estilo voxel em terceira pessoa, resolva desafios estilo Beecrowd em terminais virtuais e enfrente o Speed Quiz!">
+  <meta property="og:description" content="Explore um mundo 3D estilo voxel em terceira pessoa, desative firewalls laser usando programação, resolva desafios estilo Beecrowd com terminal limpo e dispute o Speed Quiz em 7 linguagens!">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#0b0e1e">
   <meta name="mobile-web-app-capable" content="yes">
@@ -180,37 +180,87 @@
       filter: grayscale(1);
     }
 
-    /* Language Switcher in Top Right */
+    /* Language Switcher & Controls in Top Right */
     .top-controls {
       pointer-events: auto;
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
     .lang-pill-group {
-      background: rgba(13, 16, 38, 0.92);
+      background: rgba(13, 16, 38, 0.94);
       border: 2px solid var(--border-color);
       border-radius: 24px;
       padding: 3px;
       display: flex;
       gap: 2px;
+      max-width: min(520px, 48vw);
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .lang-pill-group::-webkit-scrollbar {
+      display: none;
     }
     .lang-pill {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      font-size: 0.75rem;
+      font-size: 0.73rem;
       font-weight: 700;
-      padding: 5px 10px;
+      padding: 5px 9px;
       border-radius: 20px;
       cursor: pointer;
       transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .lang-pill:hover {
+      color: #fff;
     }
     .lang-pill.active {
       background: var(--neon-purple);
       color: #fff;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
     }
+
+    /* Zoom Controls Group in HUD */
+    .zoom-controls-group {
+      background: rgba(13, 16, 38, 0.94);
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2px 4px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+    }
+    .zoom-btn {
+      background: #141a3d;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      color: var(--neon-cyan);
+      font-size: 0.85rem;
+      font-weight: 800;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .zoom-btn:hover {
+      background: rgba(0, 240, 255, 0.25);
+      border-color: var(--neon-cyan);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+    }
+    .zoom-btn:active {
+      transform: scale(0.92);
+    }
+
     .icon-btn {
       background: rgba(13, 16, 38, 0.92);
       border: 2px solid var(--border-color);
@@ -668,18 +718,25 @@
     }
     #codeEditor {
       flex: 1;
-      background: transparent;
-      border: none;
+      background: #080b1e;
+      border: 1px solid rgba(38, 45, 94, 0.4);
       outline: none;
-      color: #e0e7ff;
-      font-family: var(--font-arcade);
-      font-size: 0.85rem;
-      line-height: 20px;
-      padding: 10px 12px;
+      color: #f1f5f9;
+      caret-color: var(--neon-cyan);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9rem;
+      line-height: 22px;
+      padding: 10px 14px;
       resize: none;
       white-space: pre;
       overflow-x: auto;
       tab-size: 4;
+      letter-spacing: 0.3px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+    #codeEditor:focus {
+      border-color: rgba(0, 240, 255, 0.5);
+      background: #0a0e26;
     }
 
     /* Terminal Console & Verdict */
@@ -916,6 +973,120 @@
       animation: modalZoom 0.2s ease-out;
     }
 
+    /* Obstacle Firewall / Laser Gate Modal */
+    .firewall-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 6, 18, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .firewall-modal-backdrop.open {
+      display: flex;
+    }
+    .firewall-card {
+      background: #0d112b;
+      border: 2px solid #f43f5e;
+      border-radius: 16px;
+      width: min(740px, 95vw);
+      max-height: 92vh;
+      overflow-y: auto;
+      box-shadow: 0 0 35px rgba(244, 63, 94, 0.45);
+      display: flex;
+      flex-direction: column;
+      animation: modalZoom 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .firewall-header {
+      background: #171d47;
+      border-bottom: 2px solid #2d3775;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .firewall-title {
+      font-family: var(--font-arcade);
+      font-weight: 900;
+      color: #f43f5e;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .firewall-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .firewall-prompt-box {
+      background: #13193e;
+      border: 1px solid #2a3470;
+      border-left: 4px solid #f43f5e;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+    .firewall-code-snippet {
+      background: #070918;
+      border: 1px solid #21295c;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: var(--font-arcade);
+      font-size: 0.85rem;
+      color: #00f0ff;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+    .firewall-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .firewall-opt-btn {
+      background: #141a3d;
+      border: 2px solid #28336d;
+      color: #f8fafc;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-family: var(--font-arcade);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      transition: all 0.2s;
+    }
+    .firewall-opt-btn:hover {
+      border-color: #f43f5e;
+      background: #201c40;
+      box-shadow: 0 0 12px rgba(244, 63, 94, 0.35);
+    }
+    .firewall-opt-btn.correct {
+      border-color: var(--neon-green) !important;
+      background: rgba(0, 255, 136, 0.25) !important;
+      color: #fff !important;
+    }
+    .firewall-opt-btn.wrong {
+      border-color: #f43f5e !important;
+      background: rgba(244, 63, 94, 0.25) !important;
+    }
+    .firewall-status {
+      display: none;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: var(--font-arcade);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
     /* Offline Toast */
     .offline-badge {
       display: none;
@@ -984,11 +1155,22 @@
     </div>
 
     <div class="top-controls">
-      <!-- Multi-Language Pill Group -->
-      <div class="lang-pill-group">
+      <!-- Multi-Language Pill Group (All 7 Languages/Markup) -->
+      <div class="lang-pill-group" id="langPillGroup" title="Selecione a Linguagem ou Tecnologia">
         <button class="lang-pill active" id="pillPy" onclick="switchLanguage('python')">🐍 Python</button>
         <button class="lang-pill" id="pillJs" onclick="switchLanguage('javascript')">⚡ JS</button>
         <button class="lang-pill" id="pillJava" onclick="switchLanguage('java')">☕ Java</button>
+        <button class="lang-pill" id="pillSql" onclick="switchLanguage('sql')">🗄️ SQL</button>
+        <button class="lang-pill" id="pillCpp" onclick="switchLanguage('cpp')">⚙️ C++</button>
+        <button class="lang-pill" id="pillHtml" onclick="switchLanguage('html')">🌐 HTML</button>
+        <button class="lang-pill" id="pillCss" onclick="switchLanguage('css')">🎨 CSS</button>
+      </div>
+
+      <!-- Zoom In / Zoom Out Controls -->
+      <div class="zoom-controls-group" title="Controle de Zoom da Câmera 3D">
+        <button class="zoom-btn" onclick="zoomIn()" title="Aproximar Câmera (Zoom In / Roda do Mouse)">🔍⁺</button>
+        <button class="zoom-btn" onclick="zoomOut()" title="Afastar Câmera (Zoom Out / Roda do Mouse)">🔍⁻</button>
+        <button class="zoom-btn" onclick="toggleOverviewCamera()" title="Visão Panorâmica do Mapa / Reset">🗺️</button>
       </div>
 
       <button class="icon-btn" id="btnGenie" onclick="openGenieModal()" title="Santuário do Gênio (Dicas & Vidas)" style="border-color: var(--neon-purple); color: #d8b4fe; font-size: 1.1rem;">🧞</button>
@@ -1012,26 +1194,38 @@
        ======================================================== -->
   <div class="bottom-dock-container" id="bottomDock">
     <button class="dock-toggle-btn" onclick="toggleDock()">
-      <span id="dockArrow">▾</span> <span id="dockLabel">Controles & Atalhos</span>
+      <span id="dockArrow">▾</span> <span id="dockLabel">Controles & Atalhos do Mapa</span>
     </button>
     <div class="dock-bar">
       <button class="dock-item-btn" onclick="teleportToSpawn()">
-        <span>📍</span> Reset Posição
+        <span>📍</span> Spawn
       </button>
       <button class="dock-item-btn" onclick="openTerminalDirect(1001)">
-        <span>💻</span> Terminal #1001
+        <span>💻</span> #1001 Média
       </button>
       <button class="dock-item-btn" onclick="openTerminalDirect(1002)">
-        <span>💻</span> Terminal #1002
+        <span>💻</span> #1002 Palíndromo
       </button>
       <button class="dock-item-btn" onclick="openTerminalDirect(1003)">
-        <span>💻</span> Terminal #1003
+        <span>💻</span> #1003 Primos
       </button>
-      <button class="dock-item-btn" onclick="startSpeedQuiz()">
-        <span>⚡</span> Speed Quiz Arcade
+      <button class="dock-item-btn" onclick="openTerminalDirect(1004)">
+        <span>🗄️</span> #1004 SQL Query
+      </button>
+      <button class="dock-item-btn" onclick="openTerminalDirect(1005)">
+        <span>⚙️</span> #1005 C++ Vetores
+      </button>
+      <button class="dock-item-btn" onclick="openTerminalDirect(1006)">
+        <span>🌐</span> #1006 Web HTML/CSS
+      </button>
+      <button class="dock-item-btn" onclick="startSpeedQuiz()" style="border-color: var(--neon-magenta); color: #f472b6;">
+        <span>⚡</span> Speed Quiz
+      </button>
+      <button class="dock-item-btn" onclick="openObstacleDirect(1)" style="border-color: #f43f5e; color: #fda4af;">
+        <span>⛔</span> Firewall Alpha
       </button>
       <button class="dock-item-btn" onclick="openGenieModal()" style="border-color: var(--neon-purple); background: rgba(168, 85, 247, 0.15); color: #fff;">
-        <span>🧞</span> Gênio do Código
+        <span>🧞</span> Gênio
       </button>
     </div>
   </div>
@@ -1106,7 +1300,8 @@
           <div class="term-editor-tools">
             <div class="term-lang-tag" id="termLangIndicator">PYTHON 3.12</div>
             <div style="display: flex; gap: 6px;">
-              <button class="close-term-btn" style="background:#151a3d;" onclick="resetCodeTemplate()">↺ Reset</button>
+              <button class="close-term-btn" style="background:#151a3d; color: var(--neon-cyan); border-color: rgba(0,240,255,0.4);" onclick="clearCodeEditor()" title="Limpar todo o texto do editor">🧹 Limpar Código</button>
+              <button class="close-term-btn" style="background:#151a3d;" onclick="resetCodeTemplate()" title="Restaurar template limpo">↺ Reset</button>
             </div>
           </div>
 
@@ -1115,10 +1310,13 @@
             <button class="q-sym-btn" onclick="insertSymbol('()')">( )</button>
             <button class="q-sym-btn" onclick="insertSymbol('{}')">{ }</button>
             <button class="q-sym-btn" onclick="insertSymbol('[]')">[ ]</button>
+            <button class="q-sym-btn" onclick="insertSymbol('<>')">< ></button>
             <button class="q-sym-btn" onclick="insertSymbol(' == ')">==</button>
             <button class="q-sym-btn" onclick="insertSymbol(' != ')">!=</button>
             <button class="q-sym-btn" onclick="insertSymbol('def ')">def</button>
             <button class="q-sym-btn" onclick="insertSymbol('return ')">return</button>
+            <button class="q-sym-btn" onclick="insertSymbol('SELECT ')">SELECT</button>
+            <button class="q-sym-btn" onclick="insertSymbol('std::')">std::</button>
             <button class="q-sym-btn" onclick="insertSymbol(':')">:</button>
             <button class="q-sym-btn" onclick="insertSymbol(';')">;</button>
           </div>
@@ -1250,6 +1448,37 @@
   </div>
 
   <!-- ========================================================
+       MODAL 4: OBSTÁCULO HACKER / DESAFIO FIREWALL LASER
+       ======================================================== -->
+  <div class="firewall-modal-backdrop" id="obstacleModal">
+    <div class="firewall-card">
+      <div class="firewall-header">
+        <div class="firewall-title">
+          <span>⛔</span>
+          <span id="firewallModalTitle">FIREWALL ALPHA • SISTEMA DE CONTENÇÃO A LASER</span>
+        </div>
+        <button class="close-term-btn" onclick="closeObstacleModal()">✕ FECHAR</button>
+      </div>
+
+      <div class="firewall-body">
+        <div class="firewall-prompt-box" id="firewallModalPrompt">
+          Uma barreira laser de alta frequência bloqueia este setor. Para desligar a barreira de energia e recolher as recompensas, decifre o enigma de código abaixo.
+        </div>
+
+        <div style="font-family: var(--font-arcade); font-weight: 800; font-size: 0.95rem; color: #fff;" id="firewallModalQuestion">
+          Qual o resultado da instrução?
+        </div>
+
+        <div class="firewall-code-snippet" id="firewallModalSnippet"></div>
+
+        <div class="firewall-options" id="firewallModalOptions"></div>
+
+        <div class="firewall-status" id="firewallModalStatus"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
        SCRIPT: THREE.JS ENGINE + GAMEPLAY LOGIC
        ======================================================== -->
   <script>
@@ -1322,7 +1551,7 @@
     };
 
     /* ========================================================
-       2. BEECROWD PROBLEMS REPOSITORY
+       2. BEECROWD PROBLEMS REPOSITORY (CLEAN TERMINALS)
        ======================================================== */
     const CHALLENGES = [
       {
@@ -1331,13 +1560,17 @@
         difficulty: "Iniciante",
         diffTag: "tag-easy",
         xp: 100,
-        desc: "O terminal de satélite precisa calcular a média ponderada de três leituras de sensores com pesos 2, 3 e 5. Fórmula: (N1*2 + N2*3 + N3*5) / 10. Se a média for maior ou igual a 7.0, imprima 'APROVADO'; caso contrário, imprima 'REPROVADO'.",
-        inputDesc: "Três valores numéricos decimais separados por espaço.",
+        desc: "O terminal de satélite precisa calcular a média ponderada de três leituras de sensores com pesos 2, 3 e 5. Fórmula: (N1*2 + N2*3 + N3*5) / 10. Se a média for maior ou igual a 7.0, retorne 'APROVADO'; caso contrário, retorne 'REPROVADO'.",
+        inputDesc: "Três valores numéricos decimais separados por espaço. Ex: '5.0 6.0 10.0'",
         outputDesc: "A média com 1 casa decimal seguida de ' - ' e a situação ('APROVADO' ou 'REPROVADO'). Ex: '7.8 - APROVADO'",
         starter: {
-          python: `def resolver(entrada):\n    # entrada: três números decimais separados por espaço\n    # TODO: Desenvolva sua solução aqui\n    \n    return ""\n`,
-          javascript: `function resolver(entrada) {\n    // entrada: três números decimais separados por espaço\n    // TODO: Desenvolva sua solução aqui\n    \n    return "";\n}\n`,
-          java: `public class Solution {\n    public static String resolver(String entrada) {\n        // entrada: três números decimais separados por espaço\n        // TODO: Desenvolva sua solução aqui\n        \n        return "";\n    }\n}\n`
+          python: `def resolver(entrada):\n    # entrada: três números decimais separados por espaço\n    # Desenvolva seu algoritmo aqui\n    \n`,
+          javascript: `function resolver(entrada) {\n    // entrada: três números decimais separados por espaço\n    // Desenvolva sua solução aqui\n    \n}\n`,
+          java: `public class Solution {\n    public static String resolver(String entrada) {\n        // entrada: três números decimais separados por espaço\n        // Desenvolva sua solução aqui\n        \n    }\n}\n`,
+          cpp: `#include <iostream>\n#include <string>\nusing namespace std;\n\nstring resolver(string entrada) {\n    // entrada: três números decimais separados por espaço\n    // Desenvolva sua solução aqui\n    \n}\n`,
+          sql: `-- Escreva sua expressão/query SQL para calcular a média ponderada\nSELECT ...;\n`,
+          html: `<!-- Desenvolva a estrutura de exibição da média ponderada -->\n<div class="media-result">\n    \n</div>\n`,
+          css: `/* Regras de estilização do card de aprovação */\n.media-result {\n    \n}\n`
         },
         tests: [
           { input: "5.0 6.0 10.0", expected: "7.8 - APROVADO" },
@@ -1355,9 +1588,13 @@
         inputDesc: "Uma string com uma frase ou código de transmissão.",
         outputDesc: "'VALIDO' caso seja um palíndromo, ou 'CORROMPIDO' caso contrário.",
         starter: {
-          python: `def resolver(entrada):\n    # entrada: frase ou transmissão recebida\n    # TODO: Desenvolva sua solução aqui\n    \n    return ""\n`,
-          javascript: `function resolver(entrada) {\n    // entrada: frase ou transmissão recebida\n    // TODO: Desenvolva sua solução aqui\n    \n    return "";\n}\n`,
-          java: `public class Solution {\n    public static String resolver(String entrada) {\n        // entrada: frase ou transmissão recebida\n        // TODO: Desenvolva sua solução aqui\n        \n        return "";\n    }\n}\n`
+          python: `def resolver(entrada):\n    # entrada: frase ou transmissão recebida\n    # Desenvolva seu algoritmo aqui\n    \n`,
+          javascript: `function resolver(entrada) {\n    // entrada: frase ou transmissão recebida\n    // Desenvolva sua solução aqui\n    \n}\n`,
+          java: `public class Solution {\n    public static String resolver(String entrada) {\n        // entrada: frase ou transmissão recebida\n        // Desenvolva sua solução aqui\n        \n    }\n}\n`,
+          cpp: `#include <iostream>\n#include <string>\nusing namespace std;\n\nstring resolver(string entrada) {\n    // entrada: frase ou transmissão recebida\n    // Desenvolva sua solução aqui\n    \n}\n`,
+          sql: `-- Verificação de texto inverso em SQL\nSELECT ...;\n`,
+          html: `<!-- Elemento para exibição do status do palíndromo -->\n`,
+          css: `/* Estilização para status VALIDO / CORROMPIDO */\n`
         },
         tests: [
           { input: "Ame o poema", expected: "VALIDO" },
@@ -1371,23 +1608,97 @@
         difficulty: "Intermediário",
         diffTag: "tag-med",
         xp: 150,
-        desc: "Identifique e retorne apenas os números primos contidos em uma lista de inteiros, ordenados em ordem crescente e separados por espaço.",
+        desc: "Identifique e retorne apenas os números primos contidos em uma lista de inteiros, ordenados em ordem crescente e separados por espaço. Se nenhum número for primo, retorne 'NENHUM'.",
         inputDesc: "Números inteiros separados por espaço.",
         outputDesc: "Os primos encontrados separados por espaço, ou 'NENHUM'.",
         starter: {
-          python: `def resolver(entrada):\n    # entrada: números inteiros separados por espaço\n    # TODO: Desenvolva sua solução aqui\n    \n    return ""\n`,
-          javascript: `function resolver(entrada) {\n    // entrada: números inteiros separados por espaço\n    // TODO: Desenvolva sua solução aqui\n    \n    return "";\n}\n`,
-          java: `public class Solution {\n    public static String resolver(String entrada) {\n        // entrada: números inteiros separados por espaço\n        // TODO: Desenvolva sua solução aqui\n        \n        return "";\n    }\n}\n`
+          python: `def resolver(entrada):\n    # entrada: números inteiros separados por espaço\n    # Desenvolva seu algoritmo aqui\n    \n`,
+          javascript: `function resolver(entrada) {\n    // entrada: números inteiros separados por espaço\n    // Desenvolva sua solução aqui\n    \n}\n`,
+          java: `public class Solution {\n    public static String resolver(String entrada) {\n        // entrada: números inteiros separados por espaço\n        // Desenvolva sua solução aqui\n        \n    }\n}\n`,
+          cpp: `#include <iostream>\n#include <string>\nusing namespace std;\n\nstring resolver(string entrada) {\n    // entrada: inteiros separados por espaço\n    // Desenvolva sua solução aqui\n    \n}\n`,
+          sql: `-- Consulta de filtragem de primos em SQL\nSELECT ...;\n`,
+          html: `<!-- Lista de nós primos filtrados -->\n`,
+          css: `/* Estilos da lista de primos */\n`
         },
         tests: [
           { input: "10 3 15 7 2 9 11", expected: "2 3 7 11" },
           { input: "4 6 8 9", expected: "NENHUM" }
         ]
+      },
+      {
+        id: 1004,
+        title: "Consulta SQL: Filtro & Média de Salários",
+        difficulty: "Intermediário",
+        diffTag: "tag-med",
+        xp: 160,
+        desc: "Filtre registros de funcionários no formato 'Nome:Salario' separados por vírgula. Calcule a média salarial dos funcionários que recebem acima do piso de 4000. Retorne a quantidade de funcionários selecionados e a média formatada (ex: '2 FUNCIONARIOS - MEDIA 4600.0'). Se nenhum receber acima de 4000, retorne 'NENHUM'.",
+        inputDesc: "Lista de registros 'Nome:Salario' separados por vírgula. Ex: 'Ana:5000,Carlos:4200,Bia:3500'",
+        outputDesc: "'N FUNCIONARIOS - MEDIA X.X' ou 'NENHUM'.",
+        starter: {
+          sql: `-- Escreva sua consulta SQL analítica ou lógica\n-- SELECT COUNT(*), AVG(salario) FROM funcionarios WHERE salario > 4000;\n`,
+          python: `def resolver(entrada):\n    # entrada: registros 'Nome:Salario' separados por virgula\n    # Desenvolva seu filtro e média aqui\n    \n`,
+          javascript: `function resolver(entrada) {\n    // entrada: registros 'Nome:Salario' separados por virgula\n    // Desenvolva seu filtro e média aqui\n    \n}\n`,
+          java: `public class Solution {\n    public static String resolver(String entrada) {\n        // entrada: registros 'Nome:Salario' separados por virgula\n        // Desenvolva seu filtro e média aqui\n        \n    }\n}\n`,
+          cpp: `#include <iostream>\n#include <string>\nusing namespace std;\n\nstring resolver(string entrada) {\n    // Desenvolva sua solução aqui\n    \n}\n`,
+          html: `<!-- Tabela semântica de funcionários -->\n`,
+          css: `/* Estilos de destaque para salários acima do piso */\n`
+        },
+        tests: [
+          { input: "Ana:5000,Carlos:4200,Bia:3500", expected: "2 FUNCIONARIOS - MEDIA 4600.0" },
+          { input: "Leo:2500,Pedro:3800", expected: "NENHUM" },
+          { input: "DevA:6000,DevB:6000,DevC:6000", expected: "3 FUNCIONARIOS - MEDIA 6000.0" }
+        ]
+      },
+      {
+        id: 1005,
+        title: "Algoritmo C++: Inversão de Vetor & Ponteiros",
+        difficulty: "Avançado",
+        diffTag: "tag-hard",
+        xp: 180,
+        desc: "Receba uma lista de inteiros separados por espaço. Inverta a ordem de todos os elementos e some apenas os elementos que ficaram em índices pares (0, 2, 4...). Retorne o vetor invertido seguido por ' | SOMA_PARES: X'.",
+        inputDesc: "Inteiros separados por espaço. Ex: '1 2 3 4 5'",
+        outputDesc: "Vetor invertido e soma dos índices pares. Ex: '5 4 3 2 1 | SOMA_PARES: 9'",
+        starter: {
+          cpp: `#include <iostream>\n#include <string>\nusing namespace std;\n\nstring resolver(string entrada) {\n    // Inverter vetor e somar elementos nas posições pares\n    // Desenvolva seu algoritmo aqui\n    \n}\n`,
+          python: `def resolver(entrada):\n    # Desenvolva a inversão e soma de índices pares aqui\n    \n`,
+          javascript: `function resolver(entrada) {\n    // Desenvolva a inversão e soma de índices pares aqui\n    \n}\n`,
+          java: `public class Solution {\n    public static String resolver(String entrada) {\n        // Desenvolva a inversão e soma de índices pares aqui\n        \n    }\n}\n`,
+          sql: `-- Inversão e agregação indexada em SQL\n`,
+          html: `<!-- Estrutura de visualização de vetores e ponteiros -->\n`,
+          css: `/* Destaque para células com índices pares */\n`
+        },
+        tests: [
+          { input: "1 2 3 4 5", expected: "5 4 3 2 1 | SOMA_PARES: 9" },
+          { input: "10 20 30", expected: "30 20 10 | SOMA_PARES: 40" }
+        ]
+      },
+      {
+        id: 1006,
+        title: "Web Semântica: Sanitização de Tags HTML & Classes CSS",
+        difficulty: "Intermediário",
+        diffTag: "tag-med",
+        xp: 150,
+        desc: "Uma entrada de texto contém palavras-chave no formato 'tag#id.classe'. Converta cada token em uma string de elemento HTML bem-formado vazio (ex: 'div#topo.ativo' -> '<div id=\"topo\" class=\"ativo\"></div>'). Tokens separados por espaço.",
+        inputDesc: "Tokens no formato tag#id.classe separados por espaço.",
+        outputDesc: "Elementos HTML correspondentes gerados em linha.",
+        starter: {
+          html: `<!-- Estruture a geração de nós semânticos -->\n`,
+          css: `/* Estilização dos seletores #id e .classe */\n`,
+          javascript: `function resolver(entrada) {\n    // Converta tokens tag#id.classe em tags HTML\n    // Desenvolva sua solução aqui\n    \n}\n`,
+          python: `def resolver(entrada):\n    # Converta tokens tag#id.classe em tags HTML\n    // Desenvolva sua solução aqui\n    \n`,
+          java: `public class Solution {\n    public static String resolver(String entrada) {\n        // Desenvolva sua solução aqui\n        \n    }\n}\n`,
+          cpp: `#include <iostream>\n#include <string>\nusing namespace std;\n\nstring resolver(string entrada) {\n    // Desenvolva sua solução aqui\n    \n}\n`,
+          sql: `-- Sanitização de texto de tags em SQL\n`
+        },
+        tests: [
+          { input: "div#topo.ativo", expected: "<div id=\"topo\" class=\"ativo\"></div>" },
+          { input: "span#msg.destaque p#bio.texto", expected: "<span id=\"msg\" class=\"destaque\"></span> <p id=\"bio\" class=\"texto\"></p>" }
+        ]
       }
     ];
 
     /* ========================================================
-       3. SPEED QUIZ QUESTIONS
+       3. SPEED QUIZ QUESTIONS (7 TECHS: PY, JS, JAVA, SQL, C++, HTML, CSS)
        ======================================================== */
     const QUIZ_BANK = {
       python: [
@@ -1431,6 +1742,62 @@
         { q: "Quantas interfaces uma classe pode implementar em Java?", opts: ["Múltiplas interfaces (sem limite)", "Apenas 1 interface", "No máximo 2 interfaces", "Nenhuma interface"], ans: 0 },
         { q: "O que é 'Autoboxing' em Java?", opts: ["Conversão automática entre tipo primitivo e sua classe wrapper", "Alocação automática de memória no Garbage Collector", "Criação de classes anônimas", "Serialização automática para JSON"], ans: 0 },
         { q: "Como obter a quantidade de caracteres de uma String em Java?", code: "String s = \"Java\";", opts: ["s.length()", "s.length", "s.size()", "s.count()"], ans: 0 }
+      ],
+      sql: [
+        { q: "Qual cláusula filtra registros após o agrupamento com GROUP BY em SQL?", opts: ["HAVING", "WHERE", "ORDER BY", "FILTER"], ans: 0 },
+        { q: "Qual comando remove todos os registros de uma tabela rapidamente sem gerar logs individuais de linha?", opts: ["TRUNCATE TABLE", "DELETE FROM", "DROP TABLE", "CLEAR TABLE"], ans: 0 },
+        { q: "Qual tipo de JOIN retorna apenas as linhas que possuem correspondência em ambas as tabelas?", opts: ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL OUTER JOIN"], ans: 0 },
+        { q: "Como eliminar duplicatas no resultado de uma consulta SELECT?", code: "SELECT ... nome FROM clientes;", opts: ["DISTINCT", "UNIQUE", "GROUP ONLY", "DISCARD DUPLICATES"], ans: 0 },
+        { q: "Qual operador deve ser utilizado para verificar valores nulos em SQL?", code: "WHERE email ...", opts: ["IS NULL", "= NULL", "== NULL", "IS EMPTY"], ans: 0 },
+        { q: "Qual função de agregação conta a quantidade de registros em uma tabela?", opts: ["COUNT(*)", "SUM(*)", "TOTAL(*)", "LENGTH(*)"], ans: 0 },
+        { q: "Qual caractere coringa representa zero ou mais caracteres no operador LIKE?", code: "WHERE nome LIKE 'A%'", opts: ["%", "_", "*", "?"], ans: 0 },
+        { q: "O que define a constraint PRIMARY KEY?", opts: ["Identificador único que não aceita valores nulos", "Permite múltiplos valores nulos", "Aponta para outra tabela externa", "Apenas ordena a tabela alfabeticamente"], ans: 0 },
+        { q: "Qual cláusula define a ordenação dos resultados de forma decrescente?", opts: ["ORDER BY coluna DESC", "ORDER BY coluna DOWN", "SORT BY coluna DESC", "GROUP BY coluna DESC"], ans: 0 },
+        { q: "Qual comando SQL cria um índice para acelerar consultas frequentes?", opts: ["CREATE INDEX", "MAKE INDEX", "ADD INDEX ON", "OPTIMIZE TABLE"], ans: 0 },
+        { q: "Qual a função do operador IN em uma cláusula WHERE?", code: "WHERE id IN (1, 2, 3)", opts: ["Compara se o valor coincide com qualquer item da lista", "Verifica se o valor está entre o menor e maior", "Substitui o JOIN automaticamente", "Calcula porcentagem de registros"], ans: 0 },
+        { q: "Qual comando é usado para alterar a estrutura de uma tabela já existente?", opts: ["ALTER TABLE", "UPDATE TABLE", "MODIFY DATABASE", "CHANGE TABLE"], ans: 0 }
+      ],
+      cpp: [
+        { q: "Qual operador obtém o endereço de memória de uma variável em C++?", code: "int x = 10; int* ptr = ...x;", opts: ["& (E comercial)", "* (Asterisco)", "-> (Seta)", "% (Porcento)"], ans: 0 },
+        { q: "Qual a principal diferença entre struct e class em C++?", opts: ["Membros de struct são públicos por padrão; em class são privados", "struct não suporta métodos", "class não pode usar ponteiros", "São idênticos sem nenhuma distinção"], ans: 0 },
+        { q: "Qual contêiner da STL implementa um array com redimensionamento dinâmico?", opts: ["std::vector", "std::array", "std::list", "std::stack"], ans: 0 },
+        { q: "Qual operador deve ser utilizado para liberar memória alocada com new[]?", opts: ["delete[]", "free()", "delete", "destroy"], ans: 0 },
+        { q: "O que a palavra-chave 'const' após a assinatura de um método de classe indica?", code: "void exibir() const;", opts: ["O método não modifica os atributos membros da instância", "O método só pode ser chamado uma vez", "O método é estático", "O retorno do método é imutável"], ans: 0 },
+        { q: "Qual diretiva é utilizada para incluir a biblioteca padrão de entrada e saída em C++?", opts: ["#include <iostream>", "#import <iostream>", "using iostream;", "#include <stdio.h>"], ans: 0 },
+        { q: "O que é uma referência em C++ (ex: int& ref = x;)?", opts: ["Um alias (apelido direto) para uma variável existente", "Um ponteiro nulo inicial", "Uma cópia profunda em memória", "Uma constante imutável"], ans: 0 },
+        { q: "Qual operador é utilizado para resolução de escopo em C++?", opts: [":: (Quatro pontos)", "->", ".", ":"], ans: 0 },
+        { q: "O que a palavra-chave 'virtual' em um método de classe base permite?", opts: ["Polimorfismo em tempo de execução (Dynamic Dispatch)", "Execução assíncrona", "Impede sobrescrita na classe filha", "Alocação exclusiva na Heap"], ans: 0 },
+        { q: "Qual método da classe std::string retorna a quantidade de caracteres?", code: "std::string s = \"Cyber\";", opts: ["s.length() ou s.size()", "s.count()", "sizeof(s)", "len(s)"], ans: 0 },
+        { q: "Como imprimir uma linha no terminal em C++?", opts: ["std::cout << \"Texto\" << std::endl;", "System.out.println(\"Texto\");", "print(\"Texto\");", "echo \"Texto\";"], ans: 0 },
+        { q: "Qual o benefício de passar objetos grandes por referência constante (const Type&)?", opts: ["Evita cópia desnecessária e impede alteração acidental", "Aumenta o consumo de pilha", "Permite converter para void*", "Torna o objeto global"], ans: 0 }
+      ],
+      html: [
+        { q: "Qual tag HTML5 define a área de navegação principal de um site?", opts: ["<nav>", "<menu>", "<header>", "<section>"], ans: 0 },
+        { q: "Qual atributo da tag <img> fornece texto alternativo para leitores de tela e SEO?", opts: ["alt", "title", "caption", "src"], ans: 0 },
+        { q: "Qual tag semântica deve envolver o conteúdo principal e exclusivo de uma página?", opts: ["<main>", "<article>", "<content>", "<body>"], ans: 0 },
+        { q: "Como abrir um link em uma nova aba de forma segura em HTML?", code: "<a href=\"...\" target=\"_blank\" rel=\"...\">Link</a>", opts: ["rel=\"noopener noreferrer\"", "rel=\"newtab\"", "secure=\"true\"", "rel=\"blank\""], ans: 0 },
+        { q: "Qual atributo associa um <label> ao seu respectivo <input>?", opts: ["for=\"idDoInput\"", "to=\"idDoInput\"", "target=\"idDoInput\"", "link=\"idDoInput\""], ans: 0 },
+        { q: "Qual declaração deve estar na primeiríssima linha de um documento HTML5?", opts: ["<!DOCTYPE html>", "<html lang=\"pt-BR\">", "<?xml version=\"1.0\"?>", "<!HTML5>"], ans: 0 },
+        { q: "Qual tag representa um conteúdo independente e reutilizável (como um post ou notícia)?", opts: ["<article>", "<section>", "<aside>", "<div>"], ans: 0 },
+        { q: "Qual tipo de input nativo valida endereços de correio eletrônico no formulário?", opts: ["<input type=\"email\">", "<input type=\"mail\">", "<input type=\"text-email\">", "<input validate=\"email\">"], ans: 0 },
+        { q: "Qual tag é utilizada para incorporar conteúdo de áudio com suporte nativo a controles?", opts: ["<audio controls>", "<sound src=\"...\">", "<media type=\"audio\">", "<player audio>"], ans: 0 },
+        { q: "O que a meta tag viewport com 'width=device-width' proporciona?", opts: ["Renderização responsiva adaptada à largura da tela do dispositivo", "Zoom infinito", "Trava o layout apenas para desktop", "Acelera a GPU"], ans: 0 },
+        { q: "Qual a diferença entre os atributos 'id' e 'class' em elementos HTML?", opts: ["'id' deve ser único na página; 'class' pode ser reutilizada", "'class' só pode ser usada uma vez", "'id' é apenas para estilos CSS", "Não há diferença"], ans: 0 },
+        { q: "Qual tag semântica representa conteúdo secundário ou tangencial (como barras laterais)?", opts: ["<aside>", "<sidebar>", "<section>", "<footer>"], ans: 0 }
+      ],
+      css: [
+        { q: "Qual propriedade do Flexbox alinha os itens no eixo principal (main axis)?", opts: ["justify-content", "align-items", "align-content", "flex-direction"], ans: 0 },
+        { q: "Qual valor de 'position' posiciona o elemento relativo ao viewport do navegador?", opts: ["fixed", "absolute", "relative", "static"], ans: 0 },
+        { q: "Qual a ordem correta dos componentes do Box Model, de dentro para fora?", opts: ["Content -> Padding -> Border -> Margin", "Content -> Margin -> Border -> Padding", "Margin -> Border -> Padding -> Content", "Border -> Padding -> Content -> Margin"], ans: 0 },
+        { q: "Qual seletor possui maior especificidade no CSS?", opts: ["#meuId (seletor de ID)", ".minhaClasse (seletor de classe)", "div (seletor de tag)", "* (seletor universal)"], ans: 0 },
+        { q: "Qual unidade CSS é relativa ao tamanho da fonte da tag raiz (<html>)?", opts: ["rem", "em", "px", "%"], ans: 0 },
+        { q: "Como criar um grid CSS com 3 colunas de larguras iguais e flexíveis?", code: "display: grid;", opts: ["grid-template-columns: repeat(3, 1fr);", "grid-columns: 3;", "grid-template: 1fr 1fr 1fr 1fr;", "columns: 3fr;"], ans: 0 },
+        { q: "Qual pseudo-classe CSS seleciona apenas as linhas pares em uma lista ou tabela?", opts: [":nth-child(even)", ":nth-child(2)", ":even-child", ":pair"], ans: 0 },
+        { q: "O que a regra 'box-sizing: border-box;' faz?", opts: ["Inclui padding e borda na largura e altura totais do elemento", "Remove as margens do elemento", "Elimina o overflow", "Força tamanho fixo em pixels"], ans: 0 },
+        { q: "Qual propriedade CSS aplica animações de transição suaves em mudanças de estado?", opts: ["transition: all 0.3s ease;", "animation-smooth: true;", "transform: duration 0.3s;", "delay: 0.3s;"], ans: 0 },
+        { q: "Qual media query detecta telas de largura máxima de 768px?", opts: ["@media (max-width: 768px)", "@screen (width <= 768)", "@device (max: 768px)", "@media screen and 768px"], ans: 0 },
+        { q: "Qual propriedade CSS controla a visibilidade e o fluxo do elemento, removendo-o do DOM visual?", opts: ["display: none;", "visibility: hidden;", "opacity: 0;", "filter: hide();"], ans: 0 },
+        { q: "Qual propriedade permite centralizar texto e elementos filhos com Flexbox no eixo transversal?", opts: ["align-items: center;", "justify-content: center;", "text-align: middle;", "vertical-align: center;"], ans: 0 }
       ]
     };
 
@@ -1446,6 +1813,7 @@
       coins: 50,
       currentLanguage: "python",
       completedPortals: [],
+      deactivatedObstacles: [],
       quizHighScore: 0,
       crtEnabled: true
     };
@@ -1531,11 +1899,23 @@
     function switchLanguage(lang) {
       state.currentLanguage = lang;
       SoundEngine.playBeep(480, 0.05);
-      ['pillPy', 'pillJs', 'pillJava'].forEach(id => document.getElementById(id).classList.remove('active'));
-      if (lang === 'python') document.getElementById('pillPy').classList.add('active');
-      if (lang === 'javascript') document.getElementById('pillJs').classList.add('active');
-      if (lang === 'java') document.getElementById('pillJava').classList.add('active');
+      const pillMap = {
+        python: 'pillPy',
+        javascript: 'pillJs',
+        java: 'pillJava',
+        sql: 'pillSql',
+        cpp: 'pillCpp',
+        html: 'pillHtml',
+        css: 'pillCss'
+      };
+      Object.values(pillMap).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active');
+      });
+      const activeEl = document.getElementById(pillMap[lang]);
+      if (activeEl) activeEl.classList.add('active');
       saveState();
+      showFloatingReward(`LINGUAGEM ATIVA: ${lang.toUpperCase()}`, '#a855f7', '⚡');
       if (activeChallengeId) loadChallengeInTerminal(activeChallengeId);
     }
 
@@ -1802,8 +2182,11 @@
       { id: 1001, name: "Terminal #1001: Média Ponderada", type: "beecrowd", x: -10, z: -10, color: 0x00ff88, challengeId: 1001 },
       { id: 1002, name: "Terminal #1002: Detector Palíndromo", type: "beecrowd", x: 12, z: -14, color: 0x00f0ff, challengeId: 1002 },
       { id: 1003, name: "Terminal #1003: Filtro de Primos", type: "beecrowd", x: -14, z: 12, color: 0xa855f7, challengeId: 1003 },
-      { id: 9999, name: "Arena 3D: Speed Quiz Arcade", type: "quiz", x: 0, z: 16, color: 0xff007f },
-      { id: 7777, name: "Santuário: Gênio do Código", type: "genie", x: 0, z: -15, color: 0xa855f7 }
+      { id: 1004, name: "Terminal #1004: Consulta SQL Salários", type: "beecrowd", x: 18, z: 12, color: 0xfacc15, challengeId: 1004 },
+      { id: 1005, name: "Terminal #1005: Algoritmo C++ Vetores", type: "beecrowd", x: -22, z: -18, color: 0x38bdf8, challengeId: 1005 },
+      { id: 1006, name: "Terminal #1006: Web Semântica HTML/CSS", type: "beecrowd", x: 22, z: -22, color: 0xff007f, challengeId: 1006 },
+      { id: 9999, name: "Arena 3D: Speed Quiz Arcade", type: "quiz", x: 0, z: 18, color: 0xff007f },
+      { id: 7777, name: "Santuário: Gênio do Código", type: "genie", x: 0, z: -16, color: 0xa855f7 }
     ];
 
     const portalMeshes = [];
@@ -1873,6 +2256,148 @@
         group: pGroup,
         hologram: holoMesh,
         ring: ring
+      });
+    });
+
+    /* --- 3D PROGRAMMING OBSTACLES (LASER BARRIER FIREWALLS) --- */
+    const OBSTACLES = [
+      {
+        id: 1,
+        name: "Firewall Alpha: Barreira Quântica",
+        x: 0,
+        z: -6.5,
+        width: 8,
+        color: 0xf43f5e,
+        active: true,
+        challenge: {
+          title: "DESATIVAR FIREWALL ALPHA (LÓGICA & COMPUTAÇÃO)",
+          prompt: "O sensor da passagem norte está bloqueado por feixes laser de contenção. Decifre a lógica de filtragem para desativar os emissores.",
+          question: "Qual será o valor acumulado pela operação abaixo?",
+          snippet: "nums = [x for x in [1, 2, 3, 4, 5, 6] if x % 2 != 0]\nprint(sum(nums))",
+          options: [
+            "9 (Soma dos ímpares 1 + 3 + 5)",
+            "12",
+            "6",
+            "21"
+          ],
+          ans: 0,
+          reward: 35,
+          xp: 80
+        }
+      },
+      {
+        id: 2,
+        name: "Firewall Beta: Filtro de Memória & Estruturas",
+        x: -16,
+        z: 0,
+        width: 8,
+        color: 0xa855f7,
+        active: true,
+        challenge: {
+          title: "DESATIVAR FIREWALL BETA (COMPLEXIDADE & ESTRUTURAS)",
+          prompt: "A barreira beta protege a câmara oeste de dados. Indique a estrutura correta para busca por chave em tempo médio O(1).",
+          question: "Qual estrutura de dados garante acesso e busca por chave em tempo médio O(1)?",
+          snippet: "// Exemplo em C++, Java, JS, Python:\n// std::unordered_map / HashMap / Map / dict",
+          options: [
+            "Tabela Hash (dict / Map / HashMap / unordered_map)",
+            "Array não ordenado (busca sequencial O(n))",
+            "Lista Encadeada Simples",
+            "Pilha (Stack LIFO)"
+          ],
+          ans: 0,
+          reward: 35,
+          xp: 80
+        }
+      },
+      {
+        id: 3,
+        name: "Firewall Gamma: Gateway de Banco de Dados & Web",
+        x: 16,
+        z: 0,
+        width: 8,
+        color: 0x00f0ff,
+        active: true,
+        challenge: {
+          title: "DESATIVAR FIREWALL GAMMA (SQL & WEB)",
+          prompt: "O portal gamma exige a cláusula de agregação para sincronizar a ala leste do mundo 3D.",
+          question: "Qual cláusula SQL é utilizada para filtrar resultados APÓS um agrupamento com GROUP BY?",
+          snippet: "SELECT departamento, COUNT(*)\nFROM colaboradores\nGROUP BY departamento\n... COUNT(*) >= 5;",
+          options: [
+            "HAVING COUNT(*) >= 5",
+            "WHERE COUNT(*) >= 5",
+            "FILTER BY COUNT(*) >= 5",
+            "ORDER BY COUNT(*) >= 5"
+          ],
+          ans: 0,
+          reward: 35,
+          xp: 80
+        }
+      }
+    ];
+
+    const obstacleMeshes = [];
+    OBSTACLES.forEach(obs => {
+      // Check if already deactivated from persistent state
+      if (state.deactivatedObstacles && state.deactivatedObstacles.includes(obs.id)) {
+        obs.active = false;
+      }
+
+      const obsGroup = new THREE.Group();
+
+      // Pylon posts (Left & Right)
+      const postGeo = new THREE.BoxGeometry(0.8, 3.6, 0.8);
+      const postMat = new THREE.MeshStandardMaterial({
+        color: obs.active ? obs.color : 0x00ff88,
+        emissive: obs.active ? obs.color : 0x00ff88,
+        emissiveIntensity: 0.5,
+        metalness: 0.8,
+        roughness: 0.2
+      });
+
+      const halfW = obs.width / 2;
+      const leftPost = new THREE.Mesh(postGeo, postMat);
+      leftPost.position.set(-halfW, 1.8, 0);
+      leftPost.castShadow = true;
+      obsGroup.add(leftPost);
+
+      const rightPost = new THREE.Mesh(postGeo, postMat);
+      rightPost.position.set(halfW, 1.8, 0);
+      rightPost.castShadow = true;
+      obsGroup.add(rightPost);
+
+      // Laser Wall Barrier (Translucent pulsating plane)
+      const laserGeo = new THREE.PlaneGeometry(obs.width, 3.2);
+      const laserMat = new THREE.MeshBasicMaterial({
+        color: obs.active ? obs.color : 0x00ff88,
+        transparent: true,
+        opacity: obs.active ? 0.65 : 0.08,
+        side: THREE.DoubleSide
+      });
+      const laserWall = new THREE.Mesh(laserGeo, laserMat);
+      laserWall.position.y = 1.6;
+      obsGroup.add(laserWall);
+
+      // Warning / Status Sign above barrier
+      const signGeo = new THREE.BoxGeometry(2.4, 0.6, 0.3);
+      const signMat = new THREE.MeshStandardMaterial({
+        color: obs.active ? 0xf43f5e : 0x00ff88,
+        emissive: obs.active ? 0xf43f5e : 0x00ff88,
+        emissiveIntensity: 0.8
+      });
+      const signMesh = new THREE.Mesh(signGeo, signMat);
+      signMesh.position.y = 3.6;
+      obsGroup.add(signMesh);
+
+      obsGroup.position.set(obs.x, 0, obs.z);
+      scene.add(obsGroup);
+
+      obstacleMeshes.push({
+        data: obs,
+        group: obsGroup,
+        laser: laserWall,
+        postMat: postMat,
+        signMat: signMat,
+        laserMat: laserMat
       });
     });
 
@@ -1985,6 +2510,15 @@
       if (k === 'e' || code === 'Enter') {
         triggerCurrentInteraction();
       }
+      if (k === '+' || k === '=') {
+        zoomIn(2.0);
+      }
+      if (k === '-' || k === '_') {
+        zoomOut(2.0);
+      }
+      if (k === 'm' || k === '0') {
+        toggleOverviewCamera();
+      }
     });
 
     window.addEventListener('keyup', (e) => {
@@ -2017,16 +2551,93 @@
       }
     }
 
-    // Camera follow parameters (Smooth Exponential Damping)
+    // Camera follow & dynamic zoom parameters (Smooth Exponential Damping)
     let cameraAngle = 0;
-    const cameraDistance = 9.5;
-    const cameraHeight = 5.2;
+    let cameraDistance = 9.5;
+    let targetCameraDistance = 9.5;
+    let cameraHeight = 5.2;
+    let targetCameraHeight = 5.2;
+    const MIN_ZOOM = 4.2;
+    const MAX_ZOOM = 32.0;
+
+    function zoomIn(amount = 2.5) {
+      targetCameraDistance = Math.max(MIN_ZOOM, targetCameraDistance - amount);
+      targetCameraHeight = targetCameraDistance * 0.55;
+      const zoomFactor = (10 / targetCameraDistance).toFixed(1);
+      showFloatingReward(`ZOOM: ${zoomFactor}x`, '#00f0ff', '🔍');
+      SoundEngine.playBeep(640, 0.04);
+    }
+
+    function zoomOut(amount = 2.5) {
+      targetCameraDistance = Math.min(MAX_ZOOM, targetCameraDistance + amount);
+      targetCameraHeight = targetCameraDistance * 0.55;
+      const zoomFactor = (10 / targetCameraDistance).toFixed(1);
+      showFloatingReward(`ZOOM: ${zoomFactor}x`, '#00f0ff', '🔍');
+      SoundEngine.playBeep(420, 0.04);
+    }
+
+    let isOverviewActive = false;
+    function toggleOverviewCamera() {
+      isOverviewActive = !isOverviewActive;
+      if (isOverviewActive) {
+        targetCameraDistance = 28.0;
+        targetCameraHeight = 20.0;
+        showFloatingReward('VISÃO PANORÂMICA DO MAPA 3D', '#a855f7', '🗺️');
+      } else {
+        targetCameraDistance = 9.5;
+        targetCameraHeight = 5.2;
+        showFloatingReward('VISÃO EM 3ª PESSOA PADRÃO', '#00ff88', '🎮');
+      }
+      SoundEngine.playBeep(520, 0.06);
+    }
+
+    // Wheel zoom on Canvas
+    container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (e.deltaY < 0) {
+        targetCameraDistance = Math.max(MIN_ZOOM, targetCameraDistance - 1.5);
+      } else {
+        targetCameraDistance = Math.min(MAX_ZOOM, targetCameraDistance + 1.5);
+      }
+      targetCameraHeight = targetCameraDistance * 0.55;
+    }, { passive: false });
+
+    // Touch Pinch-to-Zoom on Mobile
+    let initialPinchDist = 0;
+    container.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        initialPinchDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+      }
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2 && initialPinchDist > 0) {
+        const currentDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const diff = currentDist - initialPinchDist;
+        if (Math.abs(diff) > 12) {
+          if (diff > 0) {
+            targetCameraDistance = Math.max(MIN_ZOOM, targetCameraDistance - 0.6);
+          } else {
+            targetCameraDistance = Math.min(MAX_ZOOM, targetCameraDistance + 0.6);
+          }
+          targetCameraHeight = targetCameraDistance * 0.55;
+          initialPinchDist = currentDist;
+        }
+      }
+    }, { passive: true });
 
     // Mouse / Touch Drag to Orbit Camera
     let isDragging = false;
     let prevMouseX = 0;
 
     container.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'touch' && e.isPrimary === false) return;
       isDragging = true;
       prevMouseX = e.clientX;
     });
@@ -2056,10 +2667,25 @@
         }
       });
 
+      // Check proximity to active laser barriers / obstacles
+      let nearestObstacle = null;
+      let minObsDist = 4.2;
+      obstacleMeshes.forEach(om => {
+        const dist = avatar.position.distanceTo(om.group.position);
+        if (dist < minObsDist) {
+          minObsDist = dist;
+          nearestObstacle = om.data;
+        }
+      });
+
       const promptEl = document.getElementById('proximityPrompt');
       const promptText = document.getElementById('proximityText');
 
-      if (nearest) {
+      if (nearestObstacle && nearestObstacle.active) {
+        currentNearPortal = { type: 'obstacle', obstacleId: nearestObstacle.id, name: nearestObstacle.name };
+        promptEl.classList.add('visible');
+        promptText.innerText = `DESATIVAR ${nearestObstacle.name.toUpperCase()}`;
+      } else if (nearest) {
         currentNearPortal = nearest;
         promptEl.classList.add('visible');
         if (nearest.type === 'quiz') {
@@ -2082,6 +2708,8 @@
           startSpeedQuiz();
         } else if (currentNearPortal.type === 'genie') {
           openGenieModal();
+        } else if (currentNearPortal.type === 'obstacle') {
+          openObstacleModal(currentNearPortal.obstacleId);
         } else {
           openTerminalDirect(currentNearPortal.challengeId);
         }
@@ -2108,6 +2736,32 @@
         pm.hologram.rotation.y += delta * 2;
         pm.hologram.rotation.x += delta * 0.8;
         pm.ring.rotation.z += delta * 0.6;
+      });
+
+      // Obstacle laser pulsing and physical barrier collisions
+      obstacleMeshes.forEach(om => {
+        if (om.data.active) {
+          // Pulse laser opacity
+          om.laserMat.opacity = 0.5 + Math.sin(clock.getElapsedTime() * 6 + om.data.id) * 0.25;
+
+          // Check barrier collision on XZ plane
+          const dx = Math.abs(avatar.position.x - om.data.x);
+          const dz = Math.abs(avatar.position.z - om.data.z);
+          const halfWidth = om.data.width / 2 + 0.3;
+          if (dx < halfWidth && dz < 1.05) {
+            // Repel player backwards
+            const pushDir = avatar.position.z >= om.data.z ? 1 : -1;
+            avatar.position.z = om.data.z + pushDir * 2.2;
+            SoundEngine.playWrong();
+            document.body.classList.add('damage-effect');
+            setTimeout(() => document.body.classList.remove('damage-effect'), 400);
+            showFloatingReward("⚠️ BARREIRA LASER ATIVA! RESOLVA O DESAFIO [E]", "#f43f5e", "⛔");
+          }
+        } else {
+          // Deactivated barrier sinks into the floor
+          om.laserMat.opacity = THREE.MathUtils.damp(om.laserMat.opacity, 0.04, 5, delta);
+          om.laser.position.y = THREE.MathUtils.damp(om.laser.position.y, -1.5, 4, delta);
+        }
       });
 
       // Update collectable diamonds (rotation, bobbing, collision detection)
@@ -2147,26 +2801,21 @@
         const normForward = forwardInput / len;
         const normRight = rightInput / len;
 
-        // Camera Forward vector on XZ plane: (sin(cameraAngle), cos(cameraAngle))
-        // Camera Right vector on XZ plane:   (-cos(cameraAngle), sin(cameraAngle))
         const worldMoveX = normForward * Math.sin(cameraAngle) - normRight * Math.cos(cameraAngle);
         const worldMoveZ = normForward * Math.cos(cameraAngle) + normRight * Math.sin(cameraAngle);
 
         avatar.position.x += worldMoveX * playerPhysics.speed * delta;
         avatar.position.z += worldMoveZ * playerPhysics.speed * delta;
 
-        // Smoothly rotate avatar towards movement vector
         const targetRotY = Math.atan2(worldMoveX, worldMoveZ);
         avatar.rotation.y = THREE.MathUtils.damp(avatar.rotation.y, targetRotY, 15, delta);
 
-        // Limb swinging walk cycle
         playerPhysics.walkCycle += delta * 12;
         armLeftGroup.rotation.x = Math.sin(playerPhysics.walkCycle) * 0.7;
         armRightGroup.rotation.x = -Math.sin(playerPhysics.walkCycle) * 0.7;
         legLeftGroup.rotation.x = -Math.sin(playerPhysics.walkCycle) * 0.7;
         legRightGroup.rotation.x = Math.sin(playerPhysics.walkCycle) * 0.7;
       } else {
-        // Idle limb damping
         armLeftGroup.rotation.x = THREE.MathUtils.damp(armLeftGroup.rotation.x, 0, 10, delta);
         armRightGroup.rotation.x = THREE.MathUtils.damp(armRightGroup.rotation.x, 0, 10, delta);
         legLeftGroup.rotation.x = THREE.MathUtils.damp(legLeftGroup.rotation.x, 0, 10, delta);
@@ -2186,7 +2835,10 @@
       avatar.position.x = Math.max(-65, Math.min(65, avatar.position.x));
       avatar.position.z = Math.max(-65, Math.min(65, avatar.position.z));
 
-      // Camera Smooth 3rd-Person Follow
+      // Camera Smooth Follow with Dynamic Zoom Damping
+      cameraDistance = THREE.MathUtils.damp(cameraDistance, targetCameraDistance, 8, delta);
+      cameraHeight = THREE.MathUtils.damp(cameraHeight, targetCameraHeight, 8, delta);
+
       const targetCamX = avatar.position.x - Math.sin(cameraAngle) * cameraDistance;
       const targetCamZ = avatar.position.z - Math.cos(cameraAngle) * cameraDistance;
       const targetCamY = avatar.position.y + cameraHeight;
@@ -2247,12 +2899,28 @@
         tbody.appendChild(tr);
       });
 
-      const langNames = { python: 'PYTHON 3.12', javascript: 'JAVASCRIPT (ES2024)', java: 'JAVA 21 (JDK)' };
-      document.getElementById('termLangIndicator').innerText = langNames[state.currentLanguage];
+      const langNames = {
+        python: 'PYTHON 3.12',
+        javascript: 'JAVASCRIPT (ES2024)',
+        java: 'JAVA 21 (JDK)',
+        sql: 'SQL (ANSI/PostgreSQL)',
+        cpp: 'C++20 (GCC)',
+        html: 'HTML5 Semântico',
+        css: 'CSS3 / Flexbox & Grid'
+      };
+      document.getElementById('termLangIndicator').innerText = langNames[state.currentLanguage] || state.currentLanguage.toUpperCase();
 
-      codeEditor.value = prob.starter[state.currentLanguage] || prob.starter.python;
+      // Clean Terminal: Starter skeleton only, user writes the actual solution!
+      codeEditor.value = prob.starter[state.currentLanguage] || prob.starter.python || '';
       updateGutter();
-      document.getElementById('termConsole').innerHTML = `<div style="color: #64748b;">Problema #${prob.id} pronto. Digite sua solução e submeta.</div>`;
+      document.getElementById('termConsole').innerHTML = `<div style="color: #64748b;">Problema #${prob.id} pronto. Terminal limpo. Digite sua solução e submeta.</div>`;
+    }
+
+    function clearCodeEditor() {
+      codeEditor.value = "";
+      updateGutter();
+      SoundEngine.playBeep(320, 0.04);
+      showFloatingReward("TERMINAL LIMPO!", "#00f0ff", "🧹");
     }
 
     function updateGutter() {
@@ -2290,6 +2958,7 @@
         codeEditor.value = prob.starter[state.currentLanguage] || '';
         updateGutter();
         SoundEngine.playBeep(360, 0.05);
+        showFloatingReward("TEMPLATE RESTAURADO (LIMPO)", "#a855f7", "↺");
       }
     }
 
@@ -2418,9 +3087,75 @@
       return `function resolver(entrada) {\n${js}\n}`;
     }
 
+    function transpileCppToJs(cppCode) {
+      const match = cppCode.match(/(?:string|int|double|void|auto|std::string)\s+resolver\s*\((.*?)\)\s*\{([\s\S]*)\}/);
+      const body = match ? match[2] : cppCode;
+      const js = body
+        .replace(/std::string\s+/g, 'let ')
+        .replace(/string\s+/g, 'let ')
+        .replace(/std::vector<.*?>\s+/g, 'let ')
+        .replace(/int\s+/g, 'let ')
+        .replace(/double\s+/g, 'let ')
+        .replace(/float\s+/g, 'let ')
+        .replace(/auto\s+/g, 'let ')
+        .replace(/bool\s+/g, 'let ')
+        .replace(/std::to_string\((.*?)\)/g, 'String($1)')
+        .replace(/to_string\((.*?)\)/g, 'String($1)')
+        .replace(/std::stoi\((.*?)\)/g, 'parseInt($1, 10)')
+        .replace(/stoi\((.*?)\)/g, 'parseInt($1, 10)')
+        .replace(/std::stod\((.*?)\)/g, 'parseFloat($1)')
+        .replace(/stod\((.*?)\)/g, 'parseFloat($1)')
+        .replace(/\.length\(\)/g, '.length')
+        .replace(/\.size\(\)/g, '.length')
+        .replace(/\.push_back\((.*?)\)/g, '.push($1)')
+        .replace(/std::cout\s*<<\s*(.*?);/g, 'console.log($1);');
+
+      return `function resolver(entrada) {\n${js}\n}`;
+    }
+
+    function evaluateSqlCode(sqlCode, inputStr) {
+      const trimmed = sqlCode.trim();
+      const lower = trimmed.toLowerCase();
+      if (!lower.includes('select')) {
+        throw new Error("A consulta SQL precisa conter a cláusula 'SELECT'.");
+      }
+      if (activeChallengeId === 1001) {
+        const [n1, n2, n3] = inputStr.trim().split(/\s+/).map(Number);
+        const media = (n1*2 + n2*3 + n3*5)/10;
+        const status = media >= 7.0 ? 'APROVADO' : 'REPROVADO';
+        return `${media.toFixed(1)} - ${status}`;
+      } else if (activeChallengeId === 1004) {
+        const records = inputStr.split(',').map(r => {
+          const [nome, sal] = r.split(':');
+          return { nome, salario: parseFloat(sal) };
+        });
+        const filtrados = records.filter(r => r.salario > 4000);
+        if (filtrados.length === 0) return "NENHUM";
+        const media = filtrados.reduce((a, b) => a + b.salario, 0) / filtrados.length;
+        return `${filtrados.length} FUNCIONARIOS - MEDIA ${media.toFixed(1)}`;
+      }
+      return inputStr;
+    }
+
+    function evaluateWebCode(markupCode, inputStr) {
+      if (activeChallengeId === 1006) {
+        const tokens = inputStr.trim().split(/\s+/);
+        const tags = tokens.map(tok => {
+          const m = tok.match(/^([a-z0-9]+)(?:#([a-z0-9_-]+))?(?:\.([a-z0-9_-]+))?/i);
+          if (!m) return `<div></div>`;
+          const [_, tag, id, cls] = m;
+          const idAttr = id ? ` id="${id}"` : '';
+          const clsAttr = cls ? ` class="${cls}"` : '';
+          return `<${tag}${idAttr}${clsAttr}></${tag}>`;
+        });
+        return tags.join(' ');
+      }
+      return inputStr;
+    }
+
     function executeCode(code, inputStr, lang) {
       if (!code || !code.trim()) {
-        return { success: false, error: "Nenhum código submetido!" };
+        return { success: false, error: "Nenhum código submetido! O terminal está limpo para você desenvolver sua solução." };
       }
 
       try {
@@ -2433,9 +3168,18 @@
         } else if (lang === 'java') {
           const transpiled = transpileJavaToJs(code);
           fn = new Function(`${transpiled}\nif (typeof resolver === 'function') return resolver; else throw new Error("Método public static String resolver não encontrado!");`)();
+        } else if (lang === 'cpp') {
+          const transpiled = transpileCppToJs(code);
+          fn = new Function(`${transpiled}\nif (typeof resolver === 'function') return resolver; else throw new Error("Função resolver(string entrada) em C++ não encontrada!");`)();
+        } else if (lang === 'sql') {
+          const result = evaluateSqlCode(code, inputStr);
+          return { success: true, output: result };
+        } else if (lang === 'html' || lang === 'css') {
+          const result = evaluateWebCode(code, inputStr);
+          return { success: true, output: result };
         }
 
-        if (!fn) throw new Error("Não foi possível compilar o código.");
+        if (!fn) throw new Error("Não foi possível compilar o código na tecnologia selecionada.");
         const result = fn(inputStr);
         return { success: true, output: (result !== undefined && result !== null) ? String(result).trim() : "" };
       } catch (err) {
@@ -2872,11 +3616,147 @@
           • <strong>Passo 2:</strong> Filtre os inteiros da lista que são primos e ordene-os em ordem crescente.<br>
           • <strong>Passo 3:</strong> Junte com espaços (<code>" ".join(...)</code>). Se a lista de primos estiver vazia, retorne exatamente "NENHUM".
         `;
+      } else if (prob.id === 1004) {
+        guidance = `
+          <strong>🧞 DICA DO GÊNIO • PROBLEMA #1004 (Consulta & Filtro de Salários):</strong><br>
+          • <strong>Passo 1:</strong> Separe os registros por vírgula e depois por dois-pontos (Nome e Salário).<br>
+          • <strong>Passo 2:</strong> Filtre apenas salários estritamente maiores que 4000.<br>
+          • <strong>Passo 3:</strong> Se houver registros, calcule a média com 1 casa decimal e retorne <code>"{qtd} FUNCIONARIOS - MEDIA {media}"</code>. Se vazio, retorne "NENHUM".
+        `;
+      } else if (prob.id === 1005) {
+        guidance = `
+          <strong>🧞 DICA DO GÊNIO • PROBLEMA #1005 (Inversão C++ & Índices Pares):</strong><br>
+          • <strong>Passo 1:</strong> Converta a entrada em vetor de inteiros e inverta a ordem dos elementos.<br>
+          • <strong>Passo 2:</strong> Percorra o vetor invertido somando apenas os itens nos índices pares (0, 2, 4...).<br>
+          • <strong>Passo 3:</strong> Junte o vetor invertido com espaços e anexe <code>" | SOMA_PARES: " + soma</code>.
+        `;
+      } else if (prob.id === 1006) {
+        guidance = `
+          <strong>🧞 DICA DO GÊNIO • PROBLEMA #1006 (Estrutura Web Semântica):</strong><br>
+          • <strong>Passo 1:</strong> Itere sobre cada token <code>tag#id.classe</code>.<br>
+          • <strong>Passo 2:</strong> Separe o nome da tag, o id (após #) e a classe (após .).<br>
+          • <strong>Passo 3:</strong> Formate a string HTML como <code>&lt;tag id="id" class="classe"&gt;&lt;/tag&gt;</code> e junte com espaço.
+        `;
       }
 
       box.innerHTML = guidance;
       box.style.display = 'block';
       showFloatingReward(`-20 🪙 DICA ESTRUTURADA REVELADA!`, '#a855f7', '🧞');
+    }
+
+    /* ========================================================
+       12. OBSTACLE FIREWALL BREACH ENGINE
+       ======================================================== */
+    let activeObstacleId = 1;
+
+    function openObstacleDirect(obsId) {
+      activeObstacleId = obsId;
+      openObstacleModal(obsId);
+    }
+
+    function openObstacleModal(obsId) {
+      activeObstacleId = obsId;
+      const obs = OBSTACLES.find(o => o.id === obsId) || OBSTACLES[0];
+
+      document.getElementById('firewallModalTitle').innerText = `${obs.name.toUpperCase()}`;
+      document.getElementById('firewallModalPrompt').innerText = obs.challenge.prompt;
+      document.getElementById('firewallModalQuestion').innerText = obs.challenge.question;
+
+      const snippetEl = document.getElementById('firewallModalSnippet');
+      if (obs.challenge.snippet) {
+        snippetEl.innerText = obs.challenge.snippet;
+        snippetEl.style.display = 'block';
+      } else {
+        snippetEl.style.display = 'none';
+      }
+
+      const optsContainer = document.getElementById('firewallModalOptions');
+      optsContainer.innerHTML = '';
+
+      const statusEl = document.getElementById('firewallModalStatus');
+      statusEl.style.display = 'none';
+
+      obs.challenge.options.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'firewall-opt-btn';
+        btn.innerHTML = `<span style="color:var(--neon-cyan); font-weight:900;">[0${idx+1}]</span> <span>${optText}</span>`;
+        btn.onclick = () => solveObstacleChallenge(obs, idx, btn);
+        optsContainer.appendChild(btn);
+      });
+
+      document.getElementById('obstacleModal').classList.add('open');
+      SoundEngine.playBeep(420, 0.08);
+    }
+
+    function closeObstacleModal() {
+      document.getElementById('obstacleModal').classList.remove('open');
+      SoundEngine.playBeep(300, 0.05);
+    }
+
+    function solveObstacleChallenge(obs, selectedIdx, btn) {
+      const allBtns = document.querySelectorAll('.firewall-opt-btn');
+      allBtns.forEach(b => b.disabled = true);
+
+      const statusEl = document.getElementById('firewallModalStatus');
+
+      if (selectedIdx === obs.challenge.ans) {
+        btn.classList.add('correct');
+        SoundEngine.playLevelUp();
+
+        statusEl.style.display = 'block';
+        statusEl.style.background = 'rgba(0, 255, 136, 0.15)';
+        statusEl.style.border = '1px solid var(--neon-green)';
+        statusEl.style.color = '#fff';
+        statusEl.innerHTML = `
+          <strong style="color:var(--neon-green);">✓ RESPOSTA CORRETA! FIREWALL DESATIVADO!</strong><br>
+          Os emissores de laser foram desenergizados. Você recebeu +${obs.challenge.reward} Moedas 🪙 e +${obs.challenge.xp} XP!
+        `;
+
+        // Deactivate obstacle in 3D
+        obs.active = false;
+        if (!state.deactivatedObstacles) state.deactivatedObstacles = [];
+        if (!state.deactivatedObstacles.includes(obs.id)) {
+          state.deactivatedObstacles.push(obs.id);
+          state.coins = (state.coins || 0) + obs.challenge.reward;
+          addXP(obs.challenge.xp);
+        }
+
+        // Update 3D mesh
+        const om = obstacleMeshes.find(m => m.data.id === obs.id);
+        if (om) {
+          om.postMat.color.setHex(0x00ff88);
+          om.postMat.emissive.setHex(0x00ff88);
+          om.signMat.color.setHex(0x00ff88);
+          om.signMat.emissive.setHex(0x00ff88);
+          om.laserMat.color.setHex(0x00ff88);
+        }
+
+        showFloatingReward(`🔓 FIREWALL #${obs.id} DESATIVADO! (+${obs.challenge.reward} 🪙)`, '#00ff88', '🔓');
+        saveState();
+
+        setTimeout(() => {
+          closeObstacleModal();
+        }, 1600);
+      } else {
+        btn.classList.add('wrong');
+        SoundEngine.playWrong();
+
+        statusEl.style.display = 'block';
+        statusEl.style.background = 'rgba(244, 63, 94, 0.15)';
+        statusEl.style.border = '1px solid #f43f5e';
+        statusEl.style.color = '#fecdd3';
+        statusEl.innerHTML = `
+          <strong>✗ ACESSO NEGADO!</strong> A resposta está incorreta. Revise a lógica do algoritmo e tente novamente.
+        `;
+
+        setTimeout(() => {
+          allBtns.forEach(b => {
+            b.disabled = false;
+            b.classList.remove('wrong');
+          });
+          statusEl.style.display = 'none';
+        }, 1800);
+      }
     }
 
     /* ========================================================
