@@ -1,0 +1,124 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Perfil e progresso salvo do jogador no ByteQuest 3D",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID único do usuário autenticado pelo Firebase Auth"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Nome de exibição do jogador"
+        },
+        "email": {
+          "type": "string",
+          "description": "E-mail do jogador"
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "Avatar ou foto de perfil"
+        },
+        "level": {
+          "type": "number",
+          "description": "Nível atual de programador"
+        },
+        "xp": {
+          "type": "number",
+          "description": "Pontos de experiência acumulados"
+        },
+        "score": {
+          "type": "number",
+          "description": "Pontuação geral no jogo"
+        },
+        "coins": {
+          "type": "number",
+          "description": "Moedas cibernéticas coletadas"
+        },
+        "diamonds": {
+          "type": "number",
+          "description": "Diamantes encontrados pelo mapa"
+        },
+        "energy": {
+          "type": "number",
+          "description": "Energia cibernética atual"
+        },
+        "completedPortals": {
+          "type": "array",
+          "description": "Lista de IDs de portais e desafios concluídos"
+        },
+        "neutralizedBugs": {
+          "type": "array",
+          "description": "Lista de robôs bugs neutralizados e depurados"
+        },
+        "deactivatedObstacles": {
+          "type": "array",
+          "description": "Lista de barreiras laser e firewalls desativados"
+        },
+        "currentLanguage": {
+          "type": "string",
+          "description": "Linguagem de programação atualmente selecionada"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Data e hora da última sincronização em formato ISO"
+        }
+      },
+      "required": [
+        "userId",
+        "displayName",
+        "score",
+        "level"
+      ]
+    },
+    "LeaderboardEntry": {
+      "title": "LeaderboardEntry",
+      "description": "Entrada pública de classificação global dos jogadores",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID do usuário"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Nome de exibição do jogador"
+        },
+        "score": {
+          "type": "number",
+          "description": "Pontuação total para o ranking"
+        },
+        "level": {
+          "type": "number",
+          "description": "Nível alcançado"
+        },
+        "diamonds": {
+          "type": "number",
+          "description": "Diamantes totais"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Última atualização do recorde"
+        }
+      },
+      "required": [
+        "userId",
+        "displayName",
+        "score",
+        "level"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Armazena o perfil e progresso individual persistente do jogador"
+    },
+    "/leaderboard/{userId}": {
+      "schema": "LeaderboardEntry",
+      "description": "Ranking global público dos jogadores do ByteQuest 3D"
+    }
+  }
+}

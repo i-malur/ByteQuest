@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidUser(data) {
+      return data.userId is string &&
+             data.userId == request.auth.uid &&
+             data.displayName is string && data.displayName.size() <= 100 &&
+             data.score is number && data.score >= 0 &&
+             data.level is number && data.level >= 1 &&
+             (!('email' in data) || (data.email is string && data.email.size() <= 150)) &&
+             (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 500)) &&
+             (!('xp' in data) || (data.xp is number && data.xp >= 0)) &&
+             (!('coins' in data) || (data.coins is number && data.coins >= 0)) &&
+             (!('diamonds' in data) || (data.diamonds is number && data.diamonds >= 0)) &&
+             (!('energy' in data) || (data.energy is number && data.energy >= 0 && data.energy <= 100)) &&
+             (!('completedPortals' in data) || (data.completedPortals is list && data.completedPortals.size() <= 50)) &&
+             (!('neutralizedBugs' in data) || (data.neutralizedBugs is list && data.neutralizedBugs.size() <= 50)) &&
+             (!('deactivatedObstacles' in data) || (data.deactivatedObstacles is list && data.deactivatedObstacles.size() <= 50)) &&
+             (!('currentLanguage' in data) || (data.currentLanguage is string && data.currentLanguage.size() <= 20));
+    }
+
+    function isValidLeaderboard(data) {
+      return data.userId is string &&
+             data.userId == request.auth.uid &&
+             data.displayName is string && data.displayName.size() <= 100 &&
+             data.score is number && data.score >= 0 &&
+             data.level is number && data.level >= 1 &&
+             (!('diamonds' in data) || (data.diamonds is number && data.diamonds >= 0));
+    }
+
+    // User profile and game state storage
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(incoming());
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUser(incoming());
+      allow delete: if false;
+    }
+
+    // Global Leaderboard
+    match /leaderboard/{userId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isOwner(userId) && isValidId(userId) && isValidLeaderboard(incoming());
+      allow update: if isOwner(userId) && isValidId(userId) && isValidLeaderboard(incoming());
+      allow delete: if false;
+    }
+  }
+}
