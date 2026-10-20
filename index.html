@@ -179,6 +179,66 @@
       opacity: 0.2;
       filter: grayscale(1);
     }
+    .score-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-arcade);
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      padding: 3px 10px;
+      border-radius: 12px;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+    }
+    .score-badge.score-bump {
+      transform: scale(1.22);
+      box-shadow: 0 0 18px var(--neon-cyan);
+      color: var(--neon-cyan);
+    }
+    .energy-box {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 105px;
+    }
+    .energy-label {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-arcade);
+      font-size: 0.64rem;
+      font-weight: 800;
+      color: #cbd5e1;
+      letter-spacing: 0.5px;
+    }
+    .energy-bar-container {
+      width: 100%;
+      height: 8px;
+      background: #090b1c;
+      border: 1px solid #232a58;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .energy-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #10b981, #00f0ff);
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);
+      transition: width 0.35s ease, background 0.35s ease;
+    }
+    .energy-bar-fill.warning {
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      box-shadow: 0 0 8px #ef4444;
+    }
+    body.damage-flash {
+      animation: screenHitFlash 0.4s ease-out;
+    }
+    @keyframes screenHitFlash {
+      0% { box-shadow: inset 0 0 0 9999px rgba(239, 68, 68, 0.45); }
+      100% { box-shadow: inset 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
 
     /* Language Switcher & Controls in Top Right */
     .top-controls {
@@ -716,27 +776,36 @@
       user-select: none;
       overflow: hidden;
     }
+    div#terminalModal textarea#codeEditor,
     #codeEditor {
       flex: 1;
-      background: #080b1e;
-      border: 1px solid rgba(38, 45, 94, 0.4);
+      background: #050816;
+      border: 1px solid rgba(0, 240, 255, 0.22);
       outline: none;
-      color: #f1f5f9;
+      color: #f8fafc;
       caret-color: var(--neon-cyan);
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 0.9rem;
-      line-height: 22px;
-      padding: 10px 14px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 0.92rem;
+      line-height: 24px;
+      padding: 12px 16px;
       resize: none;
       white-space: pre;
       overflow-x: auto;
       tab-size: 4;
       letter-spacing: 0.3px;
-      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.65);
+      border-radius: 4px;
     }
+    div#terminalModal textarea#codeEditor::placeholder,
+    #codeEditor::placeholder {
+      color: #475569;
+      font-style: italic;
+    }
+    div#terminalModal textarea#codeEditor:focus,
     #codeEditor:focus {
-      border-color: rgba(0, 240, 255, 0.5);
-      background: #0a0e26;
+      border-color: var(--neon-cyan);
+      background: #080c22;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 12px rgba(0, 240, 255, 0.25);
     }
 
     /* Terminal Console & Verdict */
@@ -1144,6 +1213,20 @@
         <span class="heart-icon">❤️</span>
         <span class="heart-icon">❤️</span>
       </div>
+      <!-- Score & Energy Badges -->
+      <div class="score-badge" id="hudScoreBadge" title="Pontuação Geral (Score)">
+        <span>⚡</span>
+        <span id="hudScore">0</span>
+      </div>
+      <div class="energy-box" id="hudEnergyBox" title="Energia Cibernética (HP)">
+        <div class="energy-label">
+          <span>ENERGIA</span>
+          <span id="hudEnergyVal">100%</span>
+        </div>
+        <div class="energy-bar-container">
+          <div class="energy-bar-fill" id="hudEnergyFill"></div>
+        </div>
+      </div>
       <div class="coins-badge" id="hudCoinsBadge" title="Moedas Cibernéticas • Clique para abrir o Gênio" style="display: flex; align-items: center; gap: 4px; font-family: var(--font-arcade); font-size: 0.8rem; font-weight: 800; color: var(--neon-yellow); background: rgba(250, 204, 21, 0.15); border: 1px solid rgba(250, 204, 21, 0.4); padding: 2px 8px; border-radius: 12px; cursor: pointer;" onclick="openGenieModal()">
         <span>🪙</span>
         <span id="hudCoins">50</span>
@@ -1300,8 +1383,8 @@
           <div class="term-editor-tools">
             <div class="term-lang-tag" id="termLangIndicator">PYTHON 3.12</div>
             <div style="display: flex; gap: 6px;">
-              <button class="close-term-btn" style="background:#151a3d; color: var(--neon-cyan); border-color: rgba(0,240,255,0.4);" onclick="clearCodeEditor()" title="Limpar todo o texto do editor">🧹 Limpar Código</button>
-              <button class="close-term-btn" style="background:#151a3d;" onclick="resetCodeTemplate()" title="Restaurar template limpo">↺ Reset</button>
+              <button class="close-term-btn" style="background:#151a3d; color: var(--neon-cyan); border-color: rgba(0,240,255,0.4);" onclick="clearCodeEditor()" title="Limpar todo o texto do editor (Editor Vazio)">🧹 Limpar Código</button>
+              <button class="close-term-btn" style="background:#151a3d; color: #a5b4fc; border-color: rgba(165,180,252,0.4);" onclick="resetCodeTemplate()" title="Carregar esqueleto base de código se desejar">📋 Esqueleto Opcional</button>
             </div>
           </div>
 
@@ -1323,7 +1406,7 @@
 
           <div class="editor-wrapper">
             <div class="editor-gutter" id="editorGutter">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
-            <textarea id="codeEditor" spellcheck="false"></textarea>
+            <textarea id="codeEditor" spellcheck="false" placeholder="/* Terminal Limpo. Digite sua solução de código aqui do zero... */"></textarea>
           </div>
 
           <div class="term-console" id="termConsole">
@@ -1474,6 +1557,37 @@
         <div class="firewall-options" id="firewallModalOptions"></div>
 
         <div class="firewall-status" id="firewallModalStatus"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 5: ALERTA DE GLITCH - ROBÔ BUG PATRULHEIRO
+       ======================================================== -->
+  <div class="firewall-modal-backdrop" id="bugModal">
+    <div class="firewall-card" style="border-color: #f97316; box-shadow: 0 0 35px rgba(249, 115, 22, 0.45);">
+      <div class="firewall-header" style="background: #1a153b; border-bottom: 2px solid #3d2a6b;">
+        <div class="firewall-title" style="color: #f97316;">
+          <span>🐛</span>
+          <span id="bugModalTitle">ROBÔ BUG PATRULHEIRO • ANOMALIA DE CÓDIGO DETECTADA</span>
+        </div>
+        <button class="close-term-btn" onclick="closeBugModal()">✕ FECHAR</button>
+      </div>
+
+      <div class="firewall-body">
+        <div class="firewall-prompt-box" style="border-left-color: #f97316;" id="bugModalPrompt">
+          O circuito de processamento deste robô bug patrulheiro foi infectado por uma falha de lógica. Analise a anomalia no trecho de código abaixo e selecione a depuração correta para restaurar o drone antes que sua blindagem descarregue eletricidade em você!
+        </div>
+
+        <div style="font-family: var(--font-arcade); font-weight: 800; font-size: 0.95rem; color: #fff;" id="bugModalQuestion">
+          Qual instrução corrige o bug reportado?
+        </div>
+
+        <div class="firewall-code-snippet" id="bugModalSnippet" style="border-color: rgba(249, 115, 22, 0.4);"></div>
+
+        <div class="firewall-options" id="bugModalOptions"></div>
+
+        <div class="firewall-status" id="bugModalStatus"></div>
       </div>
     </div>
   </div>
@@ -1810,10 +1924,13 @@
       xp: 0,
       xpNeeded: 250,
       lives: 3,
+      score: 0,
+      energy: 100,
       coins: 50,
       currentLanguage: "python",
       completedPortals: [],
       deactivatedObstacles: [],
+      neutralizedBugs: [],
       quizHighScore: 0,
       crtEnabled: true
     };
@@ -1823,11 +1940,58 @@
       if (saved) {
         state = { ...state, ...JSON.parse(saved) };
         if (state.coins === undefined) state.coins = 50;
+        if (state.score === undefined) state.score = 0;
+        if (state.energy === undefined) state.energy = 100;
       }
     } catch (e) {}
 
     function saveState() {
       try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {}
+      updateHUD();
+    }
+
+    function addScore(points, reason = '') {
+      state.score = (state.score || 0) + points;
+      const scoreBadge = document.getElementById('hudScoreBadge');
+      if (scoreBadge) {
+        scoreBadge.classList.remove('score-bump');
+        void scoreBadge.offsetWidth;
+        scoreBadge.classList.add('score-bump');
+        setTimeout(() => scoreBadge.classList.remove('score-bump'), 320);
+      }
+      restoreEnergy(15);
+      showFloatingReward(`+${points} PTS! ${reason}`, '#38bdf8', '⚡');
+      SoundEngine.playCoin();
+      saveState();
+    }
+
+    function takeDamage(amount, reason = '') {
+      state.energy = Math.max(0, (state.energy !== undefined ? state.energy : 100) - amount);
+      document.body.classList.remove('damage-flash');
+      void document.body.offsetWidth;
+      document.body.classList.add('damage-flash');
+      setTimeout(() => document.body.classList.remove('damage-flash'), 400);
+
+      SoundEngine.playWrong();
+      showFloatingReward(`-${amount} ENERGIA! ${reason}`, '#ef4444', '⚡');
+
+      if (state.energy <= 0) {
+        state.lives = Math.max(0, state.lives - 1);
+        if (state.lives > 0) {
+          state.energy = 100;
+          showFloatingReward(`-1 CORAÇÃO! ENERGIA RECARREGADA`, '#ef4444', '💔');
+        } else {
+          showFloatingReward(`💀 GAME OVER! RENASCENDO NO SPAWN...`, '#ef4444', '💀');
+          setTimeout(teleportToSpawn, 1100);
+          state.lives = 3;
+          state.energy = 100;
+        }
+      }
+      saveState();
+    }
+
+    function restoreEnergy(amount) {
+      state.energy = Math.min(100, (state.energy !== undefined ? state.energy : 100) + amount);
       updateHUD();
     }
 
@@ -1854,6 +2018,24 @@
         h.className = `heart-icon ${i >= state.lives ? 'lost' : ''}`;
         h.innerText = '❤️';
         heartsContainer.appendChild(h);
+      }
+
+      // Update Score in HUD
+      const scoreEl = document.getElementById('hudScore');
+      if (scoreEl) scoreEl.innerText = (state.score || 0).toLocaleString();
+
+      // Update Energy bar in HUD
+      const energy = Math.max(0, Math.min(100, state.energy !== undefined ? state.energy : 100));
+      const energyValEl = document.getElementById('hudEnergyVal');
+      const energyFillEl = document.getElementById('hudEnergyFill');
+      if (energyValEl) energyValEl.innerText = `${energy}%`;
+      if (energyFillEl) {
+        energyFillEl.style.width = `${energy}%`;
+        if (energy <= 35) {
+          energyFillEl.classList.add('warning');
+        } else {
+          energyFillEl.classList.remove('warning');
+        }
       }
 
       const coinsEl = document.getElementById('hudCoins');
@@ -2401,6 +2583,192 @@
       });
     });
 
+    /* --- 3D BUG PATROLLER ROBOTS (CYBER BUGS / GLITCH DRONES) --- */
+    const BUG_CHALLENGES = [
+      {
+        id: 1,
+        title: "ROBÔ BUG #01: GLITCH-DRONE ALPHA (OUT OF BOUNDS)",
+        prompt: "O sensor do robô bug sofreu um estouro de pilha por tentar ler além dos limites do array de telemetria.",
+        question: "Qual correção elimina o erro 'IndexError: list index out of range'?",
+        snippet: "# Código com anomalia:\nleituras = [10.5, 20.2, 30.8]\nfor i in range(len(leituras) + 1):\n    processar(leituras[i])",
+        options: [
+          "Substituir por 'range(len(leituras))' ou 'for item in leituras:'",
+          "Mudar para while i <= 3:",
+          "Converter a lista para string com str(leituras)",
+          "Adicionar leituras.append(0) no início do loop"
+        ],
+        ans: 0,
+        rewardScore: 160,
+        rewardCoins: 25,
+        rewardXp: 70
+      },
+      {
+        id: 2,
+        title: "ROBÔ BUG #02: CYBER-BUG BETA (NULL REFERENCE GLITCH)",
+        prompt: "O drone tentou acessar a propriedade 'status' de um objeto que ainda não havia sido instanciado pelo servidor.",
+        question: "Como neutralizar o 'TypeError: Cannot read properties of null' de forma segura em JavaScript?",
+        snippet: "// Código com anomalia:\nlet dadosDoSensor = null;\nconsole.log(dadosDoSensor.status);",
+        options: [
+          "Usar Encadeamento Opcional: dadosDoSensor?.status ?? 'OFFLINE'",
+          "Trocar a declaração 'let' por 'const'",
+          "Chamar dadosDoSensor.valueOf()",
+          "Atribuir dadosDoSensor = Function()"
+        ],
+        ans: 0,
+        rewardScore: 160,
+        rewardCoins: 25,
+        rewardXp: 70
+      },
+      {
+        id: 3,
+        title: "ROBÔ BUG #03: QUANTUM-GLITCH GAMMA (C++ MEMORY LEAK)",
+        prompt: "Os atuadores quânticos do drone acumulam lixo na Heap sem liberar memória dinâmica ao final da rotina.",
+        question: "Qual instrução em C++ desaloca de forma correta e segura um array alocado com 'new[]'?",
+        snippet: "// Código com anomalia:\nfloat* buffer = new float[4096];\n// Rotina de voo do drone...\n// [FALHA: Memória não liberada!]",
+        options: [
+          "delete[] buffer;",
+          "free(buffer);",
+          "buffer = nullptr;",
+          "delete buffer;"
+        ],
+        ans: 0,
+        rewardScore: 160,
+        rewardCoins: 25,
+        rewardXp: 70
+      },
+      {
+        id: 4,
+        title: "ROBÔ BUG #04: DATABASE-BUG DELTA (SQL INJECTION VULN)",
+        prompt: "O transponder deste drone concatena strings de entrada sem sanitização nas consultas ao banco de dados.",
+        question: "Qual técnica neutraliza injeções maliciosas em SQL de acordo com as boas práticas?",
+        snippet: "-- Código com anomalia:\nSELECT * FROM drones WHERE tag = '\" + inputTag + \"';",
+        options: [
+          "Usar Prepared Statements com parâmetros vinculados (bind parameters)",
+          "Converter todas as letras para minúsculas com LOWER()",
+          "Adicionar mais aspas simples em volta da tag",
+          "Substituir SELECT por UPDATE"
+        ],
+        ans: 0,
+        rewardScore: 160,
+        rewardCoins: 25,
+        rewardXp: 70
+      }
+    ];
+
+    const BUG_PATROLLERS = [
+      {
+        id: 1,
+        name: "Glitch-Drone Alpha",
+        x: -8,
+        z: -3,
+        axis: 'x',
+        range: 16,
+        speed: 1.8,
+        color: 0xef4444,
+        active: true,
+        challengeId: 1
+      },
+      {
+        id: 2,
+        name: "Cyber-Bug Beta",
+        x: -18,
+        z: 0,
+        axis: 'z',
+        range: 14,
+        speed: 1.5,
+        color: 0xf97316,
+        active: true,
+        challengeId: 2
+      },
+      {
+        id: 3,
+        name: "Quantum-Glitch Gamma",
+        x: 18,
+        z: 0,
+        axis: 'z',
+        range: 14,
+        speed: 2.0,
+        color: 0xa855f7,
+        active: true,
+        challengeId: 3
+      },
+      {
+        id: 4,
+        name: "Database-Bug Delta",
+        x: 0,
+        z: 10,
+        axis: 'x',
+        range: 14,
+        speed: 1.6,
+        color: 0xfacc15,
+        active: true,
+        challengeId: 4
+      }
+    ];
+
+    const bugMeshes = [];
+    BUG_PATROLLERS.forEach(bug => {
+      const bugGroup = new THREE.Group();
+
+      // Bug Body (Dark metallic torso)
+      const bodyMat = new THREE.MeshStandardMaterial({
+        color: 0x13172e,
+        metalness: 0.9,
+        roughness: 0.25
+      });
+      const body = new THREE.Mesh(new THREE.DodecahedronGeometry(0.75, 1), bodyMat);
+      body.castShadow = true;
+      bugGroup.add(body);
+
+      // Glowing Eye / Scanner Visor
+      const eyeMat = new THREE.MeshStandardMaterial({
+        color: bug.color,
+        emissive: bug.color,
+        emissiveIntensity: 0.9,
+        roughness: 0.1
+      });
+      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.32, 12, 12), eyeMat);
+      eye.position.set(0, 0.15, 0.55);
+      bugGroup.add(eye);
+
+      // 4 Cyber Legs / Hover Thrusters
+      const legGeo = new THREE.CylinderGeometry(0.06, 0.12, 0.8, 6);
+      const legMat = new THREE.MeshStandardMaterial({ color: 0x242d54, metalness: 0.8 });
+      for (let i = 0; i < 4; i++) {
+        const angle = (i * Math.PI) / 2 + Math.PI / 4;
+        const leg = new THREE.Mesh(legGeo, legMat);
+        leg.position.set(Math.cos(angle) * 0.7, -0.35, Math.sin(angle) * 0.7);
+        leg.rotation.z = Math.cos(angle) * 0.45;
+        leg.rotation.x = Math.sin(angle) * 0.45;
+        bugGroup.add(leg);
+      }
+
+      // Glitch Wireframe Halo
+      const haloGeo = new THREE.TorusGeometry(1.1, 0.04, 6, 16);
+      const haloMat = new THREE.MeshBasicMaterial({ color: bug.color, wireframe: true, transparent: true, opacity: 0.65 });
+      const halo = new THREE.Mesh(haloGeo, haloMat);
+      halo.rotation.x = Math.PI / 2;
+      bugGroup.add(halo);
+
+      // Cyber Light point
+      const bugLight = new THREE.PointLight(bug.color, 1.4, 6);
+      bugGroup.add(bugLight);
+
+      bugGroup.position.set(bug.x, 1.3, bug.z);
+      scene.add(bugGroup);
+
+      bugMeshes.push({
+        data: bug,
+        group: bugGroup,
+        eyeMat: eyeMat,
+        haloMat: haloMat,
+        light: bugLight,
+        originX: bug.x,
+        originZ: bug.z,
+        baseY: 1.3
+      });
+    });
+
     /* ========================================================
        6. 3RD PERSON CONTROLS & CAMERA DAMPING
        ======================================================== */
@@ -2678,10 +3046,25 @@
         }
       });
 
+      // Check proximity to patrolling cyber bugs
+      let nearestBug = null;
+      let minBugDist = 3.6;
+      bugMeshes.forEach(bm => {
+        const dist = avatar.position.distanceTo(bm.group.position);
+        if (dist < minBugDist && bm.data.active) {
+          minBugDist = dist;
+          nearestBug = bm.data;
+        }
+      });
+
       const promptEl = document.getElementById('proximityPrompt');
       const promptText = document.getElementById('proximityText');
 
-      if (nearestObstacle && nearestObstacle.active) {
+      if (nearestBug && nearestBug.active) {
+        currentNearPortal = { type: 'bug', bug: nearestBug };
+        promptEl.classList.add('visible');
+        promptText.innerText = `🐛 DEPURAR ${nearestBug.name.toUpperCase()}`;
+      } else if (nearestObstacle && nearestObstacle.active) {
         currentNearPortal = { type: 'obstacle', obstacleId: nearestObstacle.id, name: nearestObstacle.name };
         promptEl.classList.add('visible');
         promptText.innerText = `DESATIVAR ${nearestObstacle.name.toUpperCase()}`;
@@ -2704,7 +3087,9 @@
     function triggerCurrentInteraction() {
       if (currentNearPortal) {
         SoundEngine.playBeep(520, 0.06);
-        if (currentNearPortal.type === 'quiz') {
+        if (currentNearPortal.type === 'bug') {
+          openBugModal(currentNearPortal.bug);
+        } else if (currentNearPortal.type === 'quiz') {
           startSpeedQuiz();
         } else if (currentNearPortal.type === 'genie') {
           openGenieModal();
@@ -2738,6 +3123,34 @@
         pm.ring.rotation.z += delta * 0.6;
       });
 
+      // Update and animate patrolling cyber bugs
+      bugMeshes.forEach(bm => {
+        const b = bm.data;
+        const t = clock.getElapsedTime() * b.speed;
+        if (b.axis === 'x') {
+          bm.group.position.x = bm.originX + Math.sin(t) * (b.range / 2);
+          bm.group.rotation.y = Math.cos(t) >= 0 ? Math.PI / 2 : -Math.PI / 2;
+        } else {
+          bm.group.position.z = bm.originZ + Math.sin(t) * (b.range / 2);
+          bm.group.rotation.y = Math.cos(t) >= 0 ? 0 : Math.PI;
+        }
+        bm.group.position.y = bm.baseY + Math.sin(t * 2) * 0.22;
+        bm.haloMat.rotation = t * 2;
+
+        // Collision check with hostile active bug
+        if (b.active) {
+          const bugDist = avatar.position.distanceTo(bm.group.position);
+          if (bugDist < 1.8) {
+            const pushX = avatar.position.x - bm.group.position.x;
+            const pushZ = avatar.position.z - bm.group.position.z;
+            const len = Math.hypot(pushX, pushZ) || 1;
+            avatar.position.x += (pushX / len) * 2.2;
+            avatar.position.z += (pushZ / len) * 2.2;
+            takeDamage(12, `COLISÃO COM ${b.name.toUpperCase()}`);
+          }
+        }
+      });
+
       // Obstacle laser pulsing and physical barrier collisions
       obstacleMeshes.forEach(om => {
         if (om.data.active) {
@@ -2752,9 +3165,7 @@
             // Repel player backwards
             const pushDir = avatar.position.z >= om.data.z ? 1 : -1;
             avatar.position.z = om.data.z + pushDir * 2.2;
-            SoundEngine.playWrong();
-            document.body.classList.add('damage-effect');
-            setTimeout(() => document.body.classList.remove('damage-effect'), 400);
+            takeDamage(15, "CHOQUE DA BARREIRA LASER");
             showFloatingReward("⚠️ BARREIRA LASER ATIVA! RESOLVA O DESAFIO [E]", "#f43f5e", "⛔");
           }
         } else {
@@ -2910,10 +3321,11 @@
       };
       document.getElementById('termLangIndicator').innerText = langNames[state.currentLanguage] || state.currentLanguage.toUpperCase();
 
-      // Clean Terminal: Starter skeleton only, user writes the actual solution!
-      codeEditor.value = prob.starter[state.currentLanguage] || prob.starter.python || '';
+      // Terminal limpo e editor vazio conforme solicitado pelo usuário
+      codeEditor.value = "";
+      codeEditor.placeholder = `/* Terminal Limpo [${langNames[state.currentLanguage]}]. Digite sua solução de código aqui do zero... */`;
       updateGutter();
-      document.getElementById('termConsole').innerHTML = `<div style="color: #64748b;">Problema #${prob.id} pronto. Terminal limpo. Digite sua solução e submeta.</div>`;
+      document.getElementById('termConsole').innerHTML = `<div style="color: #64748b;">Problema #${prob.id} pronto. Editor vazio e terminal limpo. Digite sua solução e submeta. Se desejar, clique em "📋 Esqueleto Opcional".</div>`;
     }
 
     function clearCodeEditor() {
@@ -3224,12 +3636,14 @@
         SoundEngine.playCorrect();
         const coinReward = 35;
         state.coins = (state.coins || 0) + coinReward;
+        addScore(prob.xp * 2, 'BEECROWD ACCEPTED!');
+        restoreEnergy(20);
         showFloatingReward(`+${coinReward} MOEDAS 🪙 BÔNUS BEECROWD!`, '#00f0ff', '💻');
         consoleEl.innerHTML = `
           <div style="color: var(--neon-green); font-size: 1rem; font-weight: bold;">
             ✓ ACCEPTED (100% CORRETO)
           </div>
-          <div style="color: #cbd5e1;">Todos os casos de teste passaram! Recompensa: +${prob.xp} XP e +${coinReward} Moedas 🪙!</div>
+          <div style="color: #cbd5e1;">Todos os casos de teste passaram! Recompensa: +${prob.xp} XP, +${prob.xp * 2} Score ⚡ e +${coinReward} Moedas 🪙!</div>
         `;
         if (!state.completedPortals.includes(prob.id)) {
           state.completedPortals.push(prob.id);
@@ -3245,7 +3659,11 @@
         saveState();
       } else {
         SoundEngine.playWrong();
-        consoleEl.innerHTML = `<div style="color: var(--neon-magenta); font-weight: bold;">✗ RESPOSTA INCORRETA (WRONG ANSWER)</div>`;
+        takeDamage(15, 'FALHA NOS TESTES');
+        consoleEl.innerHTML = `
+          <div style="color: var(--neon-magenta); font-weight: bold;">✗ RESPOSTA INCORRETA (WRONG ANSWER)</div>
+          <div style="color: #fca5a5; font-size: 0.8rem; margin-top: 4px;">⚡ Choque no terminal: -15 Energia! Revise sua implementação e tente novamente.</div>
+        `;
       }
     }
 
@@ -3355,6 +3773,8 @@
         SoundEngine.playCorrect();
         const coinGain = 5 * quizCombo;
         state.coins = (state.coins || 0) + coinGain;
+        addScore(35 * quizCombo, `COMBO x${quizCombo}`);
+        restoreEnergy(10);
         showFloatingReward(`+${coinGain} MOEDAS 🪙 (Combo x${quizCombo})`, '#00ff88', '⚡');
         quizCombo++;
         document.getElementById('quizComboTag').innerText = `COMBO x${quizCombo} 🔥`;
@@ -3363,6 +3783,7 @@
       } else {
         btn.classList.add('wrong');
         allBtns[q.ans].classList.add('correct');
+        takeDamage(15, 'ERRO NO SPEED QUIZ');
         handleQuizDamage();
         quizCombo = 1;
         document.getElementById('quizComboTag').innerText = 'COMBO x1';
@@ -3718,6 +4139,8 @@
         if (!state.deactivatedObstacles.includes(obs.id)) {
           state.deactivatedObstacles.push(obs.id);
           state.coins = (state.coins || 0) + obs.challenge.reward;
+          addScore(250, 'FIREWALL DESATIVADO!');
+          restoreEnergy(20);
           addXP(obs.challenge.xp);
         }
 
@@ -3740,13 +4163,124 @@
       } else {
         btn.classList.add('wrong');
         SoundEngine.playWrong();
+        takeDamage(20, 'SOBRECARGA DO FIREWALL');
 
         statusEl.style.display = 'block';
         statusEl.style.background = 'rgba(244, 63, 94, 0.15)';
         statusEl.style.border = '1px solid #f43f5e';
         statusEl.style.color = '#fecdd3';
         statusEl.innerHTML = `
-          <strong>✗ ACESSO NEGADO!</strong> A resposta está incorreta. Revise a lógica do algoritmo e tente novamente.
+          <strong>✗ ACESSO NEGADO!</strong> A resposta está incorreta. Revise a lógica do algoritmo e tente novamente (-20 Energia ⚡).
+        `;
+
+        setTimeout(() => {
+          allBtns.forEach(b => {
+            b.disabled = false;
+            b.classList.remove('wrong');
+          });
+          statusEl.style.display = 'none';
+        }, 1800);
+      }
+    }
+
+    /* ========================================================
+       13. ROBÔ BUG PATROL & DEBUG ENGINE (INTERAÇÃO MODAL)
+       ======================================================== */
+    let activeBug = null;
+
+    function openBugModal(bug) {
+      activeBug = bug;
+      const ch = BUG_CHALLENGES.find(c => c.id === bug.challengeId) || BUG_CHALLENGES[0];
+
+      document.getElementById('bugModalTitle').innerText = `${ch.title}`;
+      document.getElementById('bugModalPrompt').innerText = ch.prompt;
+      document.getElementById('bugModalQuestion').innerText = ch.question;
+
+      const snippetEl = document.getElementById('bugModalSnippet');
+      if (ch.snippet) {
+        snippetEl.innerText = ch.snippet;
+        snippetEl.style.display = 'block';
+      } else {
+        snippetEl.style.display = 'none';
+      }
+
+      const optsContainer = document.getElementById('bugModalOptions');
+      optsContainer.innerHTML = '';
+
+      const statusEl = document.getElementById('bugModalStatus');
+      statusEl.style.display = 'none';
+
+      ch.options.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'firewall-opt-btn';
+        btn.style.borderColor = 'rgba(249, 115, 22, 0.4)';
+        btn.innerHTML = `<span style="color:#f97316; font-weight:900;">[FIX 0${idx+1}]</span> <span>${optText}</span>`;
+        btn.onclick = () => solveBugChallenge(bug, ch, idx, btn);
+        optsContainer.appendChild(btn);
+      });
+
+      document.getElementById('bugModal').classList.add('open');
+      SoundEngine.playBeep(450, 0.08);
+    }
+
+    function closeBugModal() {
+      document.getElementById('bugModal').classList.remove('open');
+      SoundEngine.playBeep(300, 0.05);
+    }
+
+    function solveBugChallenge(bug, ch, selectedIdx, btn) {
+      const allBtns = document.querySelectorAll('#bugModalOptions .firewall-opt-btn');
+      allBtns.forEach(b => b.disabled = true);
+
+      const statusEl = document.getElementById('bugModalStatus');
+
+      if (selectedIdx === ch.ans) {
+        btn.classList.add('correct');
+        SoundEngine.playLevelUp();
+
+        statusEl.style.display = 'block';
+        statusEl.style.background = 'rgba(0, 255, 136, 0.15)';
+        statusEl.style.border = '1px solid var(--neon-green)';
+        statusEl.style.color = '#fff';
+        statusEl.innerHTML = `
+          <strong style="color:var(--neon-green);">✓ DEPURAÇÃO BEM-SUCEDIDA! ROBÔ BUG PURIFICADO!</strong><br>
+          Os circuitos defeituosos foram reescritos. O robô foi neutralizado e agora patrulha como sentinela aliada! Você ganhou +${ch.rewardScore} Score ⚡, +${ch.rewardCoins} Moedas 🪙 e +${ch.rewardXp} XP!
+        `;
+
+        // Update score & HUD
+        addScore(ch.rewardScore, 'BUG ELIMINADO!');
+        restoreEnergy(25);
+        state.coins = (state.coins || 0) + ch.rewardCoins;
+        addXP(ch.rewardXp);
+
+        // Turn bug into green ally in 3D
+        bug.active = false;
+        const bm = bugMeshes.find(m => m.data.id === bug.id);
+        if (bm) {
+          bm.eyeMat.color.setHex(0x00ff88);
+          bm.eyeMat.emissive.setHex(0x00ff88);
+          bm.haloMat.color.setHex(0x00ff88);
+          bm.light.color.setHex(0x00ff88);
+        }
+
+        if (!state.neutralizedBugs) state.neutralizedBugs = [];
+        if (!state.neutralizedBugs.includes(bug.id)) state.neutralizedBugs.push(bug.id);
+        saveState();
+
+        setTimeout(() => {
+          closeBugModal();
+        }, 1700);
+      } else {
+        btn.classList.add('wrong');
+        SoundEngine.playWrong();
+        takeDamage(20, 'FALHA DE DEPURAÇÃO DO BUG');
+
+        statusEl.style.display = 'block';
+        statusEl.style.background = 'rgba(239, 68, 68, 0.15)';
+        statusEl.style.border = '1px solid #ef4444';
+        statusEl.style.color = '#fecdd3';
+        statusEl.innerHTML = `
+          <strong>✗ DEPURAÇÃO INCORRETA!</strong> A anomalia gerou um arco voltaico e descarregou energia em você (-20 Energia ⚡). Analise a causa raiz e tente novamente!
         `;
 
         setTimeout(() => {
