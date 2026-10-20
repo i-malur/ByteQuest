@@ -112,39 +112,64 @@
     /* ========================================================
        TOP HUD (MINIMAL & NON-INTRUSIVE)
        ======================================================== */
+    /* ========================================================
+       TOP HEADER & HUD (RESPONSIVE FOR ALL SCREEN SIZES)
+       ======================================================== */
     .top-hud {
       position: absolute;
-      top: 12px;
-      left: 12px;
-      right: 12px;
+      top: 10px;
+      left: 10px;
+      right: 10px;
       z-index: 20;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 12px;
+      align-items: flex-start;
+      gap: 10px;
       pointer-events: none;
+      flex-wrap: wrap;
     }
+
+    /* CSS SELECTOR 3: div:nth-of-type(5) > div:nth-of-type(1) */
+    div:nth-of-type(5) > div:nth-of-type(1),
     .hud-box {
       pointer-events: auto;
-      background: rgba(13, 16, 38, 0.92);
+      background: rgba(13, 16, 38, 0.94);
       border: 2px solid var(--border-color);
       border-radius: 12px;
-      padding: 8px 14px;
+      padding: 6px 12px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      flex-wrap: wrap;
+      gap: 8px 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      max-width: 100%;
+      transition: all 0.25s ease;
     }
+
     .hud-title {
       font-family: var(--font-arcade);
       font-weight: 900;
       font-size: 0.95rem;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       color: #fff;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
+      flex-shrink: 0;
     }
+
+    /* CSS SELECTOR 2: div:nth-of-type(5) > div:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(2) */
+    div:nth-of-type(5) > div:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(2),
+    .hud-title span:nth-of-type(2) {
+      font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+      letter-spacing: 0.6px;
+      font-weight: 900;
+      color: #fff;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
     .level-tag {
       background: rgba(250, 204, 21, 0.2);
       border: 1px solid var(--neon-yellow);
@@ -154,14 +179,16 @@
       padding: 2px 8px;
       border-radius: 12px;
       font-family: var(--font-arcade);
+      flex-shrink: 0;
     }
     .xp-bar-container {
-      width: 110px;
+      width: 95px;
       height: 8px;
       background: #090b1c;
       border: 1px solid #232a58;
       border-radius: 4px;
       overflow: hidden;
+      flex-shrink: 0;
     }
     .xp-bar-fill {
       height: 100%;
@@ -172,8 +199,9 @@
     }
     .hearts-box {
       display: flex;
-      gap: 4px;
-      font-size: 1rem;
+      gap: 3px;
+      font-size: 0.95rem;
+      flex-shrink: 0;
     }
     .heart-icon.lost {
       opacity: 0.2;
@@ -184,14 +212,15 @@
       align-items: center;
       gap: 5px;
       font-family: var(--font-arcade);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 800;
       color: #38bdf8;
       background: rgba(56, 189, 248, 0.15);
       border: 1px solid rgba(56, 189, 248, 0.45);
-      padding: 3px 10px;
+      padding: 3px 8px;
       border-radius: 12px;
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+      flex-shrink: 0;
     }
     .score-badge.score-bump {
       transform: scale(1.22);
@@ -201,21 +230,22 @@
     .energy-box {
       display: flex;
       flex-direction: column;
-      gap: 3px;
-      min-width: 105px;
+      gap: 2px;
+      min-width: 95px;
+      flex-shrink: 0;
     }
     .energy-label {
       display: flex;
       justify-content: space-between;
       font-family: var(--font-arcade);
-      font-size: 0.64rem;
+      font-size: 0.62rem;
       font-weight: 800;
       color: #cbd5e1;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
     .energy-bar-container {
       width: 100%;
-      height: 8px;
+      height: 7px;
       background: #090b1c;
       border: 1px solid #232a58;
       border-radius: 4px;
@@ -240,7 +270,8 @@
       100% { box-shadow: inset 0 0 0 0 rgba(239, 68, 68, 0); }
     }
 
-    /* Language Switcher & Controls in Top Right */
+    /* CSS SELECTOR 4: div:nth-of-type(5) > div:nth-of-type(2) */
+    div:nth-of-type(5) > div:nth-of-type(2),
     .top-controls {
       pointer-events: auto;
       display: flex;
@@ -248,7 +279,39 @@
       gap: 8px;
       flex-wrap: wrap;
       justify-content: flex-end;
+      transition: all 0.25s ease;
     }
+
+    /* Start / Spawn Return Button */
+    .start-return-btn {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.35), rgba(79, 70, 229, 0.5));
+      border: 1.5px solid #818cf8;
+      color: #e0e7ff;
+      font-family: var(--font-arcade);
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .start-return-btn:hover {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border-color: #c7d2fe;
+      color: #fff;
+      box-shadow: 0 0 16px rgba(129, 140, 248, 0.7);
+      transform: translateY(-1px);
+    }
+    .start-return-btn:active {
+      transform: scale(0.94);
+    }
+
     .lang-pill-group {
       background: rgba(13, 16, 38, 0.94);
       border: 2px solid var(--border-color);
@@ -260,6 +323,8 @@
       overflow-x: auto;
       white-space: nowrap;
       scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      flex-shrink: 1;
     }
     .lang-pill-group::-webkit-scrollbar {
       display: none;
@@ -268,7 +333,7 @@
       background: transparent;
       border: none;
       color: var(--text-muted);
-      font-size: 0.73rem;
+      font-size: 0.72rem;
       font-weight: 700;
       padding: 5px 9px;
       border-radius: 20px;
@@ -295,12 +360,13 @@
       align-items: center;
       gap: 3px;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+      flex-shrink: 0;
     }
     .zoom-btn {
       background: #141a3d;
       border: 1px solid rgba(0, 240, 255, 0.3);
       color: var(--neon-cyan);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 800;
       width: 32px;
       height: 32px;
@@ -310,6 +376,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
     .zoom-btn:hover {
       background: rgba(0, 240, 255, 0.25);
@@ -319,6 +386,113 @@
     }
     .zoom-btn:active {
       transform: scale(0.92);
+    }
+
+    /* Responsive Header Styles for Smaller Screens */
+    @media (max-width: 1180px) {
+      .top-hud {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      div:nth-of-type(5) > div:nth-of-type(1),
+      .hud-box {
+        width: 100%;
+        justify-content: space-between;
+        padding: 6px 12px;
+      }
+      div:nth-of-type(5) > div:nth-of-type(2),
+      .top-controls {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .lang-pill-group {
+        max-width: calc(100% - 240px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .top-hud {
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        gap: 6px;
+      }
+      div:nth-of-type(5) > div:nth-of-type(1),
+      .hud-box {
+        padding: 5px 8px;
+        gap: 5px 8px;
+        border-radius: 10px;
+      }
+      .xp-bar-container {
+        width: 65px;
+      }
+      .energy-box {
+        min-width: 75px;
+      }
+      .score-badge {
+        padding: 2px 7px;
+        font-size: 0.76rem;
+      }
+      .hearts-box {
+        font-size: 0.88rem;
+        gap: 2px;
+      }
+      .lang-pill-group {
+        max-width: calc(100% - 220px);
+      }
+      .lang-pill {
+        font-size: 0.68rem;
+        padding: 4px 7px;
+      }
+      .start-return-btn {
+        padding: 5px 9px;
+        font-size: 0.72rem;
+      }
+      .zoom-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.76rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      /* Keep game icon 👾 and hide text on small screens so vital stats don't wrap awkwardly */
+      div:nth-of-type(5) > div:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(2),
+      .hud-title span:nth-of-type(2) {
+        display: none;
+      }
+      div:nth-of-type(5) > div:nth-of-type(1),
+      .hud-box {
+        gap: 4px 6px;
+        padding: 4px 6px;
+      }
+      .energy-label {
+        font-size: 0.58rem;
+      }
+      .energy-box {
+        min-width: 62px;
+      }
+      .xp-bar-container {
+        width: 48px;
+      }
+      div:nth-of-type(5) > div:nth-of-type(2),
+      .top-controls {
+        gap: 4px;
+      }
+      .lang-pill-group {
+        max-width: calc(100% - 170px);
+      }
+      .lang-pill {
+        font-size: 0.64rem;
+        padding: 3px 6px;
+      }
+      .start-return-btn span:last-child {
+        display: none; /* Only show 🏠 icon on super narrow screens */
+      }
+      .start-return-btn {
+        padding: 5px 8px;
+      }
     }
 
     .icon-btn {
@@ -529,35 +703,89 @@
       pointer-events: auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 50px;
+      align-items: center;
     }
     .action-btn-circle {
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
+      min-width: 62px;
+      height: 60px;
+      border-radius: 14px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
+      padding: 4px 8px;
+      font-size: 1.15rem;
       cursor: pointer;
       touch-action: manipulation;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
-      border: 2px solid #fff;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+      border: 2px solid rgba(255, 255, 255, 0.4);
       user-select: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: var(--font-arcade);
+      backdrop-filter: blur(8px);
     }
+    .action-btn-circle .action-icon {
+      font-size: 1.25rem;
+      line-height: 1.1;
+      display: block;
+    }
+    .action-btn-circle .action-caption {
+      font-size: 0.6rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+      white-space: nowrap;
+      display: block;
+      text-transform: uppercase;
+    }
+    .action-btn-circle:active {
+      transform: scale(0.9);
+    }
+
+    /* CSS SELECTOR 1: div:nth-of-type(7) > div:nth-of-type(2) > div#btnActInteract:nth-of-type(1) */
+    div:nth-of-type(7) > div:nth-of-type(2) > div#btnActInteract:nth-of-type(1),
+    #btnActInteract {
+      background: linear-gradient(135deg, #10b981, #047857);
+      border-color: var(--neon-green);
+      color: #fff;
+    }
+    #btnActInteract:hover {
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+      transform: translateY(-2px);
+    }
+    #btnActInteract.ready-to-interact {
+      background: linear-gradient(135deg, #00f0ff, #00ff88);
+      border-color: #fff;
+      color: #03141a;
+      box-shadow: 0 0 22px rgba(0, 255, 136, 0.8), 0 0 35px rgba(0, 240, 255, 0.6);
+      animation: pulseInteract 0.9s infinite alternate;
+    }
+    @keyframes pulseInteract {
+      from { transform: scale(1); }
+      to { transform: scale(1.08); }
+    }
+
+    .btn-act-spawn {
+      background: linear-gradient(135deg, #6366f1, #4338ca);
+      border-color: #a5b4fc;
+      color: #fff;
+    }
+    .btn-act-spawn:hover {
+      background: linear-gradient(135deg, #4f46e5, #3730a3);
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.6);
+      transform: translateY(-2px);
+    }
+
     .btn-act-jump {
       background: linear-gradient(135deg, #3b82f6, #1d4ed8);
       border-color: #60a5fa;
       color: #fff;
     }
-    .btn-act-interact {
-      background: linear-gradient(135deg, #10b981, #059669);
-      border-color: var(--neon-green);
-      color: #fff;
-    }
-    .action-btn-circle:active {
-      transform: scale(0.9);
+    .btn-act-jump:hover {
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.6);
+      transform: translateY(-2px);
     }
 
     /* Screen controls remain crisp and responsive on all devices */
@@ -1249,6 +1477,12 @@
         <button class="lang-pill" id="pillCss" onclick="switchLanguage('css')">🎨 CSS</button>
       </div>
 
+      <!-- Botão Voltar ao Começo (Spawn / Início do Mapa) -->
+      <button class="start-return-btn" id="btnReturnSpawn" onclick="teleportToSpawn()" title="Voltar ao Começo (Ponto Inicial do Mapa)">
+        <span>🏠</span>
+        <span>Início</span>
+      </button>
+
       <!-- Zoom In / Zoom Out Controls -->
       <div class="zoom-controls-group" title="Controle de Zoom da Câmera 3D">
         <button class="zoom-btn" onclick="zoomIn()" title="Aproximar Câmera (Zoom In / Roda do Mouse)">🔍⁺</button>
@@ -1272,8 +1506,6 @@
     <span>↵</span>
   </div>
 
-
-
   <!-- ========================================================
        SCREEN CONTROLS: VIRTUAL D-PAD & ACTION BUTTONS
        ======================================================== -->
@@ -1286,11 +1518,22 @@
     </div>
 
     <div class="virtual-actions">
-      <div class="action-btn-circle btn-act-interact" id="btnActInteract" onclick="triggerCurrentInteraction()" title="Interagir / Conversar (E ou Enter)">
-        ⚡
+      <!-- Botão Voltar ao Começo / Ponto Inicial -->
+      <div class="action-btn-circle btn-act-spawn" id="btnActSpawn" onclick="teleportToSpawn()" title="Voltar ao Começo (Início do Mapa)">
+        <span class="action-icon">🏠</span>
+        <span class="action-caption">INÍCIO</span>
       </div>
+
+      <!-- Botão de Interação Contextual [E] -->
+      <div class="action-btn-circle btn-act-interact" id="btnActInteract" onclick="triggerCurrentInteraction()" title="Interagir [E] com Terminais, Portais, Obstáculos e Robôs">
+        <span class="action-icon">⚡</span>
+        <span class="action-caption" id="btnActInteractLabel">INTERAGIR</span>
+      </div>
+
+      <!-- Botão Pular -->
       <div class="action-btn-circle btn-act-jump" id="btnActJump" title="Pular (Espaço)">
-        ▲
+        <span class="action-icon">▲</span>
+        <span class="action-caption">PULAR</span>
       </div>
     </div>
   </div>
@@ -3020,28 +3263,40 @@
 
       const promptEl = document.getElementById('proximityPrompt');
       const promptText = document.getElementById('proximityText');
+      const actBtn = document.getElementById('btnActInteract');
+      const actLabel = document.getElementById('btnActInteractLabel');
 
       if (nearestBug && nearestBug.active) {
         currentNearPortal = { type: 'bug', bug: nearestBug };
         promptEl.classList.add('visible');
         promptText.innerText = `🐛 DEPURAR ${nearestBug.name.toUpperCase()}`;
+        if (actBtn) actBtn.classList.add('ready-to-interact');
+        if (actLabel) actLabel.innerText = 'DEPURAR';
       } else if (nearestObstacle && nearestObstacle.active) {
         currentNearPortal = { type: 'obstacle', obstacleId: nearestObstacle.id, name: nearestObstacle.name };
         promptEl.classList.add('visible');
         promptText.innerText = `DESATIVAR ${nearestObstacle.name.toUpperCase()}`;
+        if (actBtn) actBtn.classList.add('ready-to-interact');
+        if (actLabel) actLabel.innerText = 'DESARMAR';
       } else if (nearest) {
         currentNearPortal = nearest;
         promptEl.classList.add('visible');
         if (nearest.type === 'quiz') {
           promptText.innerText = 'INICIAR SPEED QUIZ';
+          if (actLabel) actLabel.innerText = 'QUIZ';
         } else if (nearest.type === 'genie') {
           promptText.innerText = 'CONVERSAR COM O GÊNIO DO CÓDIGO';
+          if (actLabel) actLabel.innerText = 'GÊNIO';
         } else {
           promptText.innerText = `INTERAGIR COM ${nearest.name.toUpperCase()}`;
+          if (actLabel) actLabel.innerText = 'TERMINAL';
         }
+        if (actBtn) actBtn.classList.add('ready-to-interact');
       } else {
         currentNearPortal = null;
         promptEl.classList.remove('visible');
+        if (actBtn) actBtn.classList.remove('ready-to-interact');
+        if (actLabel) actLabel.innerText = 'INTERAGIR';
       }
     }
 
@@ -3059,13 +3314,23 @@
         } else {
           openTerminalDirect(currentNearPortal.challengeId);
         }
+      } else {
+        SoundEngine.playBeep(260, 0.08);
+        showFloatingReward("ℹ️ Botão de Ação [E]: Aproxime-se de um Portal, Barreira ou Robô Bug para interagir!", "#38bdf8", "⚡");
       }
     }
 
     function teleportToSpawn() {
       avatar.position.set(0, 0, 0);
+      avatar.rotation.set(0, 0, 0);
       playerPhysics.velY = 0;
-      SoundEngine.playBeep(320, 0.08);
+      playerPhysics.isGrounded = true;
+      cameraAngle = 0;
+      targetCameraDistance = 14;
+      targetCameraHeight = 9;
+      SoundEngine.playBeep(440, 0.09);
+      setTimeout(() => SoundEngine.playBeep(880, 0.12), 90);
+      showFloatingReward("🏠 Retornando ao ponto inicial do mapa!", "#00ff88", "✨");
     }
 
     /* ========================================================
