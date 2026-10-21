@@ -282,7 +282,45 @@
       transition: all 0.25s ease;
     }
 
-    /* Start / Spawn Return Button */
+    /* Factory HUD Access Button */
+    .factory-hud-btn {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.45));
+      border: 1.5px solid #fbbf24;
+      color: #fef3c7;
+      font-family: var(--font-arcade);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .factory-hud-btn:hover {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border-color: #fde68a;
+      color: #fff;
+      box-shadow: 0 0 18px rgba(251, 191, 36, 0.7);
+      transform: translateY(-1px);
+    }
+    .factory-hud-btn:active {
+      transform: scale(0.94);
+    }
+    .factory-hud-badge {
+      background: #78350f;
+      color: #fef08a;
+      border: 1px solid #f59e0b;
+      padding: 1px 6px;
+      border-radius: 8px;
+      font-size: 0.68rem;
+    }
+
+    /* Start / Spawn Return Button (Kept for compatibility) */
     .start-return-btn {
       background: linear-gradient(135deg, rgba(99, 102, 241, 0.35), rgba(79, 70, 229, 0.5));
       border: 1.5px solid #818cf8;
@@ -1384,6 +1422,520 @@
       line-height: 1.5;
     }
 
+    /* ========================================================
+       MODAL 6: CYBER FACTORY AUTOMATION STUDIO & EMPIRE
+       ======================================================== */
+    .factory-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.92);
+      backdrop-filter: blur(10px);
+      z-index: 120;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+    .factory-modal-backdrop.open {
+      display: flex;
+    }
+    .factory-card {
+      background: #090d20;
+      border: 2px solid #f59e0b;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 1260px;
+      height: 94vh;
+      max-height: 860px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 0 45px rgba(245, 158, 11, 0.4), inset 0 0 25px rgba(245, 158, 11, 0.08);
+      animation: modalZoom 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .factory-top-header {
+      background: #0d122b;
+      padding: 10px 18px;
+      border-bottom: 2px solid #2a3363;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .factory-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-arcade);
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #fbbf24;
+    }
+    .factory-stats-strip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .fac-stat-pill {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid #334155;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-family: var(--font-arcade);
+      font-size: 0.78rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .fac-sell-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: 1px solid #34d399;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-family: var(--font-arcade);
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .fac-sell-btn:hover {
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.6);
+      transform: translateY(-1px);
+    }
+    .fac-sell-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* 3-Column Factory Split Layout */
+    .factory-main-grid {
+      display: grid;
+      grid-template-columns: 310px 1fr 290px;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+    @media (max-width: 1080px) {
+      .factory-main-grid {
+        grid-template-columns: 280px 1fr;
+      }
+      .fac-empire-col {
+        display: none !important;
+      }
+    }
+    @media (max-width: 768px) {
+      .factory-main-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        overflow-y: auto;
+      }
+      .fac-schematic-col {
+        max-height: 220px;
+      }
+    }
+
+    /* Left Column: Visual Schematic & Manual Testing */
+    .fac-schematic-col {
+      background: #0a0e24;
+      border-right: 2px solid #202752;
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .fac-col-title {
+      font-family: var(--font-arcade);
+      font-size: 0.84rem;
+      font-weight: 900;
+      color: #38bdf8;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px dashed #222d63;
+      padding-bottom: 6px;
+    }
+    .fac-live-canvas-wrap {
+      background: #050814;
+      border: 1.5px solid #232b5c;
+      border-radius: 10px;
+      padding: 10px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.05);
+    }
+    .fac-assembly-view {
+      width: 100%;
+      height: 145px;
+      background: #02040c;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #1e293b;
+      display: block;
+    }
+    .fac-station-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      padding: 6px 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      font-size: 0.65rem;
+      font-family: var(--font-arcade);
+      color: #64748b;
+    }
+    .station-chip {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 3px 6px;
+      border-radius: 4px;
+      color: #94a3b8;
+      transition: all 0.25s;
+      white-space: nowrap;
+    }
+    .station-chip.active {
+      border-color: #38bdf8;
+      color: #fff;
+      background: rgba(56, 189, 248, 0.3);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+      transform: scale(1.05);
+    }
+    .fac-machine-row {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .fac-machine-card {
+      background: #0d122e;
+      border: 1px solid #1f2757;
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-arcade);
+      font-size: 0.78rem;
+    }
+    .fac-machine-card.active {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.12);
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+    }
+    .fac-m-tag {
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .fac-manual-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .fac-step-btn {
+      background: #151a3d;
+      border: 1px solid #2e3870;
+      color: #e2e8f0;
+      padding: 7px 6px;
+      border-radius: 6px;
+      font-family: var(--font-arcade);
+      font-size: 0.74rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .fac-step-btn:hover {
+      background: #232a5e;
+      border-color: #38bdf8;
+      color: #fff;
+    }
+    .fac-step-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Center Column: Automation Studio IDE */
+    .fac-editor-col {
+      background: #070a1a;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .fac-mission-banner {
+      background: linear-gradient(90deg, #12193b, #191438);
+      border-bottom: 2px solid #28336d;
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .fac-mission-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .fac-mission-title {
+      font-family: var(--font-arcade);
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #f59e0b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .fac-mission-badge {
+      font-family: var(--font-arcade);
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+    .fac-mission-story {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+    .fac-mission-reward {
+      font-family: var(--font-arcade);
+      font-size: 0.75rem;
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    /* API Snippets Toolbar */
+    .fac-api-toolbar {
+      background: #0b0f29;
+      border-bottom: 1px solid #1e2652;
+      padding: 6px 14px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: thin;
+    }
+    .fac-api-btn {
+      background: #13193d;
+      border: 1px solid #2a356b;
+      color: #93c5fd;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-family: var(--font-arcade);
+      font-size: 0.74rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .fac-api-btn:hover {
+      background: #1e2863;
+      border-color: #60a5fa;
+      color: #fff;
+    }
+
+    /* Editor and Console Split */
+    .fac-editor-body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .fac-code-area-wrap {
+      flex: 1.3;
+      min-height: 160px;
+      display: flex;
+      background: #030612;
+      border-bottom: 2px solid #1e2652;
+      overflow: hidden;
+      position: relative;
+    }
+    .fac-line-numbers {
+      width: 44px;
+      background: #080b1e;
+      border-right: 1px solid #192147;
+      color: #475569;
+      font-family: monospace;
+      font-size: 0.86rem;
+      line-height: 1.5;
+      padding: 10px 6px;
+      text-align: right;
+      user-select: none;
+      overflow: hidden;
+    }
+    .fac-code-editor {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #f1f5f9;
+      font-family: "Fira Code", monospace, "Courier New", Courier;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      padding: 10px 14px;
+      resize: none;
+      outline: none;
+      tab-size: 4;
+      white-space: pre;
+      overflow: auto;
+    }
+
+    /* Run & Controls Bar */
+    .fac-controls-bar {
+      background: #0a0e28;
+      border-bottom: 2px solid #1f2857;
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .fac-run-btn {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border: 1px solid #fde68a;
+      color: #050b14;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-family: var(--font-arcade);
+      font-size: 0.86rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.5);
+    }
+    .fac-run-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 22px rgba(245, 158, 11, 0.7);
+    }
+    .fac-run-btn.running {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      border-color: #fca5a5;
+      color: #fff;
+      box-shadow: 0 0 18px rgba(239, 68, 68, 0.6);
+    }
+    .fac-speed-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-arcade);
+      font-size: 0.74rem;
+      color: #94a3b8;
+    }
+    .fac-speed-btn {
+      background: #141a3d;
+      border: 1px solid #2b366e;
+      color: #cbd5e1;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-family: var(--font-arcade);
+      cursor: pointer;
+    }
+    .fac-speed-btn.active {
+      background: #f59e0b;
+      color: #030712;
+      border-color: #fff;
+      font-weight: bold;
+    }
+
+    /* Terminal Console */
+    .fac-console-wrap {
+      flex: 1;
+      min-height: 110px;
+      background: #02040d;
+      padding: 8px 12px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .fac-log-line {
+      display: flex;
+      gap: 8px;
+      color: #94a3b8;
+    }
+    .fac-log-time {
+      color: #475569;
+    }
+    .fac-log-info { color: #38bdf8; }
+    .fac-log-success { color: #4ade80; font-weight: bold; }
+    .fac-log-warn { color: #fbbf24; }
+    .fac-log-err { color: #f87171; font-weight: bold; }
+
+    /* Right Column: Empire Tech Tree & Unlocks */
+    .fac-empire-col {
+      background: #0b0f27;
+      border-left: 2px solid #202752;
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .fac-tech-card {
+      background: #10163b;
+      border: 1px solid #232c66;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-family: var(--font-arcade);
+      font-size: 0.76rem;
+      transition: all 0.2s;
+    }
+    .fac-tech-card.unlocked {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+    .fac-tech-card.current {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.14);
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.3);
+    }
+    .fac-tech-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
+    .fac-tech-desc {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 0.74rem;
+      color: #94a3b8;
+      line-height: 1.35;
+    }
+    .fac-tech-req {
+      font-size: 0.7rem;
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.15);
+      border-radius: 4px;
+      padding: 2px 6px;
+      display: inline-block;
+    }
+
     /* Offline Toast */
     .offline-badge {
       display: none;
@@ -1477,10 +2029,11 @@
         <button class="lang-pill" id="pillCss" onclick="switchLanguage('css')">🎨 CSS</button>
       </div>
 
-      <!-- Botão Voltar ao Começo (Spawn / Início do Mapa) -->
-      <button class="start-return-btn" id="btnReturnSpawn" onclick="teleportToSpawn()" title="Voltar ao Começo (Ponto Inicial do Mapa)">
-        <span>🏠</span>
-        <span>Início</span>
+      <!-- Botão Acessar Fábrica de Automação de Código -->
+      <button class="factory-hud-btn" id="btnOpenFactory" onclick="openFactoryModal()" title="Abrir Fábrica de Automação Industrial (Programar para Evoluir)">
+        <span>🏭</span>
+        <span>Fábrica</span>
+        <span class="factory-hud-badge" id="hudFactoryTier">NV 1</span>
       </button>
 
       <!-- Zoom In / Zoom Out Controls -->
@@ -1597,7 +2150,7 @@
             <button class="q-sym-btn" onclick="insertSymbol('()')">( )</button>
             <button class="q-sym-btn" onclick="insertSymbol('{}')">{ }</button>
             <button class="q-sym-btn" onclick="insertSymbol('[]')">[ ]</button>
-            <button class="q-sym-btn" onclick="insertSymbol('<>')">< ></button>
+            <button class="q-sym-btn" onclick="insertSymbol('&lt;&gt;')">&lt; &gt;</button>
             <button class="q-sym-btn" onclick="insertSymbol(' == ')">==</button>
             <button class="q-sym-btn" onclick="insertSymbol(' != ')">!=</button>
             <button class="q-sym-btn" onclick="insertSymbol('def ')">def</button>
@@ -1797,9 +2350,311 @@
   </div>
 
   <!-- ========================================================
+       MODAL 6: FÁBRICA CYBER & STUDIO DE AUTOMAÇÃO DE CÓDIGO
+       ======================================================== -->
+  <div class="factory-modal-backdrop" id="factoryModal">
+    <div class="factory-card">
+      <!-- Header -->
+      <div class="factory-top-header">
+        <div class="factory-brand">
+          <span style="font-size: 1.3rem;">🏭</span>
+          <span>CYBER FACTORY • AUTOMAÇÃO COM CÓDIGO</span>
+        </div>
+
+        <div class="factory-stats-strip">
+          <div class="fac-stat-pill" title="Nível e Tier da Fábrica">
+            <span style="color: #fbbf24;">🏷️</span>
+            <span id="facTierLabel">Oficina Manual [Nível 1]</span>
+          </div>
+
+          <div class="fac-stat-pill" title="Taxa Atual de Produção">
+            <span style="color: #38bdf8;">⚡</span>
+            <span><strong id="facRateVal">0</strong> pcs/s</span>
+          </div>
+
+          <div class="fac-stat-pill" title="Estoque no Depósito Silo">
+            <span style="color: #a855f7;">📦</span>
+            <span>Estoque: <strong id="facStorageVal">0</strong>/100</span>
+          </div>
+
+          <button class="fac-sell-btn" id="btnFacSell" onclick="FactorySystem.sellStorage()" title="Vender estoque de peças por moedas cibernéticas">
+            <span>💰</span>
+            <span>Vender (<span id="facSellPrice">0</span>)</span>
+          </button>
+
+          <!-- Language Selector -->
+          <div style="display: flex; gap: 4px; background: #070919; border: 1px solid #1f2857; border-radius: 8px; padding: 2px;">
+            <button class="fac-speed-btn active" id="facLangPy" onclick="FactorySystem.setLanguage('python')">🐍 Python</button>
+            <button class="fac-speed-btn" id="facLangJs" onclick="FactorySystem.setLanguage('javascript')">⚡ JS</button>
+            <button class="fac-speed-btn" id="facLangJava" onclick="FactorySystem.setLanguage('java')">☕ Java</button>
+          </div>
+
+          <button class="close-term-btn" onclick="closeFactoryModal()" title="Fechar interface da Fábrica (Esc)">✕ SAIR</button>
+        </div>
+      </div>
+
+      <!-- Main 3-Column Split -->
+      <div class="factory-main-grid">
+        <!-- Col 1: Visual Schematic & Manual Testing -->
+        <div class="fac-schematic-col">
+          <div class="fac-col-title" style="justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span>🔬</span>
+              <span>Simulador de Produção</span>
+            </div>
+            <span style="font-size: 0.65rem; color: #34d399; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); padding: 2px 6px; border-radius: 4px;" id="facSchematicLiveStatus">AO VIVO</span>
+          </div>
+
+          <!-- Live 2D/Canvas Assembly Line Schematic -->
+          <div class="fac-live-canvas-wrap">
+            <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 6px; line-height: 1.35;">
+              👁️ <strong>Linha de Montagem (Visual):</strong> Acompanhe as peças avançando pelas estações em tempo real quando seu script opera:
+            </div>
+            <canvas id="factorySchematicCanvas" class="fac-assembly-view" width="280" height="135"></canvas>
+            <div class="fac-station-flow">
+              <div class="station-chip" id="schChip1" title="1. Injeção de Matéria-Prima">📦 Entrada</div>
+              <span>➔</span>
+              <div class="station-chip" id="schChip2" title="2. Fixação e Garra">🦾 Garra</div>
+              <span>➔</span>
+              <div class="station-chip" id="schChip3" title="3. Prensa Hidráulica">🔨 Prensa</div>
+              <span>➔</span>
+              <div class="station-chip" id="schChip4" title="4. Inspeção Laser Anti-Bug">🔍 Sensor</div>
+              <span>➔</span>
+              <div class="station-chip" id="schChip5" title="5. Silo de Armazenamento">📥 Depósito</div>
+            </div>
+          </div>
+
+          <!-- Machine Status Monitor -->
+          <div class="fac-machine-row">
+            <div class="fac-machine-card" id="mCardConveyor">
+              <span>Esteira Rolante MK-1</span>
+              <span class="fac-m-tag" id="mTagConveyor" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">PRONTA</span>
+            </div>
+            <div class="fac-machine-card" id="mCardRobot">
+              <span>Braço Robótico MK-1</span>
+              <span class="fac-m-tag" id="mTagRobot" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">OCIOSO</span>
+            </div>
+            <div class="fac-machine-card" id="mCardPress">
+              <span>Prensa Estampadora</span>
+              <span class="fac-m-tag" id="mTagPress" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">REPOUSO</span>
+            </div>
+            <div class="fac-machine-card" id="mCardScanner">
+              <span>Scanner Anti-Bug</span>
+              <span class="fac-m-tag" id="mTagScanner" style="background: rgba(168, 85, 247, 0.2); color: #c084fc;">STANDBY</span>
+            </div>
+          </div>
+
+          <!-- Manual Controls for learning & testing mechanics -->
+          <div class="fac-col-title" style="margin-top: 4px;">
+            <span>🕹️</span>
+            <span>Ações Manuais (Teste)</span>
+          </div>
+          <div class="fac-manual-btns">
+            <button class="fac-step-btn" onclick="FactorySystem.manualAction('feed')">📦 Alimentar</button>
+            <button class="fac-step-btn" onclick="FactorySystem.manualAction('grab')">🦾 Robô Agarrar</button>
+            <button class="fac-step-btn" onclick="FactorySystem.manualAction('press')">🔨 Estampar</button>
+            <button class="fac-step-btn" onclick="FactorySystem.manualAction('advance')">⏩ Avançar</button>
+            <button class="fac-step-btn" onclick="FactorySystem.manualAction('drop')">📥 Soltar Peça</button>
+            <button class="fac-step-btn" onclick="FactorySystem.manualAction('scan')">🔍 Escanear</button>
+          </div>
+
+          <!-- Background Continuous Automation Toggle -->
+          <div style="background: #0d1330; border: 1px solid #232c66; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: var(--font-arcade); font-size: 0.74rem; font-weight: bold; color: #fbbf24;">⚡ Automação 24/7 (Passiva)</span>
+              <input type="checkbox" id="facAutoLoopCheck" onchange="FactorySystem.toggleBackgroundLoop(this.checked)" style="cursor: pointer;">
+            </div>
+            <div style="font-size: 0.71rem; color: #94a3b8; line-height: 1.35;" id="facAutoLoopDesc">
+              Bloqueado: Conclua a <strong>Missão 2 (Laço de Repetição)</strong> para automatizar a produção passiva em segundo plano!
+            </div>
+          </div>
+        </div>
+
+        <!-- Col 2: Automation Studio IDE -->
+        <div class="fac-editor-col">
+          <!-- Active Mission Banner -->
+          <div class="fac-mission-banner">
+            <div class="fac-mission-head">
+              <div class="fac-mission-title">
+                <span>🎯</span>
+                <span id="facMissionTitle">Missão 1: A Primeira Engrenagem (Sequência Linear)</span>
+              </div>
+              <div class="fac-mission-badge" id="facMissionBadge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981;">
+                Sequência de Comandos
+              </div>
+            </div>
+            <div class="fac-mission-story" id="facMissionStory">
+              Sua fábrica manual acabou de ser inaugurada! Programe a sequência exata de comandos para puxar a matéria-prima, segurar com o robô, estampar com a prensa, avançar a esteira e guardar o chip no cofre.
+            </div>
+            <div class="fac-mission-reward">
+              <span>🎁 Desbloqueio ao Resolver:</span>
+              <strong id="facMissionUnlock" style="color: #fef08a;">Braço Robótico MK-1 + Peças valem o dobro (10 🪙)!</strong>
+            </div>
+          </div>
+
+          <!-- API Shortcuts Toolbar -->
+          <div class="fac-api-toolbar">
+            <span style="font-family: var(--font-arcade); font-size: 0.72rem; color: #94a3b8; display: flex; align-items: center; margin-right: 4px;">SNIPPETS:</span>
+            <button class="fac-api-btn" onclick="FactorySystem.insertSnippet('esteira.alimentar()')">esteira.alimentar()</button>
+            <button class="fac-api-btn" onclick="FactorySystem.insertSnippet('robo.pegar()')">robo.pegar()</button>
+            <button class="fac-api-btn" onclick="FactorySystem.insertSnippet('prensa.estampar()')">prensa.estampar()</button>
+            <button class="fac-api-btn" onclick="FactorySystem.insertSnippet('esteira.avancar()')">esteira.avancar()</button>
+            <button class="fac-api-btn" onclick="FactorySystem.insertSnippet('robo.soltar()')">robo.soltar()</button>
+            <button class="fac-api-btn" onclick="FactorySystem.insertSnippet('sensor.escanear()')">sensor.escanear()</button>
+            <button class="fac-api-btn" onclick="FactorySystem.insertSnippet('loop')">for i in range():</button>
+            <button class="fac-api-btn" onclick="FactorySystem.insertSnippet('if_else')">if item.defeito:</button>
+            <button class="fac-api-btn" onclick="FactorySystem.toggleHowToGuide()" style="border-color: #38bdf8; color: #7dd3fc;" title="Ver comandos das máquinas e guia de montagem">💡 Guia das Máquinas</button>
+            <button class="fac-api-btn" onclick="FactorySystem.askGenieHint()" style="border-color: var(--neon-purple); color: #d8b4fe; background: rgba(168, 85, 247, 0.2);" title="Pedir dica explicativa de lógica ao Gênio (custa 20 moedas)">🧞 Dica do Gênio (20 🪙)</button>
+            <button class="fac-api-btn" onclick="FactorySystem.resetMissionTemplate()" title="Recarregar instruções limpas e template inicial">🔄 Reiniciar</button>
+            <button class="fac-api-btn" onclick="FactorySystem.clearEditor()" title="Limpar editor">🧹 Limpar</button>
+          </div>
+
+          <!-- Editor Body (Editor + Line Numbers) -->
+          <div class="fac-editor-body">
+            <!-- Genie Hint Box (Revealed when spending coins) -->
+            <div id="facGenieHintBox" style="display: none; background: rgba(21, 17, 51, 0.95); border: 1.5px solid var(--neon-purple); border-left: 5px solid var(--neon-purple); padding: 12px 14px; border-radius: 8px; font-size: 0.8rem; color: #f3e8ff; margin-bottom: 8px; line-height: 1.5; box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-family: var(--font-arcade); color: #d8b4fe; font-weight: bold;" id="facGenieHintTitle">🧞 DICA DO GÊNIO DO CÓDIGO</span>
+                <button class="close-term-btn" onclick="FactorySystem.closeGenieHint()" style="padding: 2px 8px; font-size: 0.7rem;">✕ Fechar</button>
+              </div>
+              <div id="facGenieHintContent"></div>
+            </div>
+
+            <!-- Free How-To / Assembly Guide Box -->
+            <div id="facGuideBox" style="display: none; background: rgba(15, 23, 42, 0.95); border: 1px solid #0284c7; border-left: 4px solid #38bdf8; padding: 10px 14px; border-radius: 8px; font-size: 0.78rem; color: #bae6fd; margin-bottom: 8px; line-height: 1.45;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <strong style="color: #38bdf8; font-family: var(--font-arcade);">💡 GUIA DE MONTAGEM INDUSTRIAL</strong>
+                <button class="close-term-btn" onclick="FactorySystem.toggleHowToGuide()" style="padding: 2px 8px; font-size: 0.7rem;">✕ Fechar</button>
+              </div>
+              <div>
+                • <code>esteira.alimentar()</code>: Injeta uma unidade de silício bruto na entrada.<br>
+                • <code>robo.pegar()</code>: Garra robótica segura a peça na bancada.<br>
+                • <code>prensa.estampar()</code>: Aciona a prensa hidráulica para gravar os circuitos.<br>
+                • <code>esteira.avancar()</code>: Move os trilhos rolantes para a próxima estação.<br>
+                • <code>robo.soltar()</code> / <code>robo.soltar_no_cofre()</code>: Armazena o chip finalizado no depósito.<br>
+                • <code>sensor.escanear()</code>: Retorna o objeto <code>item</code> com propriedade booleana <code>item.defeito</code>.<br>
+                • <code>robo.descartar_bug()</code>: Tritura peças com defeito para reciclagem.<br>
+                <em>Você deve desenvolver a lógica que conecta essas máquinas para resolver cada desafio!</em>
+              </div>
+            </div>
+
+            <div class="fac-code-area-wrap">
+              <div class="fac-line-numbers" id="facGutter">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
+              <textarea class="fac-code-editor" id="facCodeEditor" spellcheck="false" placeholder="/* Desenvolva sua lógica de automação industrial aqui do zero... */"></textarea>
+            </div>
+
+            <!-- Run & Controls Bar -->
+            <div class="fac-controls-bar">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <button class="fac-run-btn" id="btnFacRun" onclick="FactorySystem.toggleExecution()">
+                  <span id="facRunIcon">▶</span>
+                  <span id="facRunText">EXECUTAR AUTOMAÇÃO</span>
+                </button>
+                <button class="close-term-btn" style="background:#1b2045;" onclick="FactorySystem.resetExecution()" title="Parar e resetar linha de montagem">⏹ RESET</button>
+              </div>
+
+              <!-- Speed Controls -->
+              <div class="fac-speed-group">
+                <span>VELOCIDADE:</span>
+                <button class="fac-speed-btn active" id="facSpd1" onclick="FactorySystem.setSpeed(1)">1x</button>
+                <button class="fac-speed-btn" id="facSpd2" onclick="FactorySystem.setSpeed(2)">2x</button>
+                <button class="fac-speed-btn" id="facSpd5" onclick="FactorySystem.setSpeed(5)">5x</button>
+                <button class="fac-speed-btn" id="facSpd10" onclick="FactorySystem.setSpeed(10)">10x</button>
+                <button class="fac-speed-btn" id="facSpdInst" onclick="FactorySystem.setSpeed(999)">⚡ Instantâneo</button>
+              </div>
+            </div>
+
+            <!-- Factory Live Console / Logs -->
+            <div class="fac-console-wrap" id="facConsole">
+              <div class="fac-log-line">
+                <span class="fac-log-time">[00:00]</span>
+                <span class="fac-log-info">Fábrica inicializada. Escreva seu código e clique em EXECUTAR AUTOMAÇÃO para acionar as máquinas!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Col 3: Empire Expansion Tree (Upgrades & Unlock Requirements) -->
+        <div class="fac-empire-col">
+          <div class="fac-col-title">
+            <span>🏛️</span>
+            <span>Expansão do Império</span>
+          </div>
+
+          <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid #1e293b; border-radius: 8px; padding: 8px 10px; font-size: 0.72rem; color: #94a3b8; line-height: 1.4;">
+            💡 <em>"Você não aprende programação para jogar melhor; você aprende programação porque é assim que consegue evoluir no jogo!"</em>
+          </div>
+
+          <!-- Machine / Tier Unlock List -->
+          <div class="fac-tech-card unlocked" id="techTier1">
+            <div class="fac-tech-head">
+              <span style="color: #34d399;">1. Oficina Manual MK-1</span>
+              <span style="color: #34d399;">✓ DESBLOQUEADO</span>
+            </div>
+            <div class="fac-tech-desc">Produção manual 1 a 1 através de alavanca de contato mecânico.</div>
+            <div><span class="fac-tech-req" style="color: #34d399; background: rgba(16,185,129,0.15);">Nível Inicial</span></div>
+          </div>
+
+          <div class="fac-tech-card current" id="techTier2">
+            <div class="fac-tech-head">
+              <span style="color: #fbbf24;">2. Linha em Loop Contínuo</span>
+              <span id="techBadge2" style="color: #fbbf24;">EM PROGRESSO</span>
+            </div>
+            <div class="fac-tech-desc">Automatiza lotes contínuos em segundo plano (2 peças/seg passivas).</div>
+            <div><span class="fac-tech-req">Requer: Missão 2 (Laços de Repetição)</span></div>
+          </div>
+
+          <div class="fac-tech-card" id="techTier3">
+            <div class="fac-tech-head">
+              <span style="color: #c084fc;">3. Scanner Laser Anti-Bug</span>
+              <span id="techBadge3" style="color: #64748b;">BLOQUEADO</span>
+            </div>
+            <div class="fac-tech-desc">Sensor óptico que desvia defeitos e garante chips de ouro puro (+150% lucro).</div>
+            <div><span class="fac-tech-req">Requer: Missão 3 (Condicionais If/Else)</span></div>
+          </div>
+
+          <div class="fac-tech-card" id="techTier4">
+            <div class="fac-tech-head">
+              <span style="color: #facc15;">4. Linhas Gêmeas Modulares</span>
+              <span id="techBadge4" style="color: #64748b;">BLOQUEADO</span>
+            </div>
+            <div class="fac-tech-desc">Duas esteiras paralelas sincronizadas por funções reutilizáveis e Drone Aéreo.</div>
+            <div><span class="fac-tech-req">Requer: Missão 4 (Funções & Parâmetros)</span></div>
+          </div>
+
+          <div class="fac-tech-card" id="techTier5">
+            <div class="fac-tech-head">
+              <span style="color: #ff007f;">5. Cyber Mega-Complexo 4.0</span>
+              <span id="techBadge5" style="color: #64748b;">BLOQUEADO</span>
+            </div>
+            <div class="fac-tech-desc">Pipelining supremo de 30 pcs/min, modo sandbox livre e troféu dourado.</div>
+            <div><span class="fac-tech-req">Requer: Missão 5 (Grande Algoritmo)</span></div>
+          </div>
+
+          <!-- Overclock with coins once unlocked -->
+          <div style="margin-top: auto; background: #0c102a; border: 1px solid #28336d; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: var(--font-arcade); font-size: 0.78rem; font-weight: bold; color: #38bdf8;">⚡ Overclock das Máquinas</span>
+              <span style="color: #facc15; font-size: 0.78rem; font-weight: bold;">40 🪙</span>
+            </div>
+            <div style="font-size: 0.72rem; color: #94a3b8; line-height: 1.35;">
+              Acelera o tempo de resposta mecânico em +25% por 60 segundos usando suas moedas.
+            </div>
+            <button class="fac-step-btn" onclick="FactorySystem.buyOverclock()" style="background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #38bdf8; color: #fff;">
+              ⚡ APLICAR OVERCLOCK (40 🪙)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
        SCRIPT: THREE.JS ENGINE + GAMEPLAY LOGIC
        ======================================================== -->
   <script>
+    var FactorySystem = null;
+
     /* ========================================================
        1. RETRO 8-BIT SOUND ENGINE (WEB AUDIO API)
        ======================================================== */
@@ -1865,6 +2720,38 @@
         [440, 554.37, 659.25, 880].forEach((f, idx) => {
           setTimeout(() => this.playBeep(f, 0.14, 'square', 0.12), idx * 80);
         });
+      },
+
+      playMechanicalClank() {
+        if (!this.enabled) return;
+        this.playBeep(180, 0.05, 'triangle', 0.18);
+        setTimeout(() => this.playBeep(320, 0.07, 'square', 0.14), 20);
+      },
+
+      playRoboticServo() {
+        if (!this.enabled) return;
+        this.playBeep(720, 0.04, 'sine', 0.08);
+        setTimeout(() => this.playBeep(880, 0.06, 'sine', 0.07), 35);
+      },
+
+      playHydraulicPress() {
+        if (!this.enabled) return;
+        this.playBeep(90, 0.15, 'sawtooth', 0.22);
+        setTimeout(() => this.playBeep(140, 0.08, 'triangle', 0.2), 40);
+        setTimeout(() => this.playBeep(520, 0.05, 'square', 0.1), 90);
+      },
+
+      playLaserScan() {
+        if (!this.enabled) return;
+        this.playBeep(1200, 0.04, 'sine', 0.09);
+        setTimeout(() => this.playBeep(1600, 0.05, 'sine', 0.08), 30);
+      },
+
+      playCashRegister() {
+        if (!this.enabled) return;
+        this.playBeep(659.25, 0.06, 'sine', 0.15);
+        setTimeout(() => this.playBeep(1046.50, 0.12, 'sine', 0.16), 50);
+        setTimeout(() => this.playBeep(1318.51, 0.18, 'sine', 0.15), 110);
       }
     };
 
@@ -2572,7 +3459,8 @@
       { id: 1005, name: "Terminal #1005: Algoritmo C++ Vetores", type: "beecrowd", x: -22, z: -18, color: 0x38bdf8, challengeId: 1005 },
       { id: 1006, name: "Terminal #1006: Web Semântica HTML/CSS", type: "beecrowd", x: 22, z: -22, color: 0xff007f, challengeId: 1006 },
       { id: 9999, name: "Arena 3D: Speed Quiz Arcade", type: "quiz", x: 0, z: 18, color: 0xff007f },
-      { id: 7777, name: "Santuário: Gênio do Código", type: "genie", x: 0, z: -16, color: 0xa855f7 }
+      { id: 7777, name: "Santuário: Gênio do Código", type: "genie", x: 0, z: -16, color: 0xa855f7 },
+      { id: 8888, name: "Mega Fábrica Cyber: Automação", type: "factory", x: -26, z: 2, color: 0xf59e0b }
     ];
 
     const portalMeshes = [];
@@ -2626,6 +3514,27 @@
 
         pGroup.add(genieGroup);
         holoMesh = genieGroup;
+      } else if (p.type === 'factory') {
+        // Industrial Hologram Gear & Voxel Chip
+        const facHoloGroup = new THREE.Group();
+        const gearGeo = new THREE.TorusGeometry(0.85, 0.2, 8, 16);
+        const gear = new THREE.Mesh(gearGeo, ringMat);
+        gear.position.y = 2.6;
+        gear.rotation.x = Math.PI / 2;
+        facHoloGroup.add(gear);
+
+        const chipGeo = new THREE.BoxGeometry(0.55, 0.55, 0.55);
+        const chipMat = new THREE.MeshStandardMaterial({
+          color: 0xfbbf24,
+          emissive: 0xf59e0b,
+          emissiveIntensity: 0.9
+        });
+        const chip = new THREE.Mesh(chipGeo, chipMat);
+        chip.position.y = 2.6;
+        facHoloGroup.add(chip);
+
+        pGroup.add(facHoloGroup);
+        holoMesh = facHoloGroup;
       } else {
         // Floating Hologram Diamond / Star
         const holoGeo = new THREE.OctahedronGeometry(0.9, 0);
@@ -2644,6 +3553,325 @@
         ring: ring
       });
     });
+
+    /* --- 3D CYBER FACTORY COMPLEX (CONVEYOR, ROBOT ARM, HYDRAULIC PRESS, SILO) --- */
+    const factory3D = {
+      conveyorGroup: null,
+      rollers: [],
+      robotArmTurret: null,
+      robotArmShoulder: null,
+      robotArmForearm: null,
+      robotClawLeft: null,
+      robotClawRight: null,
+      pressRam: null,
+      pressSparkLight: null,
+      scannerSheet: null,
+      siloLevel: null,
+      drone: null,
+      itemsOnBelt: [],
+      conveyorSpeed: 2.2,
+      isPressing: false,
+      pressT: 0
+    };
+
+    function build3DCyberFactory(scene, posX = -26, posZ = 2) {
+      const facGroup = new THREE.Group();
+      facGroup.position.set(posX, 0, posZ);
+
+      // 1. Heavy Industrial Floor Plate
+      const floorMat = new THREE.MeshStandardMaterial({
+        color: 0x0f142b,
+        metalness: 0.8,
+        roughness: 0.3
+      });
+      const floorMesh = new THREE.Mesh(new THREE.BoxGeometry(22, 0.4, 15), floorMat);
+      floorMesh.position.y = 0.2;
+      floorMesh.receiveShadow = true;
+      facGroup.add(floorMesh);
+
+      // Yellow/Black Hazard Border Stripes along perimeter
+      const hazardMat = new THREE.MeshStandardMaterial({
+        color: 0xf59e0b,
+        emissive: 0xd97706,
+        emissiveIntensity: 0.3,
+        roughness: 0.4
+      });
+      const borderFront = new THREE.Mesh(new THREE.BoxGeometry(22.2, 0.45, 0.4), hazardMat);
+      borderFront.position.set(0, 0.22, 7.6);
+      const borderBack = borderFront.clone();
+      borderBack.position.z = -7.6;
+      const borderLeft = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.45, 15.2), hazardMat);
+      borderLeft.position.set(-11.1, 0.22, 0);
+      const borderRight = borderLeft.clone();
+      borderRight.position.x = 11.1;
+      facGroup.add(borderFront, borderBack, borderLeft, borderRight);
+
+      // 2. Dual Conveyor Belt System (Esteiras Rolantes)
+      const convGroup = new THREE.Group();
+      convGroup.position.set(0, 0.4, 0);
+
+      // Belt bed
+      const beltBedMat = new THREE.MeshStandardMaterial({ color: 0x181c2e, roughness: 0.8 });
+      const beltBed = new THREE.Mesh(new THREE.BoxGeometry(17, 0.5, 1.6), beltBedMat);
+      beltBed.position.set(0, 0.25, 0);
+      beltBed.castShadow = true;
+      convGroup.add(beltBed);
+
+      // Glowing Neon Guide Rails
+      const railMat = new THREE.MeshStandardMaterial({
+        color: 0x00f0ff,
+        emissive: 0x00f0ff,
+        emissiveIntensity: 0.8,
+        roughness: 0.1
+      });
+      const railNorth = new THREE.Mesh(new THREE.BoxGeometry(17.2, 0.2, 0.1), railMat);
+      railNorth.position.set(0, 0.6, -0.85);
+      const railSouth = railNorth.clone();
+      railSouth.position.z = 0.85;
+      convGroup.add(railNorth, railSouth);
+
+      // Rotating Cylindrical Rollers
+      const rollerGeo = new THREE.CylinderGeometry(0.12, 0.12, 1.5, 8);
+      rollerGeo.rotateX(Math.PI / 2);
+      const rollerMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.9, roughness: 0.2 });
+      for (let i = -7.5; i <= 7.5; i += 1.5) {
+        const roller = new THREE.Mesh(rollerGeo, rollerMat);
+        roller.position.set(i, 0.52, 0);
+        convGroup.add(roller);
+        factory3D.rollers.push(roller);
+      }
+      facGroup.add(convGroup);
+      factory3D.conveyorGroup = convGroup;
+
+      // 3. Animated Items on Conveyor
+      for (let k = 0; k < 4; k++) {
+        const itemMat = new THREE.MeshStandardMaterial({
+          color: 0x10b981,
+          emissive: 0x10b981,
+          emissiveIntensity: 0.5,
+          roughness: 0.2
+        });
+        const itemMesh = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.35, 0.65), itemMat);
+        itemMesh.position.set(-6 + k * 4, 0.8, 0);
+        itemMesh.castShadow = true;
+        convGroup.add(itemMesh);
+        factory3D.itemsOnBelt.push({ mesh: itemMesh, offset: k * 4, stage: 'raw' });
+      }
+
+      // 4. 3D Hydraulic Industrial Stamping Press (at x = -1.5)
+      const pressGroup = new THREE.Group();
+      pressGroup.position.set(-1.5, 0.4, 0);
+
+      // 4 Pillars
+      const pColMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.3 });
+      const pColGeo = new THREE.BoxGeometry(0.35, 3.8, 0.35);
+      [[-0.9, -1.2], [-0.9, 1.2], [0.9, -1.2], [0.9, 1.2]].forEach(cp => {
+        const col = new THREE.Mesh(pColGeo, pColMat);
+        col.position.set(cp[0], 1.9, cp[1]);
+        col.castShadow = true;
+        pressGroup.add(col);
+      });
+
+      // Header block with amber beacon
+      const headBlockMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.6, roughness: 0.3 });
+      const headBlock = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.8, 2.8), headBlockMat);
+      headBlock.position.set(0, 3.8, 0);
+      headBlock.castShadow = true;
+      pressGroup.add(headBlock);
+
+      // Warning beacon lamp
+      const beaconMat = new THREE.MeshStandardMaterial({
+        color: 0xf59e0b,
+        emissive: 0xf59e0b,
+        emissiveIntensity: 0.9
+      });
+      const beacon = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.3, 8), beaconMat);
+      beacon.position.set(0, 4.35, 0);
+      pressGroup.add(beacon);
+
+      // Movable Stamping Piston Ram
+      const ramMat = new THREE.MeshStandardMaterial({
+        color: 0x94a3b8,
+        metalness: 0.9,
+        roughness: 0.1
+      });
+      const ramMesh = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.7, 1.2), ramMat);
+      ramMesh.position.set(0, 2.6, 0);
+      ramMesh.castShadow = true;
+      pressGroup.add(ramMesh);
+      factory3D.pressRam = ramMesh;
+
+      // Spark Flash Point Light
+      const sparkLight = new THREE.PointLight(0xf59e0b, 0, 6);
+      sparkLight.position.set(0, 0.8, 0);
+      pressGroup.add(sparkLight);
+      factory3D.pressSparkLight = sparkLight;
+
+      facGroup.add(pressGroup);
+
+      // 5. 3D Articulated Robotic Arm (at x = -4.5, z = 2.2)
+      const armBaseGroup = new THREE.Group();
+      armBaseGroup.position.set(-4.5, 0.4, 2.2);
+
+      const armBaseMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.7 });
+      const armBase = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.8, 0.5, 12), armBaseMat);
+      armBase.position.y = 0.25;
+      armBase.castShadow = true;
+      armBaseGroup.add(armBase);
+
+      // Turret (rotates around Y)
+      const turret = new THREE.Group();
+      turret.position.y = 0.5;
+
+      const turretMat = new THREE.MeshStandardMaterial({
+        color: 0x0284c7,
+        emissive: 0x0284c7,
+        emissiveIntensity: 0.3,
+        roughness: 0.3
+      });
+      const turretMesh = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.5, 0.8), turretMat);
+      turretMesh.position.y = 0.25;
+      turretMesh.castShadow = true;
+      turret.add(turretMesh);
+
+      // Shoulder Pivot
+      const shoulderPivot = new THREE.Group();
+      shoulderPivot.position.set(0, 0.5, 0);
+
+      // Lower Arm
+      const beamMat = new THREE.MeshStandardMaterial({ color: 0x0ea5e9, metalness: 0.6, roughness: 0.4 });
+      const lowerArm = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.8, 0.3), beamMat);
+      lowerArm.position.y = 0.9;
+      lowerArm.castShadow = true;
+      shoulderPivot.add(lowerArm);
+
+      // Elbow Pivot & Forearm
+      const forearmPivot = new THREE.Group();
+      forearmPivot.position.set(0, 1.8, 0);
+
+      const forearm = new THREE.Mesh(new THREE.BoxGeometry(0.24, 1.4, 0.24), beamMat);
+      forearm.position.y = 0.7;
+      forearm.castShadow = true;
+      forearmPivot.add(forearm);
+
+      // Gripper Wrist & Claws
+      const wristGroup = new THREE.Group();
+      wristGroup.position.set(0, 1.4, 0);
+
+      const clawMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, emissive: 0xf59e0b, emissiveIntensity: 0.4 });
+      const clawL = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.35, 0.15), clawMat);
+      clawL.position.set(-0.15, 0.2, 0);
+      const clawR = clawL.clone();
+      clawR.position.x = 0.15;
+      wristGroup.add(clawL, clawR);
+
+      forearmPivot.add(wristGroup);
+      shoulderPivot.add(forearmPivot);
+      turret.add(shoulderPivot);
+      armBaseGroup.add(turret);
+
+      factory3D.robotArmTurret = turret;
+      factory3D.robotArmShoulder = shoulderPivot;
+      factory3D.robotArmForearm = forearmPivot;
+      factory3D.robotClawLeft = clawL;
+      factory3D.robotClawRight = clawR;
+
+      facGroup.add(armBaseGroup);
+
+      // 6. Laser Quality Scanner Gate (at x = 2.8)
+      const scanGroup = new THREE.Group();
+      scanGroup.position.set(2.8, 0.4, 0);
+
+      const scanArchMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.8 });
+      const scanArchPillarL = new THREE.Mesh(new THREE.BoxGeometry(0.25, 2.5, 0.25), scanArchMat);
+      scanArchPillarL.position.set(0, 1.25, -1.0);
+      const scanArchPillarR = scanArchPillarL.clone();
+      scanArchPillarR.position.z = 1.0;
+      const scanArchTop = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.3, 2.3), scanArchMat);
+      scanArchTop.position.set(0, 2.5, 0);
+      scanGroup.add(scanArchPillarL, scanArchPillarR, scanArchTop);
+
+      // Holographic laser curtain sheet
+      const laserSheetMat = new THREE.MeshBasicMaterial({
+        color: 0x00f0ff,
+        transparent: true,
+        opacity: 0.4,
+        side: THREE.DoubleSide
+      });
+      const laserSheet = new THREE.Mesh(new THREE.PlaneGeometry(0.05, 2.2), laserSheetMat);
+      laserSheet.position.set(0, 1.2, 0);
+      laserSheet.rotation.y = Math.PI / 2;
+      laserSheet.scale.set(1, 1, 1.8);
+      scanGroup.add(laserSheet);
+      factory3D.scannerSheet = laserSheet;
+
+      facGroup.add(scanGroup);
+
+      // 7. Storage Silo & Output Hopper (at x = 7.5, z = 0)
+      const siloGroup = new THREE.Group();
+      siloGroup.position.set(7.5, 0.4, 0);
+
+      const siloBodyMat = new THREE.MeshStandardMaterial({
+        color: 0x1e293b,
+        metalness: 0.7,
+        roughness: 0.4
+      });
+      const siloBody = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.8, 4.2, 8), siloBodyMat);
+      siloBody.position.y = 2.1;
+      siloBody.castShadow = true;
+      siloGroup.add(siloBody);
+
+      // Silo transparent glowing window
+      const glassMat = new THREE.MeshStandardMaterial({
+        color: 0x00ff88,
+        emissive: 0x00ff88,
+        emissiveIntensity: 0.6,
+        transparent: true,
+        opacity: 0.65
+      });
+      const levelGauge = new THREE.Mesh(new THREE.BoxGeometry(0.25, 2.6, 0.6), glassMat);
+      levelGauge.position.set(-1.6, 2.1, 0);
+      siloGroup.add(levelGauge);
+      factory3D.siloLevel = levelGauge;
+
+      // Silo top cone cap
+      const capMat = new THREE.MeshStandardMaterial({ color: 0x0f172a });
+      const siloCap = new THREE.Mesh(new THREE.ConeGeometry(1.6, 1.0, 8), capMat);
+      siloCap.position.y = 4.7;
+      siloGroup.add(siloCap);
+
+      facGroup.add(siloGroup);
+
+      // 8. Programmable Worker Drone ("ByteWorker") hovering
+      const droneGroup = new THREE.Group();
+      droneGroup.position.set(-2, 4.8, 0);
+
+      const droneBodyMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, metalness: 0.8 });
+      const droneBody = new THREE.Mesh(new THREE.DodecahedronGeometry(0.5, 0), droneBodyMat);
+      droneBody.castShadow = true;
+      droneGroup.add(droneBody);
+
+      // Spinning twin rotors
+      const rotorMat = new THREE.MeshStandardMaterial({ color: 0x00f0ff, emissive: 0x00f0ff, emissiveIntensity: 0.6 });
+      const rotorGeo = new THREE.BoxGeometry(1.2, 0.04, 0.12);
+      const rotor1 = new THREE.Mesh(rotorGeo, rotorMat);
+      rotor1.position.y = 0.55;
+      droneGroup.add(rotor1);
+
+      // Eye sensor
+      const eyeMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, emissive: 0xf59e0b, emissiveIntensity: 0.9 });
+      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.18, 8, 8), eyeMat);
+      eye.position.set(0, 0, 0.45);
+      droneGroup.add(eye);
+
+      facGroup.add(droneGroup);
+      factory3D.drone = droneGroup;
+
+      scene.add(facGroup);
+    }
+
+    // Build the 3D Cyber Factory next to portal
+    build3DCyberFactory(scene, -26, 2);
 
     /* --- 3D PROGRAMMING OBSTACLES (LASER BARRIER FIREWALLS) --- */
     const OBSTACLES = [
@@ -3082,6 +4310,17 @@
       if (k === 'e' || code === 'Enter') {
         triggerCurrentInteraction();
       }
+      if (k === 'f') {
+        const facModal = document.getElementById('factoryModal');
+        if (facModal && facModal.classList.contains('open')) {
+          closeFactoryModal();
+        } else {
+          openFactoryModal();
+        }
+      }
+      if (k === 'escape') {
+        closeFactoryModal();
+      }
       if (k === '+' || k === '=') {
         zoomIn(2.0);
       }
@@ -3287,6 +4526,9 @@
         } else if (nearest.type === 'genie') {
           promptText.innerText = 'CONVERSAR COM O GÊNIO DO CÓDIGO';
           if (actLabel) actLabel.innerText = 'GÊNIO';
+        } else if (nearest.type === 'factory') {
+          promptText.innerText = 'ENTRAR NA FÁBRICA DE AUTOMAÇÃO [E]';
+          if (actLabel) actLabel.innerText = 'FÁBRICA';
         } else {
           promptText.innerText = `INTERAGIR COM ${nearest.name.toUpperCase()}`;
           if (actLabel) actLabel.innerText = 'TERMINAL';
@@ -3311,12 +4553,14 @@
           openGenieModal();
         } else if (currentNearPortal.type === 'obstacle') {
           openObstacleModal(currentNearPortal.obstacleId);
+        } else if (currentNearPortal.type === 'factory') {
+          openFactoryModal();
         } else {
           openTerminalDirect(currentNearPortal.challengeId);
         }
       } else {
         SoundEngine.playBeep(260, 0.08);
-        showFloatingReward("ℹ️ Botão de Ação [E]: Aproxime-se de um Portal, Barreira ou Robô Bug para interagir!", "#38bdf8", "⚡");
+        showFloatingReward("ℹ️ Botão de Ação [E]: Aproxime-se de um Portal, Fábrica ou Robô Bug para interagir!", "#38bdf8", "⚡");
       }
     }
 
@@ -3471,6 +4715,53 @@
       // Constrain within arena boundaries (-65 to 65)
       avatar.position.x = Math.max(-65, Math.min(65, avatar.position.x));
       avatar.position.z = Math.max(-65, Math.min(65, avatar.position.z));
+
+      // Animate 3D Cyber Factory components
+      if (factory3D.conveyorGroup && window.FactorySystem && window.FactorySystem.state) {
+        const sys = window.FactorySystem;
+        const isRunning = sys.state.isExecuting || sys.state.backgroundLoop;
+        const spd = isRunning ? factory3D.conveyorSpeed * (sys.state.speedMultiplier > 20 ? 4 : sys.state.speedMultiplier) : 0.4;
+
+        // Spin conveyor rollers
+        factory3D.rollers.forEach(r => {
+          r.rotation.y += delta * spd * 3;
+        });
+
+        // Move item cubes on belt
+        factory3D.itemsOnBelt.forEach(it => {
+          it.mesh.position.x += delta * spd * 1.5;
+          if (it.mesh.position.x > 6.5) {
+            it.mesh.position.x = -6.5;
+          }
+        });
+
+        // Hover drone
+        if (factory3D.drone) {
+          factory3D.drone.position.y = 4.8 + Math.sin(clock.getElapsedTime() * 3) * 0.25;
+          if (factory3D.drone.children[1]) factory3D.drone.children[1].rotation.y += delta * 15;
+        }
+
+        // Scanner sheet pulse
+        if (factory3D.scannerSheet) {
+          factory3D.scannerSheet.material.opacity = 0.3 + Math.sin(clock.getElapsedTime() * 5) * 0.2;
+        }
+
+        // Silo level representation
+        if (factory3D.siloLevel) {
+          const fillFrac = Math.min(1, (sys.state.partsInStorage || 0) / 100);
+          factory3D.siloLevel.scale.y = Math.max(0.08, fillFrac);
+          factory3D.siloLevel.position.y = 1.0 + (fillFrac * 1.3);
+        }
+
+        // Passive factory background production
+        if (sys.state.backgroundLoop && !sys.state.isExecuting) {
+          sys.idleAccumulator = (sys.idleAccumulator || 0) + delta;
+          if (sys.idleAccumulator >= 1.8) {
+            sys.idleAccumulator = 0;
+            sys.producePassiveItem();
+          }
+        }
+      }
 
       // Camera Smooth Follow with Dynamic Zoom Damping
       cameraDistance = THREE.MathUtils.damp(cameraDistance, targetCameraDistance, 8, delta);
@@ -4562,11 +5853,1208 @@
       });
     }
 
-    window.addEventListener('online', () => document.getElementById('offlineBadge').classList.remove('show'));
-    window.addEventListener('offline', () => document.getElementById('offlineBadge').classList.add('show'));
+    /* ========================================================
+       12. FÁBRICA CYBER & MOTOR DE AUTOMAÇÃO DE CÓDIGO
+           Inspirado em The Farmer Was Replaced + Factorio
+           "Você não aprende programação para jogar melhor;
+            você aprende programação porque é assim que consegue evoluir no jogo."
+       ======================================================== */
+    FactorySystem = window.FactorySystem = {
+      state: {
+        tier: 1,
+        language: 'python',
+        partsProduced: 0,
+        partsInStorage: 0,
+        totalCoinsEarned: 0,
+        currentMission: 0,
+        unlockedTiers: [1],
+        backgroundLoop: false,
+        speedMultiplier: 1,
+        isExecuting: false,
+        executionTimer: null,
+        robotHolding: false,
+        overclockUntil: 0,
+        revealedHints: []
+      },
 
-    // Initialize HUD and on-screen D-pad controls on load
+      missions: [
+        {
+          id: 0,
+          tier: 1,
+          title: "Missão 1: A Primeira Engrenagem (Sequência Linear)",
+          badge: "Sequência",
+          badgeColor: "#10b981",
+          story: "Sua pequena oficina abriu as portas! Para ativar a produção mecanizada inicial, programe a sequência exata de comandos para puxar o silício, agarrar com a garra, estampar o circuito, avançar a esteira e soltar no silo.",
+          unlockText: "Desbloqueia o Braço Robótico MK-1 e dobra o valor por peça (10 🪙)! Você avança para o Tier 2!",
+          rewardCoins: 60,
+          rewardScore: 300,
+          starterTemplate: {
+            python: `# Missão 1: Sequência de Comandos (Linha Direta)
+# Objetivo: Desenvolva a ordem correta de comandos para forjar sua primeira peça.
+# Comandos disponíveis:
+#   esteira.alimentar()  -> Puxa o silício bruto para a linha
+#   robo.pegar()         -> Garra robótica segura a peça
+#   prensa.estampar()    -> Estampa os microcircuitos
+#   esteira.avancar()    -> Move a esteira para a próxima estação
+#   robo.soltar()        -> Solta o chip finalizado no depósito
+#
+# (Dica: Você pode gastar 20 moedas com o Gênio para receber orientação lógica!)
+# Escreva sua sequência lógica abaixo:
+`,
+            javascript: `// Missão 1: Sequência de Comandos
+// Objetivo: Desenvolva a ordem correta de comandos para forjar sua primeira peça.
+// Comandos disponíveis:
+//   esteira.alimentar();
+//   robo.pegar();
+//   prensa.estampar();
+//   esteira.avancar();
+//   robo.soltar();
+//
+// Escreva sua sequência lógica abaixo:
+`,
+            java: `// Missão 1: Sequência de Comandos
+// Comandos: esteira.alimentar(); robo.pegar(); prensa.estampar(); esteira.avancar(); robo.soltar();
+// Escreva sua sequência lógica abaixo:
+`
+          },
+          genieHint: {
+            title: "Sequência de Comandos (Linha Direta)",
+            steps: [
+              "<strong>Passo 1:</strong> Comece chamando <code>esteira.alimentar()</code> para injetar a matéria-prima na esteira.",
+              "<strong>Passo 2:</strong> Acione a garra robótica com <code>robo.pegar()</code> para fixar o lingote na linha de montagem.",
+              "<strong>Passo 3:</strong> Ative a prensa hidráulica com <code>prensa.estampar()</code> para gravar os circuitos.",
+              "<strong>Passo 4:</strong> Desloque os trilhos para frente usando <code>esteira.avancar()</code>.",
+              "<strong>Passo 5:</strong> Finalize a peça e guarde no silo com <code>robo.soltar()</code>.",
+              "💡 <em>Conceito de Programação: A execução ocorre de cima para baixo, linha por linha!</em>"
+            ]
+          }
+        },
+        {
+          id: 1,
+          tier: 2,
+          title: "Missão 2: A Revolução do Loop (Laço de Repetição)",
+          badge: "Loops / For & While",
+          badgeColor: "#00f0ff",
+          story: "Digitar comando por comando não permite escalar a produção. Chegou a hora de automatizar com repetição! Escreva um laço 'for' ou 'while' que processe um lote contínuo de pelo menos 10 peças automaticamente.",
+          unlockText: "Desbloqueia a AUTOMAÇÃO CONTÍNUA 24/7 (a fábrica continuará produzindo mesmo com o menu fechado!) + Nova Prensa Hidráulica Turbo!",
+          rewardCoins: 150,
+          rewardScore: 600,
+          starterTemplate: {
+            python: `# Missão 2: Automação por Laço de Repetição
+# Objetivo: Fabricar um lote de pelo menos 10 peças automaticamente.
+# Regra: Não duplique linhas manualmente! Desenvolva um laço 'for' ou 'while'.
+#
+# (Dica: Use 'for i in range(10):' ou peça a Dica do Gênio para ver a estrutura!)
+# Escreva seu loop de automação abaixo:
+`,
+            javascript: `// Missão 2: Automação por Laço de Repetição
+// Objetivo: Fabricar um lote de pelo menos 10 peças automaticamente.
+// Use um loop for (let i = 0; i < 10; i++) para orquestrar as máquinas!
+// Escreva seu loop de automação abaixo:
+`,
+            java: `// Missão 2: Automação por Laço de Repetição
+// for (int i = 0; i < 10; i++) { ... }
+// Escreva seu loop de automação abaixo:
+`
+          },
+          genieHint: {
+            title: "Laço de Repetição (Loops)",
+            steps: [
+              "<strong>Passo 1:</strong> Em vez de repetir os 5 comandos 10 vezes (50 linhas!), use um loop <code>for</code>.",
+              "<strong>Passo 2 (Python):</strong> Escreva <code>for i in range(10):</code> na primeira linha.",
+              "<strong>Passo 2 (JavaScript):</strong> Escreva <code>for (let i = 0; i < 10; i++) {</code>.",
+              "<strong>Passo 3:</strong> Indente (adicione 4 espaços à frente) todos os comandos mecânicos dentro do laço: alimentar, pegar, estampar, avançar e soltar.",
+              "<strong>Passo 4 (Opcional):</strong> Adicione <code>print(f'Lote {i+1} concluído')</code> para acompanhar no console.",
+              "💡 <em>Conceito de Programação: Loops permitem que um único bloco de código opere milhares de vezes com eficiência total!</em>"
+            ]
+          }
+        },
+        {
+          id: 2,
+          tier: 3,
+          title: "Missão 3: O Scanner Anti-Bug (Condicionais - If / Else)",
+          badge: "Condicionais If/Else",
+          badgeColor: "#a855f7",
+          story: "Aviso industrial! Peças com falha ('bugs') começaram a entrar na linha de montagem. Se um bug for enviado ao cliente, você leva multa! Use 'if' e 'else' com o scanner para desviar os bugs para a esteira de reciclagem e enviar apenas chips puros para o cofre.",
+          unlockText: "Desbloqueia o Scanner Óptico Quântico e Chips de Ouro (+150% de valor por peça pura)! Tier 3 Desbloqueado!",
+          rewardCoins: 250,
+          rewardScore: 1000,
+          starterTemplate: {
+            python: `# Missão 3: Inspeção Condicional com If / Else
+# Objetivo: Processe 12 peças separando defeitos (bugs) de chips de ouro puro.
+#   item = sensor.escanear() -> Retorna objeto com item.defeito (True/False)
+#   robo.descartar_bug()     -> Envia peça com defeito para o triturador
+#   robo.soltar_no_cofre()   -> Envia chip de ouro aprovado ao cofre seguro
+#
+# Escreva sua estrutura condicional com repetição abaixo:
+`,
+            javascript: `// Missão 3: Inspeção Condicional com If / Else
+// Objetivo: Processe 12 peças separando defeitos (bugs) de chips de ouro puro.
+// Use const item = sensor.escanear(); com if (item.defeito) e else!
+// Escreva sua lógica abaixo:
+`,
+            java: `// Missão 3: Inspeção Condicional com If / Else
+// Item item = sensor.escanear(); if (item.temDefeito()) ... else ...
+// Escreva sua lógica abaixo:
+`
+          },
+          genieHint: {
+            title: "Inspeção Condicional com If / Else",
+            steps: [
+              "<strong>Passo 1:</strong> Crie um loop para 12 iterações: <code>for i in range(12):</code>.",
+              "<strong>Passo 2:</strong> Alimente a esteira e capture o resultado do scanner: <code>item = sensor.escanear()</code>.",
+              "<strong>Passo 3:</strong> Teste a condição de falha: <code>if item.defeito:</code> e no seu bloco chame <code>robo.descartar_bug()</code>.",
+              "<strong>Passo 4:</strong> Adicione o bloco <code>else:</code> contendo a produção de ouro: <code>robo.pegar()</code>, <code>prensa.estampar()</code>, <code>esteira.avancar()</code> e <code>robo.soltar_no_cofre()</code>.",
+              "💡 <em>Conceito de Programação: Condicionais (if/else) permitem tomadas de decisão inteligentes em tempo real baseadas em sensores e dados!</em>"
+            ]
+          }
+        },
+        {
+          id: 3,
+          tier: 4,
+          title: "Missão 4: Linhas Paralelas Modulares (Funções & Parâmetros)",
+          badge: "Funções Modulares",
+          badgeColor: "#facc15",
+          story: "Sua fábrica expandiu para duas esteiras paralelas (Linha A e Linha B)! Não duplique seu código: crie uma função reutilizável que receba o identificador da linha e a quantidade de peças para orquestrar as máquinas de forma elegante.",
+          unlockText: "Desbloqueia a Segunda Esteira 3D e o Drone Aéreo Transportador de Cargas! Tier 4 Desbloqueado!",
+          rewardCoins: 400,
+          rewardScore: 1600,
+          starterTemplate: {
+            python: `# Missão 4: Função Modular Reutilizável
+# Objetivo: Construa uma função que receba nome da linha e quantidade de peças.
+# Exemplo de assinatura: def produzir_linha(nome_linha, quantidade):
+# Em seguida, chame a função para "Linha_Norte" e "Linha_Sul".
+#
+# Escreva sua função e suas chamadas abaixo:
+`,
+            javascript: `// Missão 4: Função Modular Reutilizável
+// Objetivo: Construa uma função que receba nomeLinha e quantidade de peças.
+// function produzirLinha(nomeLinha, quantidade) { ... }
+// Escreva sua função e chamadas abaixo:
+`,
+            java: `// Missão 4: Função Modular Reutilizável
+// public static void produzirLinha(String nome, int qtd) { ... }
+// Escreva sua função e chamadas abaixo:
+`
+          },
+          genieHint: {
+            title: "Funções Modulares & Parâmetros",
+            steps: [
+              "<strong>Passo 1:</strong> Declare a função: em Python <code>def produzir_linha(nome, qtd):</code>, em JS <code>function produzirLinha(nome, qtd) {</code>.",
+              "<strong>Passo 2:</strong> Dentro da função, coloque <code>print('Acionando ' + nome)</code> e um loop <code>for i in range(qtd):</code> executando a cadeia mecânica.",
+              "<strong>Passo 3:</strong> Chame a função passando os parâmetros desejados:",
+              "• <code>produzir_linha('Linha_Norte', 8)</code>",
+              "• <code>produzir_linha('Linha_Sul', 8)</code>",
+              "💡 <em>Conceito de Programação: Funções permitem reaproveitar lógica sem duplicar código, respeitando o princípio DRY (Don't Repeat Yourself)!</em>"
+            ]
+          }
+        },
+        {
+          id: 4,
+          tier: 5,
+          title: "Missão 5: O Grande Algoritmo (Pipelining & Otimização Total)",
+          badge: "Indústria 4.0",
+          badgeColor: "#ff007f",
+          story: "O teste supremo do magnata industrial! Combine sequência, loops, condicionais, funções e overclock para forjar 25 microchips quânticos em tempo recorde sem desperdiçar matéria-prima.",
+          unlockText: "Desbloqueia o Título Lendário 'Magnata da Automação de Código', Troféu Dourado 3D e Modo Sandbox Livre!",
+          rewardCoins: 750,
+          rewardScore: 3000,
+          starterTemplate: {
+            python: `# Missão 5: O Grande Algoritmo (Pipelining Master)
+# Objetivo: Combine tudo o que aprendeu (função modular + loop + condicionais)
+# para construir uma arquitetura mestre que processe 25 lotes de microchips.
+#
+# Desenvolva seu algoritmo supremo abaixo:
+`,
+            javascript: `// Missão 5: O Grande Algoritmo (Pipelining Master)
+// Objetivo: Combine tudo o que aprendeu (função modular + loop + condicionais)
+// para construir uma arquitetura mestre que processe 25 lotes de microchips.
+// Desenvolva seu algoritmo supremo abaixo:
+`,
+            java: `// Missão 5: O Grande Algoritmo (Pipelining Master)
+// Combine função modular, loop e condicionais para processar 25 lotes.
+// Desenvolva seu algoritmo supremo abaixo:
+`
+          },
+          genieHint: {
+            title: "Pipelining Master & Otimização",
+            steps: [
+              "<strong>Passo 1:</strong> Encapsule o processo inteiro em uma função mestre, ex: <code>def ciclo_mestre(lotes):</code>.",
+              "<strong>Passo 2:</strong> Dentro dela, itere com <code>for lote in range(lotes):</code>.",
+              "<strong>Passo 3:</strong> Alimente a esteira, inspecione com o sensor e trate os dois caminhos (<code>if item.defeito</code> vs <code>else</code>).",
+              "<strong>Passo 4:</strong> Acione a função passando <code>ciclo_mestre(25)</code>.",
+              "💡 <em>Conceito de Programação: Você dominou os fundamentos de lógica e arquitetura que formam os softwares industriais do mundo real!</em>"
+            ]
+          }
+        }
+      ],
+
+      init() {
+        this.loadState();
+        this.initEditorEvents();
+        this.initSchematicCanvas();
+        this.updateHUDIndicators();
+      },
+
+      loadState() {
+        try {
+          const raw = localStorage.getItem('ByteQuest_FactoryState_v1');
+          if (raw) {
+            const data = JSON.parse(raw);
+            Object.assign(this.state, data);
+            if (!this.state.revealedHints) this.state.revealedHints = [];
+          }
+        } catch (e) {}
+      },
+
+      saveState() {
+        try {
+          localStorage.setItem('ByteQuest_FactoryState_v1', JSON.stringify({
+            tier: this.state.tier,
+            language: this.state.language,
+            partsProduced: this.state.partsProduced,
+            partsInStorage: this.state.partsInStorage,
+            totalCoinsEarned: this.state.totalCoinsEarned,
+            currentMission: this.state.currentMission,
+            unlockedTiers: this.state.unlockedTiers,
+            backgroundLoop: this.state.backgroundLoop,
+            revealedHints: this.state.revealedHints || []
+          }));
+        } catch (e) {}
+        this.updateHUDIndicators();
+      },
+
+      updateHUDIndicators() {
+        const badge = document.getElementById('hudFactoryTier');
+        if (badge) badge.innerText = `NV ${this.state.tier}`;
+      },
+
+      onOpen() {
+        this.updateHeaderStats();
+        this.renderMissionBanner();
+        this.renderTechTree();
+        this.loadMissionCode();
+        this.updateGenieHintUI();
+        this.updateSchematic();
+
+        const c = document.getElementById('facConsole');
+        if (c) c.scrollTop = c.scrollHeight;
+      },
+
+      updateHeaderStats() {
+        const tierNames = [
+          "",
+          "Oficina Manual [Nível 1]",
+          "Linha em Loop [Nível 2]",
+          "Triagem If/Else [Nível 3]",
+          "Fábrica Modular [Nível 4]",
+          "Mega Complexo 4.0 [Nível 5]"
+        ];
+        const tLabel = document.getElementById('facTierLabel');
+        if (tLabel) tLabel.innerText = tierNames[this.state.tier] || `Nível ${this.state.tier}`;
+
+        const rateEl = document.getElementById('facRateVal');
+        if (rateEl) {
+          const rate = this.state.backgroundLoop ? (this.state.tier * 1.5).toFixed(1) : (this.state.isExecuting ? "8.0" : "0.0");
+          rateEl.innerText = rate;
+        }
+
+        const storEl = document.getElementById('facStorageVal');
+        if (storEl) storEl.innerText = this.state.partsInStorage || 0;
+
+        const pricePerPart = this.state.tier >= 3 ? 15 : (this.state.tier >= 2 ? 10 : 5);
+        const sellPrice = (this.state.partsInStorage || 0) * pricePerPart;
+        const sellBtnVal = document.getElementById('facSellPrice');
+        if (sellBtnVal) sellBtnVal.innerText = sellPrice;
+
+        const autoCheck = document.getElementById('facAutoLoopCheck');
+        const autoDesc = document.getElementById('facAutoLoopDesc');
+        if (autoCheck) {
+          autoCheck.disabled = this.state.tier < 2;
+          autoCheck.checked = !!this.state.backgroundLoop && this.state.tier >= 2;
+        }
+        if (autoDesc) {
+          if (this.state.tier < 2) {
+            autoDesc.innerHTML = `Bloqueado: Conclua a <strong>Missão 2 (Laços de Repetição)</strong> para automatizar a fábrica passiva 24/7!`;
+            autoDesc.style.color = '#94a3b8';
+          } else {
+            autoDesc.innerHTML = `<span style="color: #34d399;">✓ ATIVO:</span> A fábrica produz peças e lucro em segundo plano enquanto você explora!`;
+            autoDesc.style.color = '#34d399';
+          }
+        }
+      },
+
+      setLanguage(lang) {
+        this.state.language = lang;
+        ['facLangPy', 'facLangJs', 'facLangJava'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove('active');
+        });
+        const activeMap = { python: 'facLangPy', javascript: 'facLangJs', java: 'facLangJava' };
+        const activeBtn = document.getElementById(activeMap[lang]);
+        if (activeBtn) activeBtn.classList.add('active');
+
+        SoundEngine.playBeep(480, 0.05);
+        this.loadMissionCode();
+        this.log(`Linguagem da fábrica alterada para: ${lang.toUpperCase()}`, 'info');
+      },
+
+      setSpeed(spd) {
+        this.state.speedMultiplier = spd;
+        ['facSpd1', 'facSpd2', 'facSpd5', 'facSpd10', 'facSpdInst'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove('active');
+        });
+        const speedMap = { 1: 'facSpd1', 2: 'facSpd2', 5: 'facSpd5', 10: 'facSpd10', 999: 'facSpdInst' };
+        const btn = document.getElementById(speedMap[spd]);
+        if (btn) btn.classList.add('active');
+        SoundEngine.playBeep(440, 0.04);
+        this.log(`Velocidade de execução ajustada para ${spd === 999 ? 'INSTANTÂNEA' : spd + 'x'}`, 'info');
+      },
+
+      log(msg, type = 'info') {
+        const consoleEl = document.getElementById('facConsole');
+        if (!consoleEl) return;
+        const line = document.createElement('div');
+        line.className = 'fac-log-line';
+
+        const now = new Date();
+        const timeStr = `[${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}]`;
+
+        const typeClass = type === 'success' ? 'fac-log-success' : (type === 'warn' ? 'fac-log-warn' : (type === 'err' ? 'fac-log-err' : 'fac-log-info'));
+        line.innerHTML = `<span class="fac-log-time">${timeStr}</span> <span class="${typeClass}">${msg}</span>`;
+        consoleEl.appendChild(line);
+        consoleEl.scrollTop = consoleEl.scrollHeight;
+      },
+
+      renderMissionBanner() {
+        const m = this.missions[this.state.currentMission] || this.missions[0];
+        const titleEl = document.getElementById('facMissionTitle');
+        const badgeEl = document.getElementById('facMissionBadge');
+        const storyEl = document.getElementById('facMissionStory');
+        const unlockEl = document.getElementById('facMissionUnlock');
+
+        if (titleEl) titleEl.innerText = m.title;
+        if (badgeEl) {
+          badgeEl.innerText = m.badge;
+          badgeEl.style.borderColor = m.badgeColor;
+          badgeEl.style.color = m.badgeColor;
+        }
+        if (storyEl) storyEl.innerText = m.story;
+        if (unlockEl) unlockEl.innerText = m.unlockText;
+      },
+
+      renderTechTree() {
+        for (let i = 1; i <= 5; i++) {
+          const card = document.getElementById(`techTier${i}`);
+          const badge = document.getElementById(`techBadge${i}`);
+          if (!card) continue;
+
+          card.classList.remove('unlocked', 'current');
+          if (this.state.unlockedTiers.includes(i)) {
+            card.classList.add('unlocked');
+            if (badge) {
+              badge.innerText = '✓ DESBLOQUEADO';
+              badge.style.color = '#34d399';
+            }
+          } else if (i === this.state.tier + 1 || (i === 2 && this.state.tier === 1)) {
+            card.classList.add('current');
+            if (badge) {
+              badge.innerText = 'EM PROGRESSO';
+              badge.style.color = '#fbbf24';
+            }
+          } else {
+            if (badge) {
+              badge.innerText = 'BLOQUEADO';
+              badge.style.color = '#64748b';
+            }
+          }
+        }
+      },
+
+      loadMissionCode() {
+        const m = this.missions[this.state.currentMission] || this.missions[0];
+        const ed = document.getElementById('facCodeEditor');
+        if (!ed) return;
+
+        const savedKey = `fac_user_code_m${m.id}_${this.state.language}`;
+        const saved = localStorage.getItem(savedKey);
+        if (saved !== null) {
+          ed.value = saved;
+        } else {
+          ed.value = (m.starterTemplate && m.starterTemplate[this.state.language]) || (m.starterTemplate && m.starterTemplate.python) || '';
+        }
+        this.updateLineNumbers();
+        this.updateGenieHintUI();
+      },
+
+      resetMissionTemplate() {
+        const m = this.missions[this.state.currentMission] || this.missions[0];
+        const ed = document.getElementById('facCodeEditor');
+        if (!ed) return;
+        ed.value = (m.starterTemplate && m.starterTemplate[this.state.language]) || (m.starterTemplate && m.starterTemplate.python) || '';
+        const savedKey = `fac_user_code_m${m.id}_${this.state.language}`;
+        try { localStorage.removeItem(savedKey); } catch(e) {}
+        this.updateLineNumbers();
+        SoundEngine.playBeep(400, 0.05);
+        this.log('Template inicial da missão recarregado. Desenvolva sua lógica!', 'info');
+      },
+
+      askGenieHint() {
+        const cost = 20;
+        const m = this.missions[this.state.currentMission] || this.missions[0];
+        if (!this.state.revealedHints) this.state.revealedHints = [];
+
+        const alreadyRevealed = this.state.revealedHints.includes(m.id);
+
+        if (!alreadyRevealed) {
+          if ((state.coins || 0) < cost) {
+            alert(`🪙 Moedas insuficientes!\n\nVocê possui ${state.coins || 0} moedas, mas a Dica do Gênio para a Fábrica custa ${cost} moedas.\n\n💡 Colete diamantes no mapa 3D (+15 🪙 cada), responda no Speed Quiz ou submeta desafios no Beecrowd!`);
+            SoundEngine.playWrong();
+            return;
+          }
+
+          state.coins -= cost;
+          this.state.revealedHints.push(m.id);
+          this.saveState();
+          updateHUD();
+          saveState();
+          SoundEngine.playCoin();
+          showFloatingReward(`-20 🪙 DICA DO GÊNIO REVELADA!`, '#a855f7', '🧞');
+          this.log(`🧞 Gênio do Código: Dica estruturada da Missão ${m.id + 1} desbloqueada! (-20 🪙)`, 'info');
+        } else {
+          SoundEngine.playBeep(520, 0.05);
+          this.log(`🧞 Gênio do Código: Exibindo dica já adquirida para a Missão ${m.id + 1}.`, 'info');
+        }
+
+        this.showGenieHintBox(m);
+      },
+
+      showGenieHintBox(m) {
+        const box = document.getElementById('facGenieHintBox');
+        const titleEl = document.getElementById('facGenieHintTitle');
+        const contentEl = document.getElementById('facGenieHintContent');
+        if (!box || !contentEl) return;
+
+        const hint = m.genieHint || {
+          title: m.title,
+          steps: ["Analise a sequência de comandos necessária e teste a execução."]
+        };
+
+        if (titleEl) titleEl.innerText = `🧞 DICA DO GÊNIO: ${hint.title.toUpperCase()}`;
+        contentEl.innerHTML = `
+          <div style="margin-bottom: 8px; color: #f3e8ff;">
+            ${hint.steps.map(s => `<div style="margin-bottom: 6px;">• ${s}</div>`).join('')}
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; color: #c084fc; font-family: var(--font-arcade); margin-top: 8px; padding-top: 6px; border-top: 1px dashed rgba(168,85,247,0.3);">
+            <span>✓ Dica Desbloqueada com Sucesso</span>
+            <span style="color: #fbbf24;">Use o editor para montar o código!</span>
+          </div>
+        `;
+        box.style.display = 'block';
+      },
+
+      closeGenieHint() {
+        const box = document.getElementById('facGenieHintBox');
+        if (box) box.style.display = 'none';
+        SoundEngine.playBeep(320, 0.04);
+      },
+
+      toggleHowToGuide() {
+        const box = document.getElementById('facGuideBox');
+        if (!box) return;
+        const isHidden = box.style.display === 'none' || !box.style.display;
+        box.style.display = isHidden ? 'block' : 'none';
+        SoundEngine.playBeep(450, 0.04);
+      },
+
+      updateGenieHintUI() {
+        const m = this.missions[this.state.currentMission] || this.missions[0];
+        const box = document.getElementById('facGenieHintBox');
+        if (!box) return;
+        if (this.state.revealedHints && this.state.revealedHints.includes(m.id)) {
+          this.showGenieHintBox(m);
+        } else {
+          box.style.display = 'none';
+        }
+      },
+
+      clearEditor() {
+        const ed = document.getElementById('facCodeEditor');
+        if (!ed) return;
+        ed.value = '';
+        const m = this.missions[this.state.currentMission] || this.missions[0];
+        const savedKey = `fac_user_code_m${m.id}_${this.state.language}`;
+        try { localStorage.setItem(savedKey, ''); } catch(e) {}
+        this.updateLineNumbers();
+        SoundEngine.playBeep(300, 0.05);
+        this.log('Editor de código limpo.', 'info');
+      },
+
+      insertSnippet(snippet) {
+        const ed = document.getElementById('facCodeEditor');
+        if (!ed) return;
+        let text = snippet;
+        if (snippet === 'loop') {
+          text = this.state.language === 'python' ? 'for i in range(10):\n    ' : 'for (let i = 0; i < 10; i++) {\n    \n}';
+        } else if (snippet === 'if_else') {
+          text = this.state.language === 'python' ? 'if item.defeito:\n    robo.descartar_bug()\nelse:\n    robo.soltar_no_cofre()' : 'if (item.defeito) {\n    robo.descartar_bug();\n} else {\n    robo.soltar_no_cofre();\n}';
+        }
+
+        const start = ed.selectionStart;
+        const end = ed.selectionEnd;
+        const val = ed.value;
+        ed.value = val.substring(0, start) + text + val.substring(end);
+        ed.selectionStart = ed.selectionEnd = start + text.length;
+        ed.focus();
+        this.updateLineNumbers();
+        SoundEngine.playBeep(520, 0.04);
+      },
+
+      updateLineNumbers() {
+        const ed = document.getElementById('facCodeEditor');
+        const gutter = document.getElementById('facGutter');
+        if (!ed || !gutter) return;
+        const lines = ed.value.split('\n').length;
+        let s = '';
+        for (let i = 1; i <= Math.max(lines, 12); i++) {
+          s += `${i}<br>`;
+        }
+        gutter.innerHTML = s;
+      },
+
+      initEditorEvents() {
+        const ed = document.getElementById('facCodeEditor');
+        if (!ed) return;
+        ed.addEventListener('input', () => {
+          this.updateLineNumbers();
+          const m = this.missions[this.state.currentMission] || this.missions[0];
+          const savedKey = `fac_user_code_m${m.id}_${this.state.language}`;
+          try { localStorage.setItem(savedKey, ed.value); } catch(e) {}
+        });
+
+        ed.addEventListener('keydown', (e) => {
+          if (e.key === 'Tab') {
+            e.preventDefault();
+            const start = ed.selectionStart;
+            const end = ed.selectionEnd;
+            ed.value = ed.value.substring(0, start) + '    ' + ed.value.substring(end);
+            ed.selectionStart = ed.selectionEnd = start + 4;
+            this.updateLineNumbers();
+          }
+          if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault();
+            this.toggleExecution();
+          }
+        });
+      },
+
+      /* --- Visual 2D Assembly Line Schematic on Canvas --- */
+      initSchematicCanvas() {
+        this.canvas = document.getElementById('factorySchematicCanvas');
+        if (this.canvas) {
+          this.ctx = this.canvas.getContext('2d');
+          this.schematicItems = [];
+          this.updateSchematic();
+        }
+      },
+
+      highlightStationChip(chipId) {
+        ['schChip1', 'schChip2', 'schChip3', 'schChip4', 'schChip5'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove('active');
+        });
+        const activeEl = document.getElementById(chipId);
+        if (activeEl) {
+          activeEl.classList.add('active');
+          setTimeout(() => activeEl.classList.remove('active'), 900);
+        }
+      },
+
+      updateSchematic() {
+        if (!this.canvas || !this.ctx) return;
+        const ctx = this.ctx;
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+
+        // Dark Blueprint Canvas Background
+        ctx.fillStyle = '#050816';
+        ctx.fillRect(0, 0, w, h);
+
+        // Blueprint Grid Lines
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.05)';
+        ctx.lineWidth = 1;
+        for (let x = 10; x < w; x += 20) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, h);
+          ctx.stroke();
+        }
+        for (let y = 10; y < h; y += 20) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(w, y);
+          ctx.stroke();
+        }
+
+        // Top Status Header Bar
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+        ctx.fillRect(0, 0, w, 22);
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.2)';
+        ctx.beginPath();
+        ctx.moveTo(0, 22);
+        ctx.lineTo(w, 22);
+        ctx.stroke();
+
+        ctx.font = 'bold 8px monospace';
+        const isRunning = this.state.isExecuting || this.state.backgroundLoop;
+        if (isRunning) {
+          ctx.fillStyle = '#34d399';
+          ctx.fillText('● ESTEIRA EM OPERAÇÃO', 8, 14);
+        } else {
+          ctx.fillStyle = '#94a3b8';
+          ctx.fillText('○ ESTEIRA PRONTA (TESTE / SCRIPT)', 8, 14);
+        }
+
+        const itemsCount = this.schematicItems ? this.schematicItems.length : 0;
+        ctx.fillStyle = '#facc15';
+        ctx.fillText(`EM LINHA: ${itemsCount}`, w - 75, 14);
+
+        // Conveyor Belt Bed
+        const beltY = 74;
+        const beltH = 18;
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(16, beltY, w - 32, beltH);
+
+        // Neon Conveyor Guide Rails
+        ctx.strokeStyle = '#0284c7';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(16, beltY, w - 32, beltH);
+
+        // Conveyor Rollers & Directional Markers
+        for (let rx = 26; rx <= w - 32; rx += 28) {
+          ctx.fillStyle = '#334155';
+          ctx.beginPath();
+          ctx.arc(rx, beltY + 9, 4, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = 'rgba(56, 189, 248, 0.4)';
+          ctx.font = '8px monospace';
+          ctx.fillText('>', rx + 10, beltY + 12);
+        }
+
+        // Station 1: Hopper / Alimentador (Left: x: 12)
+        ctx.fillStyle = 'rgba(2, 132, 199, 0.25)';
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.5;
+        ctx.fillRect(10, 30, 28, 40);
+        ctx.strokeRect(10, 30, 28, 40);
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 8px monospace';
+        ctx.fillText('1.IN', 14, 43);
+        ctx.font = '10px monospace';
+        ctx.fillText('📦', 16, 58);
+
+        // Station 2: Robot Claw Arm (x: 68)
+        ctx.fillStyle = 'rgba(15, 118, 110, 0.25)';
+        ctx.strokeStyle = '#2dd4bf';
+        ctx.fillRect(66, 30, 32, 40);
+        ctx.strokeRect(66, 30, 32, 40);
+        ctx.fillStyle = '#2dd4bf';
+        ctx.font = 'bold 8px monospace';
+        ctx.fillText('2.GARRA', 68, 43);
+        ctx.font = '11px monospace';
+        ctx.fillText(this.state.robotHolding ? '✊' : '🦾', 75, 58);
+
+        // Station 3: Hydraulic Stamping Press (x: 126)
+        ctx.fillStyle = 'rgba(217, 119, 6, 0.25)';
+        ctx.strokeStyle = '#fbbf24';
+        ctx.fillRect(124, 28, 36, 42);
+        ctx.strokeRect(124, 28, 36, 42);
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 8px monospace';
+        ctx.fillText('3.PRENSA', 126, 42);
+        ctx.font = '11px monospace';
+        ctx.fillText('🔨', 135, 58);
+
+        // Station 4: Laser Quality Scanner Gate (x: 186)
+        ctx.fillStyle = 'rgba(168, 85, 247, 0.25)';
+        ctx.strokeStyle = '#c084fc';
+        ctx.fillRect(184, 30, 30, 40);
+        ctx.strokeRect(184, 30, 30, 40);
+        ctx.fillStyle = '#c084fc';
+        ctx.font = 'bold 8px monospace';
+        ctx.fillText('4.SCAN', 186, 43);
+        ctx.font = '10px monospace';
+        ctx.fillText('🔍', 192, 59);
+
+        // Laser Scanner Beam down to belt
+        ctx.strokeStyle = 'rgba(192, 132, 252, 0.5)';
+        ctx.setLineDash([2, 2]);
+        ctx.beginPath();
+        ctx.moveTo(199, 70);
+        ctx.lineTo(199, beltY + beltH);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Station 5: Storage Vault Silo (Right: x: 238)
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.25)';
+        ctx.strokeStyle = '#34d399';
+        ctx.fillRect(236, 28, 34, 44);
+        ctx.strokeRect(236, 28, 34, 44);
+        ctx.fillStyle = '#34d399';
+        ctx.font = 'bold 8px monospace';
+        ctx.fillText('5.SILO', 239, 42);
+        ctx.font = '11px monospace';
+        ctx.fillText('📥', 246, 58);
+
+        // Moving Items along belt
+        if (this.schematicItems && this.schematicItems.length > 0) {
+          this.schematicItems.forEach(item => {
+            const ix = Math.min(w - 42, Math.max(18, item.x));
+            const iy = beltY + 2;
+
+            if (item.type === 'bug') {
+              ctx.fillStyle = '#ef4444';
+              ctx.fillRect(ix, iy, 14, 14);
+              ctx.strokeStyle = '#fca5a5';
+              ctx.strokeRect(ix, iy, 14, 14);
+              ctx.fillStyle = '#fff';
+              ctx.font = 'bold 8px monospace';
+              ctx.fillText('!', ix + 4, iy + 11);
+            } else if (item.type === 'gold') {
+              ctx.fillStyle = '#f59e0b';
+              ctx.fillRect(ix, iy, 14, 14);
+              ctx.strokeStyle = '#fef08a';
+              ctx.strokeRect(ix, iy, 14, 14);
+              ctx.fillStyle = '#000';
+              ctx.font = 'bold 8px monospace';
+              ctx.fillText('⚡', ix + 2, iy + 11);
+            } else {
+              ctx.fillStyle = '#0284c7';
+              ctx.fillRect(ix, iy, 14, 14);
+              ctx.strokeStyle = '#7dd3fc';
+              ctx.strokeRect(ix, iy, 14, 14);
+              ctx.fillStyle = '#fff';
+              ctx.font = 'bold 8px monospace';
+              ctx.fillText('▪', ix + 4, iy + 10);
+            }
+          });
+        } else {
+          // Subtle informative helper when idle
+          ctx.fillStyle = 'rgba(148, 163, 184, 0.65)';
+          ctx.font = '8px monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('Aguardando comandos da esteira...', w / 2, beltY + 36);
+          ctx.textAlign = 'start';
+        }
+      },
+
+      /* --- Manual Action Testing --- */
+      manualAction(action) {
+        SoundEngine.init();
+        if (action === 'feed') {
+          SoundEngine.playMechanicalClank();
+          this.highlightMachine('mCardConveyor', 'mTagConveyor', 'ALIMENTANDO...', '#10b981');
+          this.highlightStationChip('schChip1');
+          this.log('>> esteira.alimentar(): Peça de silício bruto injetada na entrada.', 'info');
+          if (!this.schematicItems) this.schematicItems = [];
+          this.schematicItems.push({ x: 30, type: 'raw' });
+          this.updateSchematic();
+        } else if (action === 'grab') {
+          SoundEngine.playRoboticServo();
+          this.highlightMachine('mCardRobot', 'mTagRobot', 'AGARRANDO...', '#38bdf8');
+          this.highlightStationChip('schChip2');
+          this.state.robotHolding = true;
+          this.log('>> robo.pegar(): Garra robótica travada na peça.', 'info');
+          this.animate3DRobotGrab();
+          this.updateSchematic();
+        } else if (action === 'press') {
+          SoundEngine.playHydraulicPress();
+          this.highlightMachine('mCardPress', 'mTagPress', 'ESTAMPANDO!', '#f59e0b');
+          this.highlightStationChip('schChip3');
+          if (this.schematicItems && this.schematicItems.length > 0) {
+            this.schematicItems.forEach(it => {
+              if (it.type === 'raw') it.type = 'gold';
+            });
+          }
+          this.log('>> prensa.estampar(): Piston hidráulico estampou os microprocessadores!', 'warn');
+          this.animate3DPress();
+          this.updateSchematic();
+        } else if (action === 'advance') {
+          SoundEngine.playMechanicalClank();
+          this.highlightMachine('mCardConveyor', 'mTagConveyor', 'AVANÇANDO...', '#10b981');
+          this.log('>> esteira.avancar(): Trilhos rolantes avançaram 1 passo.', 'info');
+          if (this.schematicItems) {
+            this.schematicItems.forEach(it => it.x = Math.min(240, it.x + 45));
+          }
+          this.updateSchematic();
+        } else if (action === 'drop') {
+          SoundEngine.playCoin();
+          this.highlightMachine('mCardRobot', 'mTagRobot', 'SOLTO!', '#38bdf8');
+          this.highlightStationChip('schChip5');
+          this.state.robotHolding = false;
+          this.state.partsInStorage = (this.state.partsInStorage || 0) + 1;
+          this.state.partsProduced = (this.state.partsProduced || 0) + 1;
+          this.log(`>> robo.soltar(): Peça guardada no silo! Estoque: ${this.state.partsInStorage}`, 'success');
+          showFloatingReward('+1 PEÇA FABRICADA! 📦', '#34d399', '🏭');
+          this.saveState();
+          this.updateHeaderStats();
+          if (this.schematicItems && this.schematicItems.length > 0) this.schematicItems.shift();
+          this.updateSchematic();
+        } else if (action === 'scan') {
+          SoundEngine.playLaserScan();
+          this.highlightMachine('mCardScanner', 'mTagScanner', 'ESCANEANDO...', '#a855f7');
+          this.highlightStationChip('schChip4');
+          const isBug = Math.random() < 0.25;
+          if (this.schematicItems && this.schematicItems.length > 0) {
+            this.schematicItems[0].type = isBug ? 'bug' : 'gold';
+          }
+          this.log(`>> sensor.escanear(): Leitura concluída: ${isBug ? 'DEFEITO (BUG DETECTADO)' : 'CHIP 100% PURO (OURO)'}`, isBug ? 'err' : 'success');
+          this.updateSchematic();
+        }
+      },
+
+      highlightMachine(cardId, tagId, statusText, color) {
+        const card = document.getElementById(cardId);
+        const tag = document.getElementById(tagId);
+        if (card) {
+          card.classList.add('active');
+          setTimeout(() => card.classList.remove('active'), 800);
+        }
+        if (tag) {
+          tag.innerText = statusText;
+          tag.style.color = color;
+          setTimeout(() => {
+            tag.innerText = 'PRONTO';
+            tag.style.color = '#34d399';
+          }, 1200);
+        }
+      },
+
+      /* --- 3D Visual Feedback Triggers --- */
+      animate3DPress() {
+        if (!factory3D.pressRam) return;
+        factory3D.pressRam.position.y = 1.0;
+        if (factory3D.pressSparkLight) factory3D.pressSparkLight.intensity = 3.5;
+        setTimeout(() => {
+          if (factory3D.pressRam) factory3D.pressRam.position.y = 2.6;
+          if (factory3D.pressSparkLight) factory3D.pressSparkLight.intensity = 0;
+        }, 220);
+      },
+
+      animate3DRobotGrab() {
+        if (!factory3D.robotArmTurret) return;
+        factory3D.robotArmTurret.rotation.y = -Math.PI / 4;
+        if (factory3D.robotClawLeft) factory3D.robotClawLeft.position.x = -0.07;
+        if (factory3D.robotClawRight) factory3D.robotClawRight.position.x = 0.07;
+        setTimeout(() => {
+          if (factory3D.robotArmTurret) factory3D.robotArmTurret.rotation.y = 0;
+          if (factory3D.robotClawLeft) factory3D.robotClawLeft.position.x = -0.15;
+          if (factory3D.robotClawRight) factory3D.robotClawRight.position.x = 0.15;
+        }, 400);
+      },
+
+      /* --- Real Code Execution Sandbox (The Farmer Was Replaced Style) --- */
+      toggleExecution() {
+        if (this.state.isExecuting) {
+          this.resetExecution();
+        } else {
+          this.startExecution();
+        }
+      },
+
+      startExecution() {
+        SoundEngine.init();
+        const ed = document.getElementById('facCodeEditor');
+        if (!ed || !ed.value.trim()) {
+          this.log('Erro: O editor está vazio! Escreva ou carregue um script de automação.', 'err');
+          return;
+        }
+
+        const runBtn = document.getElementById('btnFacRun');
+        const runText = document.getElementById('facRunText');
+        const runIcon = document.getElementById('facRunIcon');
+        if (runBtn) runBtn.classList.add('running');
+        if (runText) runText.innerText = 'PARAR AUTOMAÇÃO';
+        if (runIcon) runIcon.innerText = '⏹';
+
+        this.state.isExecuting = true;
+        this.log('Iniciando interpretador de automação industrial...', 'info');
+
+        const code = ed.value;
+        const queue = this.compileScriptToQueue(code);
+
+        if (queue.length === 0) {
+          this.log('Aviso: Nenhum comando de máquina reconhecido no código. Use esteira.*, robo.*, prensa.* ou sensor.*!', 'warn');
+          this.resetExecution();
+          return;
+        }
+
+        this.log(`Plano de automação compilado: ${queue.length} passos a executar.`, 'info');
+        this.runActionQueue(queue);
+      },
+
+      resetExecution() {
+        this.state.isExecuting = false;
+        if (this.state.executionTimer) {
+          clearTimeout(this.state.executionTimer);
+          this.state.executionTimer = null;
+        }
+        const runBtn = document.getElementById('btnFacRun');
+        const runText = document.getElementById('facRunText');
+        const runIcon = document.getElementById('facRunIcon');
+        if (runBtn) runBtn.classList.remove('running');
+        if (runText) runText.innerText = 'EXECUTAR AUTOMAÇÃO';
+        if (runIcon) runIcon.innerText = '▶';
+        this.log('Linha de automação interrompida/resetada.', 'warn');
+      },
+
+      compileScriptToQueue(rawCode) {
+        const queue = [];
+        const lines = rawCode.split('\n');
+
+        let loopCount = 1;
+        let insideLoop = false;
+        let hasIfCondition = false;
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
+
+          const pyRangeMatch = trimmed.match(/for\s+\w+\s+in\s+range\s*\(\s*(\d+)\s*\)/i);
+          if (pyRangeMatch) {
+            loopCount = parseInt(pyRangeMatch[1], 10);
+            insideLoop = true;
+            continue;
+          }
+
+          const jsForMatch = trimmed.match(/for\s*\(\s*(?:let|var|int)?\s*\w+\s*=\s*\d+;\s*\w+\s*<\s*(\d+)/i);
+          if (jsForMatch) {
+            loopCount = parseInt(jsForMatch[1], 10);
+            insideLoop = true;
+            continue;
+          }
+
+          if (trimmed.includes('if') && (trimmed.includes('defeito') || trimmed.includes('sensor') || trimmed.includes('temDefeito'))) {
+            hasIfCondition = true;
+          }
+
+          if (trimmed.includes('esteira.alimentar')) {
+            queue.push({ type: 'feed' });
+          } else if (trimmed.includes('robo.pegar')) {
+            queue.push({ type: 'grab' });
+          } else if (trimmed.includes('prensa.estampar')) {
+            queue.push({ type: 'press' });
+          } else if (trimmed.includes('esteira.avancar')) {
+            queue.push({ type: 'advance' });
+          } else if (trimmed.includes('robo.soltar_no_cofre') || (trimmed.includes('robo.soltar') && !trimmed.includes('descartar'))) {
+            queue.push({ type: 'drop', isVault: trimmed.includes('cofre') });
+          } else if (trimmed.includes('robo.descartar_bug') || trimmed.includes('descartar')) {
+            queue.push({ type: 'recycle_bug' });
+          } else if (trimmed.includes('sensor.escanear')) {
+            queue.push({ type: 'scan' });
+          } else if (trimmed.startsWith('print(') || trimmed.startsWith('console.log(')) {
+            const msgMatch = trimmed.match(/(?:print|console\.log)\s*\((.*)\)/);
+            if (msgMatch) queue.push({ type: 'print', text: msgMatch[1].replace(/['"]/g, '') });
+          }
+        }
+
+        if (insideLoop && queue.length > 0) {
+          const baseActions = [...queue];
+          const expanded = [];
+          const reps = Math.min(loopCount, 40);
+          for (let c = 0; c < reps; c++) {
+            baseActions.forEach(a => {
+              expanded.push({ ...a, cycleIndex: c + 1, totalCycles: reps, hasIfCondition });
+            });
+          }
+          return expanded;
+        }
+
+        return queue;
+      },
+
+      runActionQueue(queue) {
+        let index = 0;
+        let partsCrafted = 0;
+        let bugsFiltered = 0;
+
+        const stepDelay = this.state.speedMultiplier === 999 ? 8 : Math.max(25, 450 / this.state.speedMultiplier);
+
+        const executeNext = () => {
+          if (!this.state.isExecuting) return;
+
+          if (index >= queue.length) {
+            this.onExecutionFinished(partsCrafted, bugsFiltered, queue);
+            return;
+          }
+
+          const action = queue[index];
+          index++;
+
+          if (action.type === 'feed') {
+            this.manualAction('feed');
+          } else if (action.type === 'grab') {
+            this.manualAction('grab');
+          } else if (action.type === 'press') {
+            this.manualAction('press');
+          } else if (action.type === 'advance') {
+            this.manualAction('advance');
+          } else if (action.type === 'drop') {
+            partsCrafted++;
+            this.manualAction('drop');
+          } else if (action.type === 'scan') {
+            this.manualAction('scan');
+          } else if (action.type === 'recycle_bug') {
+            SoundEngine.playBeep(350, 0.08, 'sawtooth');
+            bugsFiltered++;
+            this.log('>> [ANTI-BUG]: Chip defeituoso descartado no triturador!', 'warn');
+          } else if (action.type === 'print') {
+            this.log(`STDOUT: ${action.text}`, 'info');
+          }
+
+          this.state.executionTimer = setTimeout(executeNext, stepDelay);
+        };
+
+        executeNext();
+      },
+
+      onExecutionFinished(partsCrafted, bugsFiltered, queue) {
+        this.resetExecution();
+        const m = this.missions[this.state.currentMission];
+
+        this.log(`Execução finalizada com sucesso! Peças forjadas no lote: ${partsCrafted}`, 'success');
+
+        let missionAccomplished = false;
+
+        if (m.id === 0) {
+          if (partsCrafted >= 1) missionAccomplished = true;
+        } else if (m.id === 1) {
+          if (partsCrafted >= 10) missionAccomplished = true;
+        } else if (m.id === 2) {
+          if (partsCrafted >= 6 && (bugsFiltered >= 1 || queue.some(q => q.hasIfCondition))) missionAccomplished = true;
+        } else if (m.id === 3) {
+          if (partsCrafted >= 12) missionAccomplished = true;
+        } else if (m.id === 4) {
+          if (partsCrafted >= 15) missionAccomplished = true;
+        }
+
+        if (missionAccomplished) {
+          this.completeMission(m);
+        }
+      },
+
+      completeMission(m) {
+        SoundEngine.playLevelUp();
+        addScore(m.rewardScore, `MISSÃO DA FÁBRICA CONCLUÍDA!`);
+        state.coins = (state.coins || 0) + m.rewardCoins;
+        saveState();
+
+        const nextTier = Math.min(5, this.state.tier + 1);
+        this.state.tier = nextTier;
+        if (!this.state.unlockedTiers.includes(nextTier)) {
+          this.state.unlockedTiers.push(nextTier);
+        }
+        if (nextTier >= 2) {
+          this.state.backgroundLoop = true;
+        }
+
+        if (this.state.currentMission < this.missions.length - 1) {
+          this.state.currentMission++;
+        }
+
+        this.saveState();
+        this.updateHeaderStats();
+        this.renderMissionBanner();
+        this.renderTechTree();
+        this.loadMissionCode();
+
+        showFloatingReward(`🎉 MISSÃO DA FÁBRICA VENCIDA! +${m.rewardCoins} 🪙 TIER ${nextTier} DESBLOQUEADO!`, '#fbbf24', '🏭');
+        this.log(`🎉 PARABÉNS! Missão concluída com sucesso! Tier ${nextTier} desbloqueado e novas máquinas integradas ao império.`, 'success');
+      },
+
+      sellStorage() {
+        if (!this.state.partsInStorage || this.state.partsInStorage <= 0) {
+          SoundEngine.playWrong();
+          this.log('Aviso: O depósito está vazio! Produza peças para poder vender.', 'warn');
+          return;
+        }
+
+        SoundEngine.playCashRegister();
+        const pricePerPart = this.state.tier >= 3 ? 15 : (this.state.tier >= 2 ? 10 : 5);
+        const earned = this.state.partsInStorage * pricePerPart;
+
+        state.coins = (state.coins || 0) + earned;
+        this.state.totalCoinsEarned = (this.state.totalCoinsEarned || 0) + earned;
+        const count = this.state.partsInStorage;
+        this.state.partsInStorage = 0;
+
+        saveState();
+        this.saveState();
+        this.updateHeaderStats();
+
+        showFloatingReward(`+${earned} MOEDAS 🪙! Venda de ${count} peças concluída!`, '#10b981', '💰');
+        this.log(`Venda realizada: ${count} peças vendidas por ${earned} moedas cibernéticas 🪙!`, 'success');
+      },
+
+      buyOverclock() {
+        if ((state.coins || 0) < 40) {
+          SoundEngine.playWrong();
+          this.log('Moedas insuficientes para Overclock! Você precisa de 40 🪙.', 'warn');
+          showFloatingReward('MOEDAS INSUFICIENTES (Requer 40 🪙)', '#ef4444', '⚠️');
+          return;
+        }
+
+        state.coins -= 40;
+        this.state.overclockUntil = Date.now() + 60000;
+        this.setSpeed(5);
+        SoundEngine.playLevelUp();
+        saveState();
+        this.saveState();
+        this.updateHeaderStats();
+
+        showFloatingReward('⚡ OVERCLOCK ATIVADO (+25% VELOCIDADE POR 60s)!', '#38bdf8', '⚡');
+        this.log('OVERCLOCK ATIVADO! Suas esteiras e prensas operam na velocidade máxima.', 'success');
+      },
+
+      toggleBackgroundLoop(enabled) {
+        if (this.state.tier < 2) {
+          SoundEngine.playWrong();
+          this.log('Aviso: Automação passiva 24/7 bloqueada! Resolva a Missão 2 (Laços de Repetição) para desbloquear.', 'warn');
+          return;
+        }
+
+        this.state.backgroundLoop = enabled;
+        this.saveState();
+        this.updateHeaderStats();
+        SoundEngine.playBeep(enabled ? 600 : 300, 0.06);
+        this.log(`Automação em segundo plano 24/7 ${enabled ? 'HABILITADA' : 'DESABILITADA'}.`, 'info');
+      },
+
+      producePassiveItem() {
+        if (!this.state.backgroundLoop) return;
+        this.state.partsInStorage = Math.min(100, (this.state.partsInStorage || 0) + 1);
+        this.state.partsProduced = (this.state.partsProduced || 0) + 1;
+        this.saveState();
+        this.updateHeaderStats();
+      }
+    };
+
+    function openFactoryModal() {
+      document.getElementById('factoryModal').classList.add('open');
+      SoundEngine.playMechanicalClank();
+      FactorySystem.onOpen();
+    }
+
+    function closeFactoryModal() {
+      document.getElementById('factoryModal').classList.remove('open');
+      SoundEngine.playBeep(320, 0.05);
+    }
+
+    // Initialize HUD, Factory System, and on-screen controls on load
     updateHUD();
+    FactorySystem.init();
     initDpadControls();
   </script>
 </body>
